@@ -142,8 +142,9 @@ class _StopGridViewState extends State<StopGridView> {
     final prov = context.watch<PendingProvider>();
 
     if (prov.isLoading) return const Center(child: CircularProgressIndicator());
-    if (prov.hasError)
+    if (prov.hasError) {
       return Center(child: Text('Error: ${prov.errorMessage}'));
+    }
 
     final filteredList = prov.filteredPending;
 

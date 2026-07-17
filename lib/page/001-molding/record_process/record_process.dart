@@ -346,7 +346,7 @@ class _RecordProcessState extends State<RecordProcess>
     final bool hasPrefixIcon = icon != null;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      padding: const EdgeInsets.symmetric(vertical: 1.0),
       child: TextField(
         controller: controller,
         readOnly: readOnly,
@@ -354,7 +354,7 @@ class _RecordProcessState extends State<RecordProcess>
         keyboardType:
             inputFormatters != null ? TextInputType.number : TextInputType.text,
         style: GoogleFonts.poppins(
-          fontSize: 13.0,
+          fontSize: 12.0,
           color: Colors.black87,
         ),
         decoration: InputDecoration(
@@ -364,7 +364,7 @@ class _RecordProcessState extends State<RecordProcess>
             child: Text(
               label,
               style: GoogleFonts.poppins(
-                fontSize: 14.0,
+                fontSize: 12.0,
                 color: Colors.black,
                 fontWeight: FontWeight.w400,
               ),
@@ -374,46 +374,45 @@ class _RecordProcessState extends State<RecordProcess>
           border: const OutlineInputBorder(),
           isDense: true,
           contentPadding: EdgeInsets.symmetric(
-            horizontal: hasPrefixIcon ? 0 : 12,
+            horizontal: hasPrefixIcon ? 4 : 6,
             vertical: 12,
           ),
+
           prefixIcon: hasPrefixIcon
               ? Container(
-                  width: 36,
-                  height: 36,
+                  width: 28,
+                  height: 28,
                   margin:
                       const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        Colors.blue.shade300,
-                        Colors.blue.shade900,
-                      ],
+                      colors: [Colors.blue.shade300, Colors.blue.shade900],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    border: Border.all(
-                      color: Colors.grey.shade500,
-                      width: 0.5,
-                    ),
+                    border: Border.all(color: Colors.grey.shade500, width: 0.5),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: IconButton(
-                    onPressed: onIconTap,
-                    icon: Icon(
-                      icon,
-                      size: 20,
-                      color: Colors.white,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: onIconTap,
+                      borderRadius: BorderRadius.circular(4),
+                      child: Center(
+                        child: Icon(
+                          icon,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
                   ),
                 )
               : null,
           suffixIcon: suffixIcon != null
               ? Container(
-                  width: 36,
-                  height: 36,
+                  width: 28,
+                  height: 28,
                   margin:
                       const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
                   decoration: BoxDecoration(
@@ -438,7 +437,7 @@ class _RecordProcessState extends State<RecordProcess>
           hintStyle: GoogleFonts.poppins(
             color: Colors.grey.shade500,
             fontStyle: FontStyle.italic,
-            fontSize: 14.0,
+            fontSize: 12.0,
           ),
         ),
       ),

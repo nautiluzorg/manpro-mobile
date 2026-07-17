@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_provider_data/navigation/page_transitions.dart';
 import 'package:flutter_provider_data/page/001-molding/record_process/record_process.dart';
-// import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
 import 'package:flutter_provider_data/page/001-molding/recordtesting.dart';
 import 'package:flutter_provider_data/page/001-molding/report/monitor_testing.dart';
 import 'package:flutter_provider_data/page/001-molding/runningmoldingpage.dart';
@@ -148,7 +147,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
                     const SizedBox(height: 5),
                     _buildQualityCheckSection(),
                     const SizedBox(height: 5),
-                    _buildAfterProcessSection(),
+                    // _buildAfterProcessSection(),
                   ],
                 ),
               ),
@@ -389,7 +388,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
 
   Widget _buildQualityCheckSection() {
     final qualityButtons = [
-      'RECORD TESTING',
+      'MOLDING TEST',
       'LIST TESTING RUNNING',
       'LIST TESTING FINISH',
     ];

@@ -32,7 +32,6 @@ class RecordFormGrid extends StatelessWidget {
   });
 
   final String idProses;
-
   final TextEditingController mixLotNumberController;
   final TextEditingController idEmployeeController;
   final TextEditingController goldPillController;
@@ -174,7 +173,7 @@ class RecordFormGrid extends StatelessWidget {
                     mixLotNumberController.text = provider.mixLotNumber;
                     return onBuildTextField(
                       controller: mixLotNumberController,
-                      label: 'Mix Lot No',
+                      label: 'Mix Lot',
                       hint: 'Scan Mix Lot',
                       readOnly: true,
                       icon: Icons.qr_code_scanner,
@@ -183,9 +182,10 @@ class RecordFormGrid extends StatelessWidget {
                         if (jobProvider.jobNumber.isEmpty) {
                           CustomSnackbar.show(
                             context,
-                            'Harap scan Jobnumber dulu',
+                            'Harap scan Jobnumber dulu ye',
                             isSuccess: false,
                           );
+
                           return;
                         }
 
@@ -229,7 +229,7 @@ class RecordFormGrid extends StatelessWidget {
                     idMachineController.text = provider.machine.idMc;
                     return onBuildTextField(
                       controller: idMachineController,
-                      label: 'Machine',
+                      label: 'MCH',
                       hint: 'Scan Machine ID',
                       icon: Icons.qr_code_scanner,
                       readOnly: true,
@@ -303,7 +303,7 @@ class RecordFormGrid extends StatelessWidget {
 
                     return onBuildTextField(
                       controller: idEmployeeController,
-                      label: 'Employee',
+                      label: 'EMP',
                       hint: 'Scan Employee ID',
                       icon: Icons.qr_code_scanner,
                       readOnly: true,
@@ -682,7 +682,7 @@ class RecordFormGrid extends StatelessWidget {
                       controller: qtyActualController,
                       keyboardType: TextInputType.number,
                       style: GoogleFonts.poppins(
-                        fontSize: 14,
+                        fontSize: 10,
                         color: Colors.green,
                       ),
                       decoration: const InputDecoration(

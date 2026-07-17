@@ -171,9 +171,9 @@ class _RunningListViewState extends State<RunningListView> {
     return Scaffold(
         body: Column(children: [
       Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(5),
         child: Container(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.only(bottom: 5.0),
             decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(color: Colors.grey, width: 1.0),
@@ -193,7 +193,8 @@ class _RunningListViewState extends State<RunningListView> {
                               : scanAndFilterJobNumber,
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 18, vertical: 16),
+                                horizontal: 8,
+                                vertical: 10), // dikurangin dari 12
                             side: BorderSide(
                               color: prov.isSearchDisabled
                                   ? Colors.grey.shade400
@@ -209,19 +210,24 @@ class _RunningListViewState extends State<RunningListView> {
                             children: [
                               Icon(
                                 Icons.search_sharp,
+                                size: 18, // dikecilin dikit
                                 color: prov.isSearchDisabled
                                     ? Colors.grey.shade400
                                     : Colors.blue.shade400,
                               ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'JOBNUMBER',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: prov.isSearchDisabled
-                                      ? Colors.grey.shade400
-                                      : Colors.blue.shade400,
+                              const SizedBox(width: 4), // dikurangin dari 6
+                              Flexible(
+                                child: Text(
+                                  'JOBNUMBERS',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 12, // dikurangin dari 14
+                                    fontWeight: FontWeight.w500,
+                                    color: prov.isSearchDisabled
+                                        ? Colors.grey.shade400
+                                        : Colors.blue.shade400,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
                               ),
                             ],
@@ -239,7 +245,7 @@ class _RunningListViewState extends State<RunningListView> {
                           : scanAndFilterEmployeeFinish,
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 16),
+                            horizontal: 8, vertical: 10), // dikurangin dari 12
                         side: BorderSide(
                           color: prov.isSearchDisabled
                               ? Colors.grey.shade400
@@ -255,19 +261,24 @@ class _RunningListViewState extends State<RunningListView> {
                         children: [
                           Icon(
                             Icons.person_search,
+                            size: 18, // dikecilin dikit
                             color: prov.isSearchDisabled
                                 ? Colors.grey.shade400
                                 : Colors.blue.shade400,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'OPERATOR',
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: prov.isSearchDisabled
-                                  ? Colors.grey.shade400
-                                  : Colors.blue.shade400,
+                          const SizedBox(width: 4), // dikurangin dari 8
+                          Flexible(
+                            child: Text(
+                              'OPERATORS',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12, // dikurangin dari 14
+                                fontWeight: FontWeight.w500,
+                                color: prov.isSearchDisabled
+                                    ? Colors.grey.shade400
+                                    : Colors.blue.shade400,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ),
                         ],
@@ -288,7 +299,7 @@ class _RunningListViewState extends State<RunningListView> {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.redAccent,
-                                Colors.red.shade600, // ✅ tambah tengah
+                                Colors.red.shade600,
                                 Colors.red.shade900,
                               ],
                               begin: Alignment.topCenter,
@@ -304,7 +315,7 @@ class _RunningListViewState extends State<RunningListView> {
                             ],
                           ),
                           child: const Padding(
-                            padding: EdgeInsets.all(12), // ukuran tombol
+                            padding: EdgeInsets.all(12),
                             child: Icon(
                               Icons.clear,
                               color: Colors.white,
@@ -335,10 +346,9 @@ class _RunningListViewState extends State<RunningListView> {
                         TextSpan(
                           text: 'TOTAL ',
                           style: GoogleFonts.poppins(
-                            color: Colors.blueGrey
-                                .shade400, // warna lebih soft untuk kata TOTAL
-                            fontWeight: FontWeight.w500, // medium
-                            fontSize: 18, // bisa disesuaikan
+                            color: Colors.blueGrey.shade400,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
                         ),
                         WidgetSpan(
@@ -357,8 +367,7 @@ class _RunningListViewState extends State<RunningListView> {
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: Colors
-                                    .white, // warna ini akan di-mask sama gradient
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -366,10 +375,9 @@ class _RunningListViewState extends State<RunningListView> {
                         TextSpan(
                           text: ' MOLD RUNNING ',
                           style: GoogleFonts.poppins(
-                            color: Colors.blueGrey
-                                .shade400, // warna lebih soft untuk kata TOTAL
-                            fontWeight: FontWeight.w500, // medium
-                            fontSize: 18, // bisa disesuaikan
+                            color: Colors.blueGrey.shade400,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
                         ),
                       ],
