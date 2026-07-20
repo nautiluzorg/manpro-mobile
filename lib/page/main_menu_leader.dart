@@ -248,6 +248,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// ===== TITLE =====
+
                 ShaderMask(
                   shaderCallback: (bounds) {
                     return const LinearGradient(

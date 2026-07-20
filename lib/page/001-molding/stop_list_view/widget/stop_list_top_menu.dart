@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_provider_data/provider/running_provider.dart';
+import 'package:flutter_provider_data/provider/pending_provider.dart';
 
-class RunningListTopMenu extends StatelessWidget {
+class StopListTopMenu extends StatelessWidget {
   final double widthApp;
-  final RunningProvider prov;
+  final PendingProvider prov;
   final Future<void> Function() onScanJobNumber;
   final Future<void> Function() onScanEmployee;
   final VoidCallback onClearFilter;
 
-  const RunningListTopMenu({
+  const StopListTopMenu({
     super.key,
     required this.widthApp,
     required this.prov,
@@ -21,29 +21,34 @@ class RunningListTopMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Container(
-        padding: const EdgeInsets.only(bottom: 8.0),
+        padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
         decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
+          border: Border(
+            bottom: BorderSide(color: Colors.grey, width: 1.0),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Row(
             children: [
               // JOBNUMBER BUTTON
-
               SizedBox(
                 width: widthApp * 0.25,
                 child: OutlinedButton(
-                  onPressed: prov.isSearchDisabled ? null : onScanJobNumber,
+                  onPressed: prov.isFilterActive
+                      ? null
+                      : () async {
+                          await onScanJobNumber();
+                        },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 16),
                     side: BorderSide(
-                      color: prov.isSearchDisabled
+                      color: prov.isFilterActive
                           ? Colors.grey.shade400
-                          : Colors.blue.shade400,
+                          : Colors.green.shade400,
                       width: 1,
                     ),
                     shape: RoundedRectangleBorder(
@@ -52,11 +57,13 @@ class RunningListTopMenu extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.search_sharp,
-                          size: 18,
-                          color: prov.isSearchDisabled
-                              ? Colors.grey.shade400
-                              : Colors.blue.shade400),
+                      Icon(
+                        Icons.search_sharp,
+                        size: 18,
+                        color: prov.isFilterActive
+                            ? Colors.grey.shade400
+                            : Colors.green.shade400,
+                      ),
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(
@@ -66,9 +73,9 @@ class RunningListTopMenu extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: prov.isSearchDisabled
+                            color: prov.isFilterActive
                                 ? Colors.grey.shade400
-                                : Colors.blue.shade400,
+                                : Colors.green.shade400,
                           ),
                         ),
                       ),
@@ -83,36 +90,46 @@ class RunningListTopMenu extends StatelessWidget {
               SizedBox(
                 width: widthApp * 0.25,
                 child: OutlinedButton(
-                  onPressed: prov.isSearchDisabled ? null : onScanEmployee,
+                  onPressed: prov.isFilterActive
+                      ? null
+                      : () async {
+                          await onScanEmployee();
+                        },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 16),
+                        horizontal: 10, vertical: 16),
                     side: BorderSide(
-                      color: prov.isSearchDisabled
+                      color: prov.isFilterActive
                           ? Colors.grey.shade400
-                          : Colors.blue.shade400,
+                          : Colors.green.shade400,
                       width: 1,
                     ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.person_search,
-                          color: prov.isSearchDisabled
-                              ? Colors.grey.shade400
-                              : Colors.blue.shade400),
-                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.person_search,
+                        size: 18,
+                        color: prov.isFilterActive
+                            ? Colors.grey.shade400
+                            : Colors.green.shade400,
+                      ),
+                      const SizedBox(width: 6),
                       Flexible(
                         child: Text(
                           'OPERATOR',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                           style: GoogleFonts.poppins(
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: prov.isSearchDisabled
+                            color: prov.isFilterActive
                                 ? Colors.grey.shade400
-                                : Colors.blue.shade400,
+                                : Colors.green.shade400,
                           ),
                         ),
                       ),
@@ -123,21 +140,17 @@ class RunningListTopMenu extends StatelessWidget {
 
               SizedBox(width: widthApp * 0.01),
 
-              // CLEAR BUTTON
-              if (prov.isFilterSearchActive)
+              // CLEAR BUTTON (Circle gradient)
+              if (prov.isFilterActive)
                 SizedBox(
-                  width: 52,
+                  width: 45,
                   child: InkWell(
                     onTap: onClearFilter,
                     borderRadius: BorderRadius.circular(30),
                     child: Ink(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [
-                            Colors.redAccent,
-                            Colors.red.shade600,
-                            Colors.red.shade900,
-                          ],
+                          colors: [Colors.redAccent, Colors.red.shade900],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
@@ -151,8 +164,8 @@ class RunningListTopMenu extends StatelessWidget {
                         ],
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.all(12),
-                        child: Icon(Icons.clear, color: Colors.white, size: 20),
+                        padding: EdgeInsets.all(10),
+                        child: Icon(Icons.clear, color: Colors.white, size: 18),
                       ),
                     ),
                   ),
@@ -162,15 +175,13 @@ class RunningListTopMenu extends StatelessWidget {
 
               SizedBox(width: widthApp * 0.02),
 
-              // TOTAL TEXT
-              // TOTAL TEXT
+              // TOTAL DATA TEXT
               Expanded(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerRight,
                   child: RichText(
                     textAlign: TextAlign.right,
-                    overflow: TextOverflow.ellipsis,
                     text: TextSpan(
                       style: GoogleFonts.poppins(
                         fontSize: 18,
@@ -197,25 +208,26 @@ class RunningListTopMenu extends StatelessWidget {
                           child: ShaderMask(
                             shaderCallback: (bounds) => LinearGradient(
                               colors: [
-                                Colors.blue.shade400,
-                                Colors.blue.shade800
+                                Colors.red.shade400,
+                                Colors.red.shade800,
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                            ).createShader(Rect.fromLTWH(
-                                0, 0, bounds.width, bounds.height)),
+                            ).createShader(
+                              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                            ),
                             child: Text(
-                              '${prov.filteredRecords.length}',
+                              '${prov.filteredPending.length}',
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
                             ),
                           ),
                         ),
                         TextSpan(
-                          text: ' MOLD RUNNING ',
+                          text: ' MOLD STOP',
                           style: GoogleFonts.poppins(
                             color: Colors.blueGrey.shade400,
                             fontWeight: FontWeight.w500,
@@ -226,7 +238,7 @@ class RunningListTopMenu extends StatelessWidget {
                     ),
                   ),
                 ),
-              ), // <-- penutup Expanded
+              ),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/page/001-molding/stop_grid_view/stop_grid_view.dart';
-import 'package:flutter_provider_data/page/001-molding/stoplistview.dart';
+// import 'package:flutter_provider_data/page/001-molding/stoplistview.dart';
+import 'package:flutter_provider_data/page/001-molding/stop_list_view/stop_list_view.dart';
 import 'package:flutter_provider_data/page/menu.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -66,46 +67,52 @@ class _StopMoldingPageState extends State<StopMoldingPage> {
                     const SizedBox(width: 10), // jarak tombol dan teks
 
                     // BAGIAN KANAN: AnimatedTextKit
+
                     Expanded(
                         // <-- penting! biar teks memanfaatkan semua sisa ruang
-                        child: AnimatedTextKit(
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          '🚀 Pilih Jobnumber & scan ID Card anda',
-                          textStyle: GoogleFonts.poppins(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade800, // lebih kontras
+                        child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          TyperAnimatedText(
+                            '🚀 Pilih Jobnumber & scan ID Card anda',
+                            textStyle: GoogleFonts.poppins(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade800, // lebih kontras
+                            ),
+                            speed: const Duration(milliseconds: 80),
                           ),
-                          speed: const Duration(milliseconds: 80),
-                        ),
-                        FadeAnimatedText(
-                          '📢 Pastikan menggunakan APD lengkap',
-                          textStyle: GoogleFonts.poppins(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepOrangeAccent.shade400
-                                .withValues(alpha: 0.5), // lebih “pop” di grey
+                          FadeAnimatedText(
+                            '📢 Pastikan menggunakan APD lengkap!',
+                            textStyle: GoogleFonts.poppins(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepOrangeAccent.shade400
+                                  .withValues(
+                                      alpha: 0.5), // lebih “pop” di grey
+                            ),
                           ),
-                        ),
-                        ColorizeAnimatedText(
-                          '💡 Pastikan selalu focus dan hati-hati!...',
-                          textStyle: GoogleFonts.poppins(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
+                          ColorizeAnimatedText(
+                            '💡 Pastikan selalu focus dan hati-hati!.',
+                            textStyle: GoogleFonts.poppins(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            colors: [
+                              Colors.blue.shade700,
+                              Colors.cyan.shade400,
+                              Colors.lightGreenAccent.shade400,
+                              Colors.orangeAccent.shade700,
+                            ],
                           ),
-                          colors: [
-                            Colors.blue.shade700,
-                            Colors.cyan.shade400,
-                            Colors.lightGreenAccent.shade400,
-                            Colors.orangeAccent.shade700,
-                          ],
-                        ),
-                      ],
-                      repeatForever: true,
-                      pause: const Duration(milliseconds: 800),
-                      displayFullTextOnTap: true,
-                      stopPauseOnTap: true,
+                        ],
+                        repeatForever: true,
+                        pause: const Duration(milliseconds: 800),
+                        displayFullTextOnTap: true,
+                        stopPauseOnTap: true,
+                      ),
                     )),
                   ],
                 ),
@@ -245,6 +252,7 @@ class ListViewMoldStop extends StatelessWidget {
   Widget build(BuildContext context) {
     // Memanggil MachineMonitoringGrid, tapi tanpa Scaffold/AppBar agar pas di body
     return StopListView(title: title, idProses: idProses);
+    // return StopListView(title: title, idProses: idProses);
   }
 }
 

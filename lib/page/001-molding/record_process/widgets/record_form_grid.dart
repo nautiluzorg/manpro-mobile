@@ -229,7 +229,7 @@ class RecordFormGrid extends StatelessWidget {
                     idMachineController.text = provider.machine.idMc;
                     return onBuildTextField(
                       controller: idMachineController,
-                      label: 'MCH',
+                      label: 'Mch',
                       hint: 'Scan Machine ID',
                       icon: Icons.qr_code_scanner,
                       readOnly: true,
@@ -303,7 +303,7 @@ class RecordFormGrid extends StatelessWidget {
 
                     return onBuildTextField(
                       controller: idEmployeeController,
-                      label: 'EMP',
+                      label: 'Emp',
                       hint: 'Scan Employee ID',
                       icon: Icons.qr_code_scanner,
                       readOnly: true,

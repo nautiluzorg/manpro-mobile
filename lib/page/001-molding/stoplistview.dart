@@ -164,7 +164,7 @@ class _StopListViewState extends State<StopListView> {
                                     : Colors.green.shade400),
                             const SizedBox(width: 8),
                             Text(
-                              'JOBNUMBER',
+                              'JOBNUMBERX',
                               style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
