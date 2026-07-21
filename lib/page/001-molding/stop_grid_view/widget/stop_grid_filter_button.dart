@@ -26,7 +26,7 @@ class StopGridFilterButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: isDisabled ? null : onTap,
         style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           side: BorderSide(color: color, width: 1),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -34,14 +34,18 @@ class StopGridFilterButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: color,
+            Icon(icon, size: 18, color: color),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: color,
+                ),
               ),
             ),
           ],

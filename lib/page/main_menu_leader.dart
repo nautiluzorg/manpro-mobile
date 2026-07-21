@@ -7,9 +7,9 @@ import 'package:flutter_provider_data/page/001-molding/report/monitor_testing.da
 import 'package:flutter_provider_data/page/001-molding/runningmoldingpage.dart';
 import 'package:flutter_provider_data/page/001-molding/stopmoldingpage.dart';
 import 'package:flutter_provider_data/page/login_page.dart';
-import 'package:flutter_provider_data/page/operator/inspectionform.dart';
-import 'package:flutter_provider_data/page/operator/onebatch.dart';
-import 'package:flutter_provider_data/page/operator/onejoborder.dart';
+// import 'package:flutter_provider_data/page/operator/inspectionform.dart';
+// import 'package:flutter_provider_data/page/operator/onebatch.dart';
+// import 'package:flutter_provider_data/page/operator/onejoborder.dart';
 import 'package:flutter_provider_data/service/auth_session.dart';
 import 'package:flutter_provider_data/service/token_storage.dart';
 import 'package:flutter_provider_data/widget/app_drawer.dart';
@@ -568,6 +568,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
     );
   }
 
+/*
   Widget _buildAfterProcessSection() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -739,7 +740,10 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
     );
   }
 
+  */
+
   /// =================== MODIFIKASI _buildProcessSection ===================
+  /*
   Widget _buildProcessSection({
     required String sectionTitle,
     // required List<String> buttonTitles,
@@ -847,6 +851,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
       ),
     );
   }
+  */
 
   Widget _buildGradientButton(
     String title,

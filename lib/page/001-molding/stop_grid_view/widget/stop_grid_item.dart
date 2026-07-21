@@ -77,35 +77,54 @@ class StopGridItem extends StatelessWidget {
           width: isSelected ? 3 : 1,
         ),
       ),
+      // Konten (judul, foto, nama, tabel) dibungkus Expanded + scroll,
+      // tombol CONTINUE ditaruh DI LUAR Expanded. Efeknya:
+      // 1) kalau konten lebih tinggi dari cell grid, dia scroll (bukan
+      //    overflow),
+      // 2) posisi tombol CONTINUE selalu konsisten di semua card, karena
+      //    Expanded selalu ngisi sisa ruang yang sama besar (GridView
+      //    sudah menyamakan tinggi tiap cell).
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            item.jobnumber ?? '-',
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color:
-                  isSelected ? Colors.grey.shade800 : Colors.blueGrey.shade600,
-              letterSpacing: 1.0,
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    item.jobnumber ?? '-',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected
+                          ? Colors.grey.shade800
+                          : Colors.blueGrey.shade600,
+                      letterSpacing: 1.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  _buildOperatorPhoto(),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.employeeName,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color:
+                          isSelected ? Colors.green.shade700 : Colors.black87,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 4),
+                  _buildTable(),
+                ],
+              ),
             ),
-            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          _buildOperatorPhoto(),
-          const SizedBox(height: 6),
-          Text(
-            item.employeeName,
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.green.shade700 : Colors.black87,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 4),
-          _buildTable(),
-          const Spacer(),
           _buildContinueButton(context),
         ],
       ),
@@ -136,12 +155,14 @@ class StopGridItem extends StatelessWidget {
           ],
         ),
         child: CircleAvatar(
-          radius: 60,
+          // Dikecilkan dari 60 -> 42 supaya total tinggi konten lebih
+          // ringkas dan lebih jarang butuh scroll di cell grid kecil.
+          radius: 42,
           backgroundImage: NetworkImage(
             "${AppConfig.baseUrl}/media/img/employee/${item.idEmployee}.png",
           ),
           onBackgroundImageError: (_, __) =>
-              const Icon(Icons.person, size: 28, color: Colors.grey),
+              const Icon(Icons.person, size: 24, color: Colors.grey),
         ),
       ),
     );
@@ -197,7 +218,8 @@ class StopGridItem extends StatelessWidget {
   // ── CONTINUE BUTTON ────────────────────────────────────────────────────
   Widget _buildContinueButton(BuildContext context) {
     return Container(
-      height: 60,
+      // Dikecilkan dari 60 -> 50 supaya hemat tinggi.
+      height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         gradient: LinearGradient(
@@ -220,7 +242,7 @@ class StopGridItem extends StatelessWidget {
         child: Text(
           "CONTINUE",
           style: GoogleFonts.poppins(
-            fontSize: 18,
+            fontSize: 15,
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
@@ -244,8 +266,11 @@ class StopGridItem extends StatelessWidget {
         item.productType,
       );
 
+      if (!context.mounted) return;
+
       if (result == true) {
         pendingProvider.fetchPending(idProses);
+        if (!context.mounted) return;
         CustomSnackbar.show(
           context,
           "Record updated successfully!",
@@ -253,6 +278,7 @@ class StopGridItem extends StatelessWidget {
         );
       }
     } catch (e) {
+      if (!context.mounted) return;
       CustomSnackbar.showWithOverlay(
         overlay,
         "Terjadi kesalahan: $e",
