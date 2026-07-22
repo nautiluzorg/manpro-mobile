@@ -43,7 +43,8 @@ class _RunningMoldingPageState extends State<RunningMoldingPage> {
       appBar: myAppBar,
       body: Column(
         children: [
-          // --- BAGIAN 1: CUSTOM SEGMENTED CONTROL / MENU BUTTONS ---
+          //##### BAGIAN BUTTON LIST & GRID #####//
+
           Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
@@ -54,6 +55,7 @@ class _RunningMoldingPageState extends State<RunningMoldingPage> {
                 child: Row(
                   children: [
                     // BAGIAN KIRI: Tombol
+
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -257,15 +259,10 @@ class ListViewMoldRunning extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Memanggil MachineMonitoringGrid, tapi tanpa Scaffold/AppBar agar pas di body
-    // return RunningListView(title: title, idProses: idProses);
     return RunningListView(title: title, idProses: idProses);
-    // return RecordRunning(title: title, idProses: idProses);
-    // return MachineMonitoringGrid(title: title, idProses: idProses);
   }
 }
 
-// ASUMSI: Widget list data job number milikmu
 class TableViewMoldRunning extends StatelessWidget {
   final String title;
   final String idProses;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/page/001-molding/report/monitor_testing.dart';
 import 'package:flutter_provider_data/page/001-molding/report/testing_completed.dart';
 import 'package:flutter_provider_data/page/menu.dart';
-import 'package:flutter_provider_data/page/001-molding/recordtesting.dart';
+// import 'package:flutter_provider_data/page/001-molding/recordtesting.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MenuSubTesting extends StatefulWidget {
@@ -78,6 +78,7 @@ class _MenuSubTestingState extends State<MenuSubTesting> {
         "title": "RECORD TESTING",
         "icon": Icons.note_add_rounded,
         "onTap": () {
+/*
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
@@ -88,6 +89,7 @@ class _MenuSubTestingState extends State<MenuSubTesting> {
               transitionDuration: const Duration(milliseconds: 800),
             ),
           );
+          */
         }
       },
       {

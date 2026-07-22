@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:flutter_provider_data/navigation/page_transitions.dart';
 import 'package:flutter_provider_data/page/001-molding/record_process/record_process.dart';
-import 'package:flutter_provider_data/page/001-molding/recordtesting.dart';
+import 'package:flutter_provider_data/page/001-molding/record_testing/record_testing.dart';
 import 'package:flutter_provider_data/page/001-molding/report/monitor_testing.dart';
 import 'package:flutter_provider_data/page/001-molding/runningmoldingpage.dart';
 import 'package:flutter_provider_data/page/001-molding/stopmoldingpage.dart';
 import 'package:flutter_provider_data/page/login_page.dart';
-// import 'package:flutter_provider_data/page/operator/inspectionform.dart';
-// import 'package:flutter_provider_data/page/operator/onebatch.dart';
-// import 'package:flutter_provider_data/page/operator/onejoborder.dart';
 import 'package:flutter_provider_data/service/auth_session.dart';
 import 'package:flutter_provider_data/service/token_storage.dart';
 import 'package:flutter_provider_data/widget/app_drawer.dart';
@@ -205,7 +202,6 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
     final moldingProcesses = [
       'MOLDING',
     ];
-
     final List<Color> colors = [
       Colors.red,
       Colors.green,
@@ -391,7 +387,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
     final qualityButtons = [
       'MOLDING TEST',
       'LIST TESTING RUNNING',
-      'LIST TESTING FINISH',
+      'LIST TESTING DONE',
     ];
 
     final qualityProcesses = [
@@ -419,11 +415,11 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.teal.withAlpha(40),
-                  Colors.greenAccent.withAlpha(60),
+                  Colors.deepOrange.withAlpha(20),
+                  Colors.orangeAccent.withAlpha(50),
                 ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
@@ -445,16 +441,16 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
                   shaderCallback: (bounds) {
                     return const LinearGradient(
                       colors: [
-                        Color(0xFF1B5E20), // Green 900
-                        Color(0xFF2E7D32), // Green 800
-                        Color(0xFF43A047), // Green 600
+                        Color(0xFFBF360C), // Deep Orange 900
+                        Color(0xFFD84315), // Deep Orange 800
+                        Color(0xFFF4511E), // Deep Orange 600
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ).createShader(bounds);
                   },
                   child: Text(
-                    'QUALITY & MEASUREMENT PROCESS',
+                    'MOLDING TEST',
                     style: GoogleFonts.poppins(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
@@ -466,7 +462,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
 
                 const SizedBox(height: 4),
                 Text(
-                  'Testing Molding • Measurement checking • Validation result',
+                  'Testing Molding and checking MIM for Approval Production',
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -487,7 +483,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
                           Colors.blueAccent,
                           Colors.blue.shade900,
                           onPressed: () {
-                            if (title == 'RECORD TESTING') {
+                            if (title == 'MOLDING TEST') {
                               _goToPage(
                                 RecordTesting(
                                   title: 'RECORD TESTING',
@@ -502,7 +498,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
                                 ),
                               );
                             } else if (title == 'LIST TESTING FINISH') {
-/*
+                              /*
                               _goToPage(
                                 RecordTesting(
                                   title: 'LIST TESTING FINISH',
@@ -567,291 +563,6 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
       ),
     );
   }
-
-/*
-  Widget _buildAfterProcessSection() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-          child: Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue.shade900.withAlpha(40),
-                  Colors.blueAccent.shade700.withAlpha(60),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: Colors.white.withAlpha(60),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(40),
-                  blurRadius: 22,
-                  offset: const Offset(0, 12),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// ===== TITLE =====
-                Text(
-                  'AFTER PROCESS FLOW',
-                  style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.2,
-                    color: Colors.white.withAlpha(220),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'One Batch Process • One Job Number Process • Inspection Process',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withAlpha(160),
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-
-                /// ===== ONE BATCH =====
-                _buildProcessSection(
-                  sectionTitle: 'ONE BATCH NUMBER',
-                  buttons: [
-                    ProcessButton(
-                      title: 'RECORD PROCESS',
-                      onPressed: () {
-                        _goToPage(
-                          OneBatch(
-                            title: 'RECORD BATCH PROCESS',
-                            idProses: 'BATCH',
-                          ),
-                        );
-                      },
-                    ),
-                    ProcessButton(
-                      title: 'LIST BATCH RUNNING',
-                      onPressed: () {},
-                    ),
-                    ProcessButton(
-                      title: 'LIST BATCH STOP',
-                      onPressed: () {},
-                    ),
-                  ],
-                  gradientStart: Colors.blueAccent,
-                  gradientEnd: Colors.blue.shade900,
-                  processes: ['OVEN', 'OY', 'SPRAY'],
-                ),
-
-                const SizedBox(height: 14),
-
-                /// ===== ONE JOBNUMBER =====
-                _buildProcessSection(
-                  sectionTitle: 'ONE JOB NUMBER',
-                  buttons: [
-                    ProcessButton(
-                      title: 'RECORD PROCESS',
-                      onPressed: () {
-                        _goToPage(
-                          OneJoborder(
-                            title: 'RECORD BATCH PROCESS',
-                            idProses: 'BATCH',
-                          ),
-                        );
-                      },
-                    ),
-                    ProcessButton(
-                      title: 'LIST JOBNUMBER RUNNING',
-                      onPressed: () {},
-                    ),
-                    ProcessButton(
-                      title: 'LIST JOBNUMBER STOP',
-                      onPressed: () {},
-                    ),
-                  ],
-                  gradientStart: Colors.blueAccent,
-                  gradientEnd: Colors.blue.shade900,
-                  processes: [
-                    'PUNCHING',
-                    'FINISHING',
-                    'WASHING',
-                    'PRINTING',
-                    'PREPUSH',
-                    'RESISTANCE',
-                    'CUTTING',
-                    'MIP',
-                    'SCREENING',
-                    'PACKING',
-                    'STORE IN',
-                    'CLEANING B.OY',
-                    'CLEANING INSPECTION',
-                  ],
-                ),
-
-                const SizedBox(height: 14),
-
-                /// ===== INSPECTION =====
-                _buildProcessSection(
-                  sectionTitle: 'FINAL INSPECTION',
-                  buttons: [
-                    ProcessButton(
-                      title: 'RECORD PROCESS',
-                      onPressed: () {
-                        _goToPage(
-                          InspectionForm(
-                            title: 'RECORD PROCESS',
-                            idProses: 'BATCH',
-                          ),
-                        );
-                      },
-                    ),
-                    ProcessButton(
-                      title: 'LIST INSPECTION RUNNING',
-                      onPressed: () {},
-                    ),
-                    ProcessButton(
-                      title: 'LIST INSPECTION STOP',
-                      onPressed: () {},
-                    ),
-                  ],
-                  gradientStart: Colors.blueAccent,
-                  gradientEnd: Colors.blue.shade900,
-                  processes: [
-                    'INSPECTION',
-                    'GI INSPECTION',
-                    'CAMERA INSPECTION',
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  */
-
-  /// =================== MODIFIKASI _buildProcessSection ===================
-  /*
-  Widget _buildProcessSection({
-    required String sectionTitle,
-    // required List<String> buttonTitles,
-    required List<ProcessButton> buttons,
-    required Color gradientStart,
-    required Color gradientEnd,
-    required List<String> processes,
-  }) {
-    // List warna berbeda untuk setiap process
-    final List<Color> colors = [
-      Colors.red,
-      Colors.orange,
-      Colors.yellow.shade700,
-      Colors.green,
-      Colors.teal,
-      Colors.blue,
-      Colors.indigo,
-      Colors.purple,
-      Colors.pink,
-      Colors.brown,
-      Colors.cyan,
-      Colors.lime,
-      Colors.deepOrange,
-    ];
-
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: gradientStart.withAlpha(30),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: gradientStart.withAlpha(60)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            sectionTitle,
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey.shade800,
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          Row(
-            children: buttons.map((btn) {
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: _buildGradientButton(
-                    btn.title,
-                    gradientStart,
-                    gradientEnd,
-                    onPressed: btn.onPressed,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-
-          const SizedBox(height: 12),
-          // Text.rich untuk setiap process dengan warna berbeda dan titik pemisah
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            decoration: BoxDecoration(
-              // color: Colors.grey.shade50,
-              color: Colors.white.withAlpha(160),
-              borderRadius: BorderRadius.circular(10),
-              // border: Border.all(color: Colors.grey.shade300),
-              border: Border.all(color: Colors.white.withAlpha(120)),
-            ),
-            child: RichText(
-              text: TextSpan(
-                children: List.generate(processes.length * 2 - 1, (index) {
-                  if (index.isEven) {
-                    // process
-                    final processIndex = index ~/ 2;
-                    final color = colors[processIndex % colors.length];
-                    return TextSpan(
-                      text: processes[processIndex],
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: color,
-                      ),
-                    );
-                  } else {
-                    // separator
-                    return TextSpan(
-                      text: ' • ',
-                      style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade600,
-                      ),
-                    );
-                  }
-                }),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  */
 
   Widget _buildGradientButton(
     String title,

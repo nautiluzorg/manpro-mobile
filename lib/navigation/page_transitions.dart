@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
 
-/*
-CARA MENGGUNAKANNYA SEPERTI INI:
-
-Navigator.of(context).push(
-  PageTransitions.master(
-    DetailPage(id: 10),
-  ),
-);
-
-*/
-
 class PageTransitions {
   // 🔹 SLIDE + FADE (enterprise)
   static Route slideFade(Widget page) {
