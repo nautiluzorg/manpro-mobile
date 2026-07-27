@@ -27,7 +27,7 @@ class NgDataTable extends StatelessWidget {
           columns: [
             DataColumn(
               label: SizedBox(
-                width: 30,
+                width: 25,
                 child: Text(
                   'NO',
                   style: GoogleFonts.poppins(
@@ -39,7 +39,7 @@ class NgDataTable extends StatelessWidget {
             ),
             DataColumn(
               label: SizedBox(
-                width: 90,
+                width: 155,
                 child: Text(
                   'OPERATOR',
                   style: GoogleFonts.poppins(
@@ -63,7 +63,7 @@ class NgDataTable extends StatelessWidget {
             ),
             DataColumn(
               label: SizedBox(
-                width: 40,
+                width: 30,
                 child: Text(
                   'QTY',
                   style: GoogleFonts.poppins(
@@ -75,11 +75,11 @@ class NgDataTable extends StatelessWidget {
             ),
             DataColumn(
               label: SizedBox(
-                width: 80,
+                width: 30,
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    'DELETE',
+                    'ACT',
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -102,29 +102,37 @@ class NgDataTable extends StatelessWidget {
               cells: [
                 DataCell(Text('${index + 1}')),
                 DataCell(
-                  Row(
-                    children: [
-                      ClipOval(
-                        child: Image.network(
-                          "${AppConfig.baseUrl}/media/img/employee/${item['idEmployee'] ?? 'default'}.png",
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.person, size: 40);
-                          },
+                  SizedBox(
+                    width: 155,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipOval(
+                          child: Image.network(
+                            "${AppConfig.baseUrl}/media/img/employee/${item['idEmployee'] ?? 'default'}.png",
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.person, size: 40);
+                            },
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        item['nmEmployee'] ?? 'No Name',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            item['nmEmployee'] ?? 'No Name',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 DataCell(Text(item['ngName']!)),

@@ -110,6 +110,7 @@ class PendingProvider extends ChangeNotifier {
   List<RecordPendingModel> _filteredPending = [];
 
   List<RecordPendingModel> get pendingList => _filteredPending;
+
   List<RecordPendingModel> get filteredPending => _filteredPending;
 
   String _filterJobNumber = '';

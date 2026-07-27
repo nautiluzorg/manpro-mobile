@@ -359,7 +359,7 @@ class _ContinueButton extends StatelessWidget {
           ),
         ),
         child: Text(
-          "CONTINUES",
+          "CONTINUE",
           style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.w600,

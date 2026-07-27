@@ -630,6 +630,12 @@ class _ContinuePendingChangeMachineState
                           );
 
                           if (!mounted) return;
+                          // 🔥 TAMBAHAN: refresh list-nya di sini, gak gantung ke pop chain
+                          if (success) {
+                            await prov.fetchPending('001');
+                          }
+
+                          if (!mounted) return;
                           if (widget.onSuccess != null) {
                             widget.onSuccess!(success);
                           }

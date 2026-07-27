@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_provider_data/provider/pending_provider.dart';
 import 'package:flutter_provider_data/utils/custom_snackbar.dart';
 import 'package:flutter_provider_data/utils/mobile_scanner_page.dart';
-
 import 'widget/stop_list_top_menu.dart';
 import 'widget/stop_list_body.dart';
 
@@ -34,6 +33,7 @@ class _StopListViewState extends State<StopListView> {
 
   // Scan/navigation logic tetap di UI layer (bukan di provider), sesuai
   // arsitektur project: provider tidak boleh menerima BuildContext.
+
   Future<void> _scanJobNumber() async {
     try {
       final getcode = await Navigator.push<String>(

@@ -75,45 +75,6 @@ class _ContinuePendingWorkdayOverState
     });
   }
 
-/*
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      //=========== PENDING PROVIDER ======================
-
-      final pendingProv = context.read<PendingProvider>();
-      pendingProv.resetPendingDetail();
-      pendingProv.resetEmployeeScanState();
-      pendingProv.clearNextMachine();
-      await pendingProv.fetchPendingDetail(widget.idPending);
-
-      //=========== NG PROVIDER ======================
-
-      final ngProvider = context.read<NGProvider>();
-      // Gunakan langsung dari widget parameter, tidak perlu tunggu pendingDetail
-      logPrint('hasLoadedForThisRecord: ${ngProvider.hasLoadedForThisRecord}');
-      logPrint('listNG sebelum load: ${ngProvider.listNG.length}');
-      logPrint('productType: ${widget.productType}');
-      logPrint('idProses: ${widget.idProses}');
-
-      if (!ngProvider.hasLoadedForThisRecord) {
-        // ngProvider.hasLoadedForThisRecord = false;
-
-        await ngProvider.loadNGList(
-          productType: widget.productType, // ← dari widget parameter
-          idProses: widget.idProses, // ← dari widget parameter
-        );
-
-        ngProvider.hasLoadedForThisRecord = true;
-
-        logPrint('NG Loaded : ${ngProvider.listNG.length}');
-      }
-    });
-  }
-  */
-
   @override
   void dispose() {
     _qtyShootController.dispose();
@@ -486,56 +447,6 @@ class _ContinuePendingWorkdayOverState
 
             // CONFIRM
 
-            /*
-            Expanded(
-              child: SizedBox(
-                height: 80,
-                child: buildCustomButton(
-                  text: 'CONFIRM',
-                  height: 80,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.greenAccent,
-                      Colors.green.shade600,
-                      Colors.green.shade900,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  onPressed: () async {
-                    final overlay = Overlay.of(context, rootOverlay: true);
-                    final pendingProv = context.read<PendingProvider>();
-                    final employeeProv = context.read<EmployeeProvider>();
-
-                    final code = await Navigator.push<String>(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const MobileScannerPage()),
-                    );
-
-                    if (!mounted) return;
-                    if (code == null || code.isEmpty || code == "-1") return;
-
-                    pendingProv.attachEmployeeProvider(employeeProv);
-                    final success = await pendingProv.scanEmployee(code);
-
-                    if (!mounted) return;
-
-                    if (!success) {
-                      CustomSnackbar.showWithOverlay(
-                        overlay,
-                        pendingProv.errorMessage ?? "Scan failed",
-                        isSuccess: false,
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
-            */
-
             Expanded(
               child: SizedBox(
                 height: 80,
@@ -640,6 +551,12 @@ class _ContinuePendingWorkdayOverState
                                 idPending: int.parse(widget.idPending),
                                 idEmployee: prov.confirmedEmployee.idEmployee,
                               );
+
+                              if (!mounted) return;
+                              // 🔥 TAMBAHAN: refresh list-nya di sini, gak gantung ke pop chain
+                              if (success) {
+                                await prov.fetchPending(widget.idProses);
+                              }
 
                               if (!mounted) return;
 

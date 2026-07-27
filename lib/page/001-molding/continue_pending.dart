@@ -390,7 +390,6 @@ class _ContinuePendingState extends State<ContinuePending> {
         const SizedBox(width: 8),
 
         // ---------------- CONFIRM ----------------
-
         Expanded(
           child: SizedBox(
             height: 80,
@@ -493,7 +492,12 @@ class _ContinuePendingState extends State<ContinuePending> {
                           );
 
                           if (!mounted) return;
+                          // 🔥 TAMBAHAN: refresh list-nya di sini, gak gantung ke pop chain
+                          if (success) {
+                            await prov.fetchPending(widget.idProses);
+                          }
 
+                          if (!mounted) return;
                           if (widget.onSuccess != null) {
                             widget.onSuccess!(success);
                           }

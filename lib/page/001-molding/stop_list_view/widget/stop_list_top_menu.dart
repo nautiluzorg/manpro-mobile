@@ -141,6 +141,7 @@ class StopListTopMenu extends StatelessWidget {
               SizedBox(width: widthApp * 0.01),
 
               // CLEAR BUTTON (Circle gradient)
+
               if (prov.isFilterActive)
                 SizedBox(
                   width: 45,
