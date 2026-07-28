@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_provider_data/block/block_post.dart';
 import 'package:flutter_provider_data/page/main_menu_admin.dart';
 import 'package:flutter_provider_data/page/login_page.dart';
 import 'package:flutter_provider_data/page/main_menu_leader.dart';
@@ -59,7 +58,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<RunningProvider>(
           create: (_) => RunningProvider(service: RunningService()),
         ),
-        ChangeNotifierProvider<BlockPost>(create: (_) => BlockPost()),
         ChangeNotifierProvider<NGProvider>(
           create: (_) => NGProvider(),
         ),
