@@ -1,8 +1,94 @@
+// lib/service/employee_service.dart
+import 'package:dio/dio.dart';
+import 'package:flutter_provider_data/model/master/employee_model.dart';
+import 'dio_client.dart';
+
+class EmployeeService {
+  final Dio _dio;
+
+  EmployeeService({Dio? dio}) : _dio = dio ?? DioClient.instance;
+
+  /// ================= GET EMPLOYEE DETAIL =================
+  Future<EmployeeModel> getEmployeeDetail(String id) async {
+    try {
+      final response = await _dio.get('/api/employee-detail/$id/');
+
+      final data = response.data;
+
+      if (!data.containsKey('id_employee')) {
+        throw Exception("Invalid data from server");
+      }
+
+      if (data['status'] == "02") {
+        throw Exception("Employee not Active");
+      }
+
+      return EmployeeModel.fromJson(data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw Exception("Employee not found");
+      }
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      } else if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          "Error: ${e.response?.statusCode} - ${e.response?.statusMessage}");
+    } catch (e) {
+      throw Exception("Unexpected error: $e");
+    }
+  }
+
+  /// ================= GET ALL EMPLOYEES =================
+  Future<List<EmployeeModel>> getAllEmployees() async {
+    try {
+      final response = await _dio.get('/api/employee-list-search/');
+
+      final List data = response.data;
+      return data.map((e) => EmployeeModel.fromJson(e)).toList();
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      } else if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          "Failed to load employee list: ${e.response?.statusCode}");
+    } catch (e) {
+      throw Exception("Unexpected error: $e");
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io'; // <- untuk SocketException
 import 'package:flutter_provider_data/model/master/employee_model.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_provider_data/config/app_config.dart';
 import 'token_storage.dart';
 
@@ -88,3 +174,4 @@ class EmployeeService {
     }
   }
 }
+*/

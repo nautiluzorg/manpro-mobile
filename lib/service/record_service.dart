@@ -1,9 +1,100 @@
 // lib/services/record_service.dart
+import 'dart:async';
+import 'package:dio/dio.dart';
+import '../service/dio_client.dart';
+import '../model/record_active_model.dart';
+
+class RecordService {
+  final Dio _dio;
+
+  RecordService({Dio? dio}) : _dio = dio ?? DioClient.instance;
+
+  /// ================= FETCH ACTIVE RECORDS =================
+  Future<List<RecordActiveModel>> fetchActiveRecords({
+    String jobnumber = '',
+    String idEmployeeFinish = '',
+    String runStatus = '', // bisa "pending,running"
+  }) async {
+    Map<String, String> queryParams = {};
+    if (jobnumber.isNotEmpty) queryParams['jobnumber'] = jobnumber;
+    if (idEmployeeFinish.isNotEmpty) {
+      queryParams['id_employee_finish'] = idEmployeeFinish;
+    }
+    if (runStatus.isNotEmpty) queryParams['run_status'] = runStatus;
+
+    try {
+      final response = await _dio.get(
+        '/api/record-on-process/',
+        queryParameters: queryParams,
+      );
+
+      final body = response.data;
+      if (body is List) {
+        return body.map((r) => RecordActiveModel.fromJson(r)).toList();
+      } else {
+        throw Exception("Unexpected response type: ${body.runtimeType}");
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      } else if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          'Failed to load active records (${e.response?.statusCode})');
+    } catch (e) {
+      throw Exception("Error fetching active records: $e");
+    }
+  }
+
+  /// ================= DELETE RECORD =================
+  Future<bool> deleteRecord(String idRecord) async {
+    try {
+      final response = await _dio.delete(
+        '/api/recordproses/delete/$idRecord/',
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(
+            'Failed to delete record (${response.statusCode}): ${response.data}');
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      } else if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          'Failed to delete record (${e.response?.statusCode}): ${e.response?.data}');
+    } catch (e) {
+      throw Exception("Error deleting record: $e");
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+// lib/services/record_service.dart
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_provider_data/service/token_storage.dart';
-import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 import '../model/record_active_model.dart';
 
@@ -94,7 +185,7 @@ class RecordService {
     }
   }
 }
-
+*/
 
 
 
@@ -111,7 +202,6 @@ class RecordService {
 /*
 import 'dart:convert';
 import 'package:flutter_provider_data/model/record_active_model.dart';
-import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 
 class RecordService {

@@ -75,6 +75,39 @@ class AuthService {
       return false;
     }
   }
+
+// Function baru
+// lib/service/auth_service.dart
+  Future<bool> refreshToken() async {
+    try {
+      final refresh = await TokenStorage.getRefreshToken();
+      if (refresh == null) return false;
+
+      final response = await _dio.post(
+        ApiConfig
+            .refresh, // pastikan endpoint ini ada di ApiConfig, biasanya /api/token/refresh/
+        data: {"refresh": refresh},
+      );
+
+      if (response.statusCode == 200) {
+        final newAccess = response.data['access'];
+        final newRefresh =
+            response.data['refresh']; // ada karena ROTATE_REFRESH_TOKENS=True
+
+        if (newAccess == null) return false;
+
+        await TokenStorage.saveTokens(
+          access: newAccess,
+          refresh: newRefresh ?? refresh,
+        );
+        return true;
+      }
+      return false;
+    } catch (e) {
+      logPrint("REFRESH ERROR: $e");
+      return false;
+    }
+  }
 }
 
 

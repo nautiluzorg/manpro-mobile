@@ -1,9 +1,51 @@
 // lib/services/reason_service.dart
+import 'package:dio/dio.dart';
+import '../service/dio_client.dart';
+import '../model/reason_dropdown_model.dart';
+
+class ReasonService {
+  final Dio _dio;
+
+  ReasonService({Dio? dio}) : _dio = dio ?? DioClient.instance;
+
+  /// ================= FETCH REASON LIST =================
+  Future<List<ReasonDropdownModel>> fetchReasonList({
+    required String idProses,
+  }) async {
+    try {
+      final response = await _dio.get('/api/reason-list/all/');
+
+      final data = response.data;
+      if (data is List) {
+        return data.map((e) => ReasonDropdownModel.fromJson(e)).toList();
+      } else {
+        throw Exception("Unexpected response format: ${data.runtimeType}");
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return [];
+      }
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      }
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          "Failed to fetch reason list (${e.response?.statusCode}): ${e.response?.data}");
+    } catch (e) {
+      throw Exception("Error fetching reason list: $e");
+    }
+  }
+}
+
+/*
+// lib/services/reason_service.dart
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_provider_data/service/token_storage.dart';
-import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 import '../model/reason_dropdown_model.dart';
 
@@ -61,7 +103,7 @@ class ReasonService {
     }
   }
 }
-
+*/
 
 
 
@@ -69,7 +111,6 @@ class ReasonService {
 /*
 import 'dart:convert';
 import 'package:flutter_provider_data/model/reason_dropdown_model.dart';
-import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 
 class ReasonService {

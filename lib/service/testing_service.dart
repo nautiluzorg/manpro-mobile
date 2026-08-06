@@ -1,3 +1,123 @@
+// lib/service/testing_service.dart
+import 'package:dio/dio.dart';
+import 'package:flutter_provider_data/model/master/mold_model.dart';
+import 'package:flutter_provider_data/model/monitor_testing_model.dart';
+import 'package:flutter_provider_data/model/master/product_model.dart';
+import 'package:flutter_provider_data/model/check_proses_testing_model.dart';
+import 'package:flutter_provider_data/model/record_testing_detail_response.dart';
+import 'dio_client.dart';
+
+class TestingService {
+  final Dio _dio;
+
+  TestingService({Dio? dio}) : _dio = dio ?? DioClient.instance;
+
+  // ================= JOB NUMBER =================
+  Future<CheckProsesTestingModel> checkJobNumber({
+    required String jobNumber,
+    required String idProses,
+  }) async {
+    try {
+      final response = await _dio
+          .get('/api/check-proses-jobnumber-testing/$jobNumber/$idProses/');
+
+      return CheckProsesTestingModel.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception(
+        "Job number not found (status: ${e.response?.statusCode})",
+      );
+    }
+  }
+
+  // ================= PRODUCT DETAIL =================
+  Future<ProductModel> fetchProductDetail(String bcode) async {
+    try {
+      final response = await _dio.get('/api/product-detail/$bcode/');
+
+      return ProductModel.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception(
+        "Failed load product detail (status: ${e.response?.statusCode})",
+      );
+    }
+  }
+
+  // ================= GET LIST MOLDS BY DRAWING =================
+  Future<List<MoldModel>> fetchMoldsByDrawing(
+    String drawingNumber,
+  ) async {
+    try {
+      final response =
+          await _dio.get('/api/mold-list-by-drawing/$drawingNumber/');
+
+      final List data = response.data;
+      return data.map((e) => MoldModel.fromJson(e)).toList();
+    } on DioException catch (e) {
+      throw Exception(
+        "Failed to load molds (status: ${e.response?.statusCode})",
+      );
+    }
+  }
+
+  // ================= POST RECORD TESTING =================
+  Future<bool> postRecordTesting(
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _dio.post('/api/record-testing/', data: body);
+
+      return response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300;
+    } on DioException {
+      return false;
+    }
+  }
+
+  // ================= PATCH RECORD TESTING =================
+  Future<bool> patchRecordTesting(
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      final response = await _dio.patch('/api/record-testing/', data: body);
+
+      return response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300;
+    } on DioException {
+      return false;
+    }
+  }
+
+  // ================= GET TESTING DETAIL =================
+  Future<RecordTestingDetailResponse> getTestingDetail(
+    String idRecordTest,
+  ) async {
+    try {
+      final response = await _dio.get('/api/testing/detail/$idRecordTest/');
+
+      return RecordTestingDetailResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception(
+        "Failed to load testing detail (status: ${e.response?.statusCode})",
+      );
+    }
+  }
+
+  // ================= LIST ON PROGRESS TESTING =================
+  Future<MonitorTestingModel> fetchOnProgressTesting() async {
+    try {
+      final response = await _dio.get('/api/onprogress-testing/');
+
+      return MonitorTestingModel.fromJson(response.data);
+    } on DioException catch (e) {
+      throw Exception(
+        "Failed to fetch testing data (status: ${e.response?.statusCode})",
+      );
+    }
+  }
+}
+/*
 import 'dart:convert';
 import 'package:flutter_provider_data/config/app_config.dart';
 import 'package:flutter_provider_data/model/master/mold_model.dart';
@@ -6,7 +126,6 @@ import 'package:flutter_provider_data/model/master/product_model.dart';
 import 'package:flutter_provider_data/model/check_proses_testing_model.dart';
 import 'package:flutter_provider_data/model/record_testing_detail_response.dart';
 import 'package:flutter_provider_data/service/token_storage.dart';
-import 'package:http/http.dart' as http;
 
 class TestingService {
   final http.Client _client;
@@ -176,6 +295,8 @@ class TestingService {
     }
   }
 }
+
+*/
 
 
 
@@ -387,7 +508,6 @@ import 'package:flutter_provider_data/model/mold_model.dart';
 import 'package:flutter_provider_data/model/product_model.dart';
 import 'package:flutter_provider_data/model/check_proses_testing_model.dart';
 import 'package:flutter_provider_data/model/record_testing_detail_response.dart';
-import 'package:http/http.dart' as http;
 
 class TestingService {
   final http.Client _client;

@@ -1,9 +1,58 @@
 // lib/services/ng_service.dart
+import 'package:dio/dio.dart';
+import '../service/dio_client.dart';
+import '../model/ng_dropdown_model.dart';
+
+class NGService {
+  final Dio _dio;
+
+  NGService({Dio? dio}) : _dio = dio ?? DioClient.instance;
+
+  /// ================= FETCH NG LIST =================
+  Future<List<NgDropdownModel>> fetchNGList({
+    required String productType,
+    required String idProses,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/api/ngs/',
+        queryParameters: {
+          'product_type': productType,
+          'id_proses': idProses,
+        },
+      );
+
+      final data = response.data;
+      if (data is List) {
+        return data.map((item) => NgDropdownModel.fromJson(item)).toList();
+      } else {
+        throw Exception("Unexpected response format: ${data.runtimeType}");
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return [];
+      }
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      }
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          "Failed to fetch NG list (${e.response?.statusCode}): ${e.response?.data}");
+    } catch (e) {
+      throw Exception("Error fetching NG list: $e");
+    }
+  }
+}
+
+/*
+// lib/services/ng_service.dart
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_provider_data/service/token_storage.dart';
-import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
 import '../model/ng_dropdown_model.dart';
 
@@ -68,3 +117,5 @@ class NGService {
     }
   }
 }
+
+*/

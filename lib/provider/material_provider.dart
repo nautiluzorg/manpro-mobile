@@ -99,7 +99,7 @@ class MaterialProvider extends ChangeNotifier {
 
   Future<void> scanGoldPillFromCode(String qrCode) async {
     try {
-      print("DEBUG: RAW QR CODE: '$qrCode'");
+      logPrint("DEBUG: RAW QR CODE: '$qrCode'");
 
       // 1. Bersihkan state lama
       clearGoldPill();
@@ -121,9 +121,9 @@ class MaterialProvider extends ChangeNotifier {
       // 4. Panggil API untuk ambil data JSON yang lengkap (id 21, lot number, dll)
       await fetchGoldPillDetail();
 
-      print("DEBUG: Sukses memuat data untuk ID: $id");
+      logPrint("DEBUG: Sukses memuat data untuk ID: $id");
     } catch (e) {
-      print("DEBUG: CATCH ERROR - $e");
+      logPrint("DEBUG: CATCH ERROR - $e");
       clearGoldPill();
       rethrow;
     }
@@ -169,7 +169,7 @@ class MaterialProvider extends ChangeNotifier {
   /// Proses scan QR Code Carbon Pill (Input dari String/Raw)
   Future<void> scanCarbonPillFromCode(String qrCode) async {
     try {
-      print("DEBUG: RAW QR CODE: '$qrCode'");
+      logPrint("DEBUG: RAW QR CODE: '$qrCode'");
 
       // 1. Bersihkan state lama
       clearCarbonPill();
@@ -191,9 +191,9 @@ class MaterialProvider extends ChangeNotifier {
       // 4. Panggil API untuk ambil data JSON yang lengkap (id 21, lot number, dll)
       await fetchCarbonPillDetail();
 
-      print("DEBUG: Sukses memuat data Carbon Pill untuk ID: $id");
+      logPrint("DEBUG: Sukses memuat data Carbon Pill untuk ID: $id");
     } catch (e) {
-      print("DEBUG: CATCH ERROR - $e");
+      logPrint("DEBUG: CATCH ERROR - $e");
       clearCarbonPill();
       rethrow;
     }

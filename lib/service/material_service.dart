@@ -1,7 +1,65 @@
+// lib/service/material_service.dart
+import 'package:dio/dio.dart';
+import 'dio_client.dart';
+
+class MaterialService {
+  final Dio _dio;
+
+  MaterialService({Dio? dio}) : _dio = dio ?? DioClient.instance;
+
+  /// ================= GOLD PILL DETAIL =================
+  Future<Map<String, dynamic>> getGoldPillDetail(int id) async {
+    try {
+      final res = await _dio.get('/api/goldpill-detail/$id/');
+      return res.data as Map<String, dynamic>;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw Exception("GoldPill not found");
+      }
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      }
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          "Error: ${e.response?.statusCode} - ${e.response?.statusMessage}");
+    } catch (e) {
+      throw Exception("Unexpected error: $e");
+    }
+  }
+
+  /// ================= CARBON PILL DETAIL =================
+  Future<Map<String, dynamic>> getCarbonPillDetail(int id) async {
+    try {
+      final res = await _dio.get('/api/carbonpill-detail/$id/');
+      return res.data as Map<String, dynamic>;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw Exception("CarbonPill not found");
+      }
+      if (e.type == DioExceptionType.connectionError) {
+        throw Exception("No internet connection.");
+      }
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw Exception("Request timed out.");
+      }
+      throw Exception(
+          "Error: ${e.response?.statusCode} - ${e.response?.statusMessage}");
+    } catch (e) {
+      throw Exception("Unexpected error: $e");
+    }
+  }
+}
+
+
+
+/*
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:flutter_provider_data/config/app_config.dart';
 import 'package:flutter_provider_data/service/token_storage.dart';
 
@@ -77,3 +135,4 @@ class MaterialService {
     }
   }
 }
+*/
