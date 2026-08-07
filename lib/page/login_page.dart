@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _isLoading = true);
 
-    final success = await authService.login(
+    final result = await authService.login(
       username: _usernameCtrl.text.trim(),
       password: _passwordCtrl.text,
     );
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _isLoading = false);
 
-    if (success) {
+    if (result.success) {
       // ⬇️ SERAHKAN KE SISTEM AUTH (JWT-based navigation)
       await AuthNavigator.goHome(context);
     } else {

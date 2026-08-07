@@ -1,5 +1,6 @@
 // lib/service/token_storage.dart
 
+import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
@@ -13,12 +14,16 @@ class TokenStorage {
     required String access,
     required String refresh,
   }) async {
+    print("💾 Simpan ACCESS_TOKEN: $access");
+    print("💾 Simpan REFRESH_TOKEN: $refresh");
     await _storage.write(key: _accessToken, value: access);
     await _storage.write(key: _refreshToken, value: refresh);
   }
 
   static Future<String?> getAccessToken() async {
-    return await _storage.read(key: _accessToken);
+    final token = await _storage.read(key: _accessToken);
+    logPrint("📦 Ambil ACCESS_TOKEN: $token");
+    return token;
   }
 
   static Future<String?> getRefreshToken() async {

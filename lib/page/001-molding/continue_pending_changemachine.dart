@@ -127,6 +127,7 @@ class _ContinuePendingChangeMachineState
   }
 
   // ================= MAIN CONTENT =================
+
   Widget _buildMainContent(PendingProvider prov) {
     final data = prov.pendingDetail.first;
 
@@ -205,7 +206,7 @@ class _ContinuePendingChangeMachineState
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 12),
                         Text(
                           data.employeeName,
                           style: GoogleFonts.poppins(
@@ -230,6 +231,45 @@ class _ContinuePendingChangeMachineState
                           style: GoogleFonts.poppins(
                               fontSize: 11, color: Colors.grey.shade600),
                           textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () {
+                              // TODO: aksi scan QR / buka scanner
+                            },
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.indigoAccent,
+                                    Colors.indigo.shade900
+                                  ],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.indigo.withValues(alpha: 0.3),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.qr_code_scanner,
+                                color: Colors.white,
+                                size: 48,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -266,7 +306,7 @@ class _ContinuePendingChangeMachineState
                                       [
                                         'JOB NUMBER',
                                         'DRAW NO',
-                                        'MACHINE',
+                                        'PREVIOUS MACHINE',
                                         'QTY',
                                         'TIME STOP',
                                         'PENDING REASON',
@@ -466,7 +506,7 @@ class _ContinuePendingChangeMachineState
           child: SizedBox(
             height: 80,
             child: buildCustomButton(
-              text: 'ADD MACHINE',
+              text: 'NEW MC',
               height: 80,
               fontSize: 20,
               fontWeight: FontWeight.w600,

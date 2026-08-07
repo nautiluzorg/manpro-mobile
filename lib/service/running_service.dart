@@ -1,4 +1,4 @@
-// lib/services/running_service.dart
+// lib/service/running_service.dart
 import 'package:dio/dio.dart';
 import 'package:flutter_provider_data/model/reason_dropdown_model.dart';
 import 'package:flutter_provider_data/model/master/reason_model.dart';
@@ -10,9 +10,11 @@ import 'package:flutter_provider_data/utils/logger.dart';
 import 'dio_client.dart';
 
 class RunningService {
-  final Dio _dio;
+  final Dio _dio = DioClient.instance;
 
-  RunningService({Dio? dio}) : _dio = dio ?? DioClient.instance;
+  RunningService();
+
+  // RunningService({Dio? dio}) : _dio = dio ?? DioClient.instance;
 
   String _extractErrorMessage(dynamic body) {
     if (body is Map) {
@@ -43,6 +45,11 @@ class RunningService {
           .map((e) => RecordRunningModel.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
+      logPrint('DioException type: ${e.type}');
+      logPrint('DioException message: ${e.message}');
+      logPrint('Status code: ${e.response?.statusCode}');
+      logPrint('Response data: ${e.response?.data}');
+
       final errorMessage = _extractErrorMessage(e.response?.data);
       throw Exception(
           'FETCH_RUNNING_RECORDS_FAILED: $errorMessage (${e.response?.statusCode})');
