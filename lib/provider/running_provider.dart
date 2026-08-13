@@ -451,6 +451,40 @@ class RunningProvider extends ChangeNotifier {
 
   Future<bool> submitWorkdayOverData({
     required String idRecord,
+    required String idReason,
+    required String idEmployee,
+    required String idProses,
+    required String bcode,
+    required int shootQty,
+    required List<Map<String, dynamic>> ngList,
+  }) async {
+    setLoadingStop(true);
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      return await service.submitWorkdayOver(
+        idRecord: idRecord,
+        idReason: idReason,
+        idEmployee: idEmployee,
+        idProses: idProses,
+        bcode: bcode,
+        shootQty: shootQty,
+        ngList: ngList,
+      );
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+      return false;
+    } finally {
+      setLoadingStop(false);
+      notifyListeners();
+    }
+  }
+
+/*
+  Future<bool> submitWorkdayOverData({
+    required String idRecord,
     required String idEmployee,
     required String idProses,
     required String bcode,
@@ -475,6 +509,7 @@ class RunningProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  */
 
   Future<bool> submitRecordStopData({
     required String idRecord,

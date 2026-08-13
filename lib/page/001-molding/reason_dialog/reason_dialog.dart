@@ -246,6 +246,65 @@ class _ReasonSelectDialogState extends State<ReasonSelectDialog> {
                         onSubmit: _handleSubmit,
                       ),
                       const SizedBox(height: 10),
+
+//Ini untuk Reason Workday Over
+
+                      if (provider.selectedReason?.idReason == '02') ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: TextField(
+                                      controller:
+                                          _controller.currentShootQtyController,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        LengthLimitingTextInputFormatter(5),
+                                        NoLeadingZeroFormatter(),
+                                      ],
+                                      style: const TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        labelText: 'SHOOTS',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  _buildNgDropdownSection(provider),
+                                  const SizedBox(width: 4),
+                                  NgQtyCounter(
+                                    ngQtyController:
+                                        _controller.ngQtyController,
+                                    onDecrement: _handleDecrementNgQty,
+                                    onIncrement: _handleIncrementNgQty,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  NgAddButton(
+                                    isEnabled: _controller.isAddButtonEnabled,
+                                    onPressed: _handleAddNg,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              NgDataTable(
+                                ngDataList: _controller.ngDataList,
+                                onDelete: _handleDeleteNg,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+
+//Sampai ini untuk Reason Workday Over.
+
                       if (provider.selectedReason?.idReason == '03') ...[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),

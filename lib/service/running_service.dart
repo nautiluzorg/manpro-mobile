@@ -120,7 +120,43 @@ class RunningService {
     }
   }
 
+  Future<bool> submitWorkdayOver({
+    required String idRecord,
+    required String idReason,
+    required String idEmployee,
+    required String idProses,
+    required String bcode,
+    required int shootQty,
+    required List<Map<String, dynamic>> ngList,
+  }) async {
+    try {
+      await _dio.post(
+        '/api/submit-workday-over/',
+        data: {
+          "id_record": idRecord,
+          "id_reason": idReason,
+          "id_employee": idEmployee,
+          "id_proses": idProses,
+          "bcode": bcode,
+          "shoot_qty": shootQty,
+          "ng_list": ngList,
+        },
+      );
+
+      return true;
+    } on DioException catch (e) {
+      final errorMessage = _extractErrorMessage(e.response?.data);
+      throw Exception(
+          'SUBMIT_CHANGE_OPERATOR_FAILED: $errorMessage (${e.response?.statusCode})');
+    } on Exception {
+      rethrow;
+    } catch (e) {
+      throw Exception('SUBMIT_CHANGE_OPERATOR_ERROR: $e');
+    }
+  }
+
   /// Service workday over
+  /*
   Future<bool> submitWorkdayOver({
     required String idRecord,
     required String idEmployee,
@@ -150,6 +186,7 @@ class RunningService {
       throw Exception('SUBMIT_WORKDAY_OVER_ERROR: $e');
     }
   }
+  */
 
   /// Service pergantian operator
   Future<bool> submitChangeOperator({

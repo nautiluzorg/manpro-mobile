@@ -58,8 +58,30 @@ class ReasonDialogSubmitHelper {
 
   // ── Reason 02: Workday Over ───────────────────────────────
   Future<bool> _submitWorkdayOver() async {
+    if (!controller.isShootQtyValid) {
+      CustomSnackbar.showWithOverlay(
+        overlay,
+        'HARAP LENGKAPI DATA CURRENT SHOOT.',
+        isSuccess: false,
+      );
+      return false; // ✅
+    }
+
+    final shootQty = controller.getShootQty();
+    final ngListMapped = controller.mapNgDataForSubmit();
+
     final data = runningProvider.recordDetails;
     if (data.isEmpty) return false;
+
+    final success = await runningProvider.submitWorkdayOverData(
+      idRecord: idRecord,
+      idReason: runningProvider.selectedReason?.idReason ?? '',
+      idEmployee: data[0].activeEmployee.idEmployee,
+      idProses: data[0].proses.idProses,
+      bcode: data[0].detailsRecord[0].bcode.bcode,
+      shootQty: shootQty,
+      ngList: ngListMapped,
+    );
 
     final activeEmployeeId = data[0].activeEmployee.idEmployee;
     final scanEmployeeId = employeeProvider.employee.idEmployee;
@@ -72,15 +94,6 @@ class ReasonDialogSubmitHelper {
       );
       return false;
     }
-
-    final success = await runningProvider.submitWorkdayOverData(
-      idRecord: idRecord,
-      idEmployee: activeEmployeeId,
-      idProses: data[0].proses.idProses,
-      bcode: data[0].detailsRecord.isNotEmpty
-          ? data[0].detailsRecord[0].bcode.bcode
-          : '',
-    );
 
     if (success) {
       await _handleSuccess();

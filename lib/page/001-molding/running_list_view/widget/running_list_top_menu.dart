@@ -163,7 +163,7 @@ class RunningListTopMenu extends StatelessWidget {
               SizedBox(width: widthApp * 0.02),
 
               // TOTAL TEXT
-              // TOTAL TEXT
+
               Expanded(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
@@ -226,7 +226,7 @@ class RunningListTopMenu extends StatelessWidget {
                     ),
                   ),
                 ),
-              ), // <-- penutup Expanded
+              ),
             ],
           ),
         ),
