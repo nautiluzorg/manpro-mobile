@@ -15,8 +15,7 @@ class WorkdayOverAnnouncementBanner extends StatelessWidget {
           height: 80,
           width: double.infinity,
           margin: const EdgeInsets.symmetric(vertical: 4),
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
@@ -55,7 +54,7 @@ class WorkdayOverAnnouncementBanner extends StatelessWidget {
                     ),
                   ),
                   FadeAnimatedText(
-                    '📢 Jangan lupa input qty Shoot last operator',
+                    '📢 Fokus pada proses dan keep safety',
                     duration: const Duration(seconds: 10),
                     textStyle: GoogleFonts.poppins(
                       fontSize: 22,
@@ -64,7 +63,7 @@ class WorkdayOverAnnouncementBanner extends StatelessWidget {
                     ),
                   ),
                   ColorizeAnimatedText(
-                    '💡 Jangan lupa input data NG last Operator jika ada!',
+                    '💡 Jangan ciptakan Produk NG!',
                     speed: const Duration(milliseconds: 50),
                     textStyle: GoogleFonts.poppins(
                       fontSize: 22,

@@ -14,18 +14,6 @@ Future<bool?> showRunningDialog(
 }) {
   late final Widget targetPage;
 
-  /*
-   if (idReason == '02') {
-    targetPage = ContinuePendingWorkdayOver(
-      idPending: idPending,
-      idProses: idProses,
-      productType: productType,
-      onSuccess: onSuccess,
-    );
-  }
-  
-   */
-
   if (idReason == '02') {
     targetPage = ContinuePendingWorkdayOver(
       idPending: idPending,

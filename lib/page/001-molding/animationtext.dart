@@ -267,6 +267,7 @@ class _AnimationTextState extends State<AnimationText>
           ),
 
           _buildSectionTitle("Glowing Text (True Neon Effect Safe)"),
+
           _container(
             color: Colors.black,
             height: 200,
@@ -279,7 +280,6 @@ class _AnimationTextState extends State<AnimationText>
                   return Stack(
                     alignment: Alignment.center,
                     children: [
-                      // ✨ Lapisan cahaya lembut (blur glow aman)
                       Opacity(
                         opacity: 0.5 + 0.3 * glow,
                         child: ImageFiltered(

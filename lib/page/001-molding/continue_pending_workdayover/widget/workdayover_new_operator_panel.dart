@@ -84,22 +84,6 @@ class WorkdayOverNewOperatorPanel extends StatelessWidget {
               onSubmit: onSubmitNewOperator,
             ),
             const SizedBox(height: 5),
-
-/*
-            WorkdayOverNgSection(
-              data: data,
-              qtyShootController: qtyShootController,
-              ngProvider: ngProvider,
-              selectedNgId: selectedNgId,
-              qtyNg: qtyNg,
-              addedNgItems: addedNgItems,
-              onNgSelected: onNgSelected,
-              onIncrementNg: onIncrementNg,
-              onDecrementNg: onDecrementNg,
-              onAddNg: onAddNg,
-              onDeleteNg: onDeleteNg,
-            ),
-*/
           ],
         ),
       ),

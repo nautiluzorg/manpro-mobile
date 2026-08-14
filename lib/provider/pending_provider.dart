@@ -203,6 +203,26 @@ class PendingProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchPendingDetailWorkdayOver(String idPending) async {
+    _setLoading(true);
+    _setError(null);
+
+    logPrint("Fetching pending detail for idPending: $idPending");
+
+    try {
+      _pendingDetail = await _service.fetchPendingDetailWorkdayOver(idPending);
+      if (_pendingDetail.isNotEmpty) {
+        _storedEmployeeId = _pendingDetail.first.idEmployee;
+      }
+      logPrint("Fetched ${_pendingDetail.length} records");
+    } catch (e) {
+      _pendingDetail = [];
+      _setError(e.toString());
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   void resetPendingDetail() {
     _pendingDetail = [];
     notifyListeners();

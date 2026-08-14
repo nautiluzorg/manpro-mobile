@@ -72,6 +72,27 @@ class PendingService {
     }
   }
 
+  Future<List<RecordPendingDetailModel>> fetchPendingDetailWorkdayOver(
+      String idPending) async {
+    try {
+      final response =
+          await _dio.get('/api/pending-detail-workdayover/$idPending/');
+
+      final jsonResponse = response.data;
+
+      if (jsonResponse is Map && jsonResponse['data'] is List) {
+        return (jsonResponse['data'] as List)
+            .map((e) => RecordPendingDetailModel.fromJson(e))
+            .toList();
+      }
+
+      return [RecordPendingDetailModel.fromJson(jsonResponse)];
+    } on DioException catch (e) {
+      throw Exception(
+          'Failed to load pending detail (${e.response?.statusCode})');
+    }
+  }
+
   Future<RecordPendingDetailModel> fetchWithNgDetail(String idPending) async {
     try {
       final response =

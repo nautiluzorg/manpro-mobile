@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/provider/employee_provider.dart';
 import 'package:flutter_provider_data/provider/ng_provider.dart';
 import 'package:flutter_provider_data/provider/pending_provider.dart';
-// import 'package:flutter_provider_data/utils/custom_button.dart'; // customDialogAppBar
 import 'package:flutter_provider_data/utils/custom_snackbar.dart';
 import 'package:flutter_provider_data/utils/mobile_scanner_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:flutter_provider_data/model/ng_dropdown_model.dart';
-
 import 'widget/workdayover_main_content.dart';
 import 'widget/workdayover_header_bar.dart';
 import 'widget/workdayover_new_operator_panel.dart';
+import 'package:flutter_provider_data/model/ng_operator_model.dart';
 
-/// Halaman "Continue Pending - Workday Over".
-///
 /// File ini murni orchestrator: menyimpan state (controller, hasil scan,
 /// item NG) dan mendelegasikan seluruh tampilan ke widget-widget di
 /// folder `widget/`.
@@ -67,10 +64,11 @@ class _ContinuePendingWorkdayOverState
       pendingProv.resetPendingDetail();
       pendingProv.resetEmployeeScanState();
       pendingProv.clearNextMachine();
+      // await pendingProv.loadPendingDetailWithNg(int.parse(widget.idPending));
 
       // ← jalankan parallel, tidak saling tunggu
       await Future.wait([
-        pendingProv.fetchPendingDetail(widget.idPending),
+        pendingProv.fetchPendingDetailWorkdayOver(widget.idPending),
         ngProvider.loadNGList(
           productType: widget.productType,
           idProses: widget.idProses,
@@ -101,6 +99,11 @@ class _ContinuePendingWorkdayOverState
       _qtyNg = 0;
       _addedNgItems.clear();
     });
+  }
+
+  List<NgOperatorModel> _ngItems(PendingProvider prov) {
+    if (prov.pendingDetail.isEmpty) return const [];
+    return prov.pendingDetail.first.ngList;
   }
 
   // ── Handlers: view "same operator" ──────────────────────────────────
@@ -331,8 +334,8 @@ class _ContinuePendingWorkdayOverState
         preferredSize: const Size.fromHeight(60),
         child: customDialogAppBar(
           title: _showNewOperatorForm
-              ? "CONTINUE WORKDAY OVER WITH NEW OPERATOR"
-              : "CONTINUE WORKDAY OVER WITH SAME OPERATOR",
+              ? "CONTINUE WITH NEW OPERATOR"
+              : "CONTINUE SAME OPERATOR",
         ),
       ),
       body: SafeArea(
@@ -374,6 +377,7 @@ class _ContinuePendingWorkdayOverState
                             const SizedBox(height: 12),
                             WorkdayOverMainContent(
                               prov: prov,
+                              ngItems: _ngItems(prov),
                               onCancel: () => _handleCancel(prov),
                               onConfirmScan: () => _handleConfirmScan(
                                 context,
