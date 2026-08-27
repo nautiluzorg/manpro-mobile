@@ -22,7 +22,7 @@ class PendingProvider extends ChangeNotifier {
   // ===================== CONSTRUCTOR =====================
   PendingProvider.initial();
 
-  // ===================== LOADING STATE =====================
+  // ===================== LOADING STATE (LIST) =====================
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -32,6 +32,15 @@ class PendingProvider extends ChangeNotifier {
   }
 
   void setLoading(bool value) => _setLoading(value);
+
+//====================== LOADING STATE (DETAIL) ======================
+  bool _isDetailLoading = false;
+  bool get isDetailLoading => _isDetailLoading;
+
+  void _setDetailLoading(bool value) {
+    _isDetailLoading = value;
+    notifyListeners();
+  }
 
   // ===================== SUBMIT STATE =====================
   bool _isSubmitting = false;
@@ -184,7 +193,8 @@ class PendingProvider extends ChangeNotifier {
   String _storedEmployeeId = '';
 
   Future<void> fetchPendingDetail(String idPending) async {
-    _setLoading(true);
+    // _setLoading(true);
+    _setDetailLoading(true);
     _setError(null);
 
     logPrint("Fetching pending detail for idPending: $idPending");
@@ -199,12 +209,13 @@ class PendingProvider extends ChangeNotifier {
       _pendingDetail = [];
       _setError(e.toString());
     } finally {
-      _setLoading(false);
+      // _setLoading(false);
+      _setDetailLoading(false);
     }
   }
 
   Future<void> fetchPendingDetailWorkdayOver(String idPending) async {
-    _setLoading(true);
+    _setDetailLoading(true);
     _setError(null);
 
     logPrint("Fetching pending detail for idPending: $idPending");
@@ -219,7 +230,7 @@ class PendingProvider extends ChangeNotifier {
       _pendingDetail = [];
       _setError(e.toString());
     } finally {
-      _setLoading(false);
+      _setDetailLoading(false);
     }
   }
 
@@ -514,12 +525,10 @@ class PendingProvider extends ChangeNotifier {
   }
 
   /// ================= CONTINUE WORKDAY OVER NEW OPERATOR =================
+  /// ================= CONTINUE WORKDAY OVER NEW OPERATOR =================
   Future<bool> continueWorkdayOverNewOperator({
     required String idRecord,
-    required String idEmployeeLama,
-    required String idEmployeeBaru,
-    required int qtyShoot,
-    required List<Map<String, dynamic>> ngData,
+    required String idEmployee,
   }) async {
     _setSubmitting(true);
     _setError(null);
@@ -527,24 +536,15 @@ class PendingProvider extends ChangeNotifier {
     try {
       final response = await _service.continueWorkdayOverNewOperator(
         idRecord: idRecord,
-        idEmployeeLama: idEmployeeLama,
-        idEmployeeBaru: idEmployeeBaru,
-        qtyShoot: qtyShoot,
-        ngData: ngData,
+        idEmployee: idEmployee,
       );
 
-      logPrint(
-        'CONTINUE WORKDAY OVER SUCCESS: $response',
-      );
+      logPrint('CONTINUE WORKDAY OVER SUCCESS: $response');
 
       return true;
     } catch (e) {
       _setError(e.toString());
-
-      logPrint(
-        'CONTINUE WORKDAY OVER ERROR: $e',
-      );
-
+      logPrint('CONTINUE WORKDAY OVER ERROR: $e');
       return false;
     } finally {
       _setSubmitting(false);

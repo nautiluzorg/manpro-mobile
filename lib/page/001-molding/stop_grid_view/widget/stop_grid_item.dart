@@ -219,9 +219,9 @@ class StopGridItem extends StatelessWidget {
   Widget _buildContinueButton(BuildContext context) {
     return Container(
       // Dikecilkan dari 60 -> 50 supaya hemat tinggi.
-      height: 50,
+      height: 60,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(8),
         gradient: LinearGradient(
           colors: isSelected
               ? [Colors.grey.shade400, Colors.grey.shade500]
@@ -242,7 +242,7 @@ class StopGridItem extends StatelessWidget {
         child: Text(
           "CONTINUE",
           style: GoogleFonts.poppins(
-            fontSize: 15,
+            fontSize: 18,
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),

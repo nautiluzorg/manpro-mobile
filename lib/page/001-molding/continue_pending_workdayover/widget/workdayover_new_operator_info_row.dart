@@ -12,7 +12,7 @@ class WorkdayOverNewOperatorInfoRow extends StatelessWidget {
   final String scannedEmployeeName;
   final String scannedEmployeeSection;
   final String scannedEmployeeDivision;
-  final bool qtyShootFilled;
+  // final bool qtyShootFilled;
   final VoidCallback onScanNewOperator;
   final VoidCallback onBack;
   final VoidCallback onSubmit;
@@ -24,7 +24,7 @@ class WorkdayOverNewOperatorInfoRow extends StatelessWidget {
     required this.scannedEmployeeName,
     required this.scannedEmployeeSection,
     required this.scannedEmployeeDivision,
-    required this.qtyShootFilled,
+    // required this.qtyShootFilled,
     required this.onScanNewOperator,
     required this.onBack,
     required this.onSubmit,
@@ -318,7 +318,7 @@ class WorkdayOverNewOperatorInfoRow extends StatelessWidget {
                   children: [
                     Expanded(
                       child: SizedBox(
-                        height: 70,
+                        height: 80,
                         child: OutlinedButton(
                           onPressed: onBack,
                           style: OutlinedButton.styleFrom(
@@ -334,7 +334,7 @@ class WorkdayOverNewOperatorInfoRow extends StatelessWidget {
                           child: Text(
                             'BACK',
                             style: GoogleFonts.poppins(
-                              fontSize: 22,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: Colors.red.shade700,
                             ),
@@ -346,8 +346,8 @@ class WorkdayOverNewOperatorInfoRow extends StatelessWidget {
                     Expanded(
                       child: buildCustomButton(
                         text: 'SUBMIT',
-                        height: 70,
-                        fontSize: 22,
+                        height: 80,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
@@ -356,8 +356,7 @@ class WorkdayOverNewOperatorInfoRow extends StatelessWidget {
                               ? [Colors.blueAccent, Colors.blue.shade900]
                               : [Colors.grey.shade400, Colors.grey.shade600],
                         ),
-                        onPressed:
-                            (!hasScanned || !qtyShootFilled) ? null : onSubmit,
+                        onPressed: hasScanned ? onSubmit : null,
                       ),
                     ),
                   ],

@@ -46,8 +46,7 @@ class WorkdayOverActionButtons extends StatelessWidget {
                   ),
                   child: const Text(
                     'CANCEL',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -112,12 +111,12 @@ class WorkdayOverActionButtons extends StatelessWidget {
         // ── Row 2: CONTINUE NEW OPERATOR ────────────────────────────────
         SizedBox(
           width: double.infinity,
-          height: 70,
+          height: 90,
           child: buildCustomButton(
-            text: 'CONTINUE NEW OPERATOR',
-            height: 70,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            text: 'DILANJUTKAN OPERATOR BARU',
+            height: 90,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
             gradient: LinearGradient(
               colors: [
                 Colors.orangeAccent,

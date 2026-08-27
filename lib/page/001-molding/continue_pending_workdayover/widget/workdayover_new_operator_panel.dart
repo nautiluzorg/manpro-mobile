@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/provider/pending_provider.dart';
-import 'package:flutter_provider_data/provider/ng_provider.dart';
+// import 'package:flutter_provider_data/provider/ng_provider.dart';
 import 'package:flutter_provider_data/model/ng_dropdown_model.dart';
 import 'workdayover_header_bar.dart';
 import 'workdayover_announcement_banner.dart';
@@ -11,7 +11,7 @@ import 'workdayover_new_operator_info_row.dart';
 /// banner pengumuman + header record + info operator baru + section NG.
 class WorkdayOverNewOperatorPanel extends StatelessWidget {
   final PendingProvider prov;
-  final NGProvider ngProvider;
+  // final NGProvider ngProvider;
 
   final TextEditingController qtyShootController;
 
@@ -36,7 +36,7 @@ class WorkdayOverNewOperatorPanel extends StatelessWidget {
   const WorkdayOverNewOperatorPanel({
     super.key,
     required this.prov,
-    required this.ngProvider,
+    // required this.ngProvider,
     required this.qtyShootController,
     required this.scannedEmployeeId,
     required this.scannedEmployeeName,
@@ -78,7 +78,7 @@ class WorkdayOverNewOperatorPanel extends StatelessWidget {
               scannedEmployeeName: scannedEmployeeName,
               scannedEmployeeSection: scannedEmployeeSection,
               scannedEmployeeDivision: scannedEmployeeDivision,
-              qtyShootFilled: qtyShootController.text.isNotEmpty,
+              // qtyShootFilled: qtyShootController.text.isNotEmpty,
               onScanNewOperator: onScanNewOperator,
               onBack: onBack,
               onSubmit: onSubmitNewOperator,

@@ -13,7 +13,7 @@ class StopGridTotalText extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: 'TOTAL ',
+            text: 'TOTAL  ',
             style: GoogleFonts.poppins(
               color: Colors.blueGrey.shade400,
               fontWeight: FontWeight.w500,
@@ -21,6 +21,8 @@ class StopGridTotalText extends StatelessWidget {
             ),
           ),
           WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
             child: ShaderMask(
               shaderCallback: (bounds) => LinearGradient(
                 colors: [Colors.red.shade400, Colors.red.shade800],
@@ -38,7 +40,7 @@ class StopGridTotalText extends StatelessWidget {
             ),
           ),
           TextSpan(
-            text: ' MOLD STOP',
+            text: '  STOP',
             style: GoogleFonts.poppins(
               color: Colors.blueGrey.shade400,
               fontWeight: FontWeight.w500,

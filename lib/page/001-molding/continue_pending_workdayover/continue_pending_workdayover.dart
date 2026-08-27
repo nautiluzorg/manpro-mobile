@@ -188,7 +188,6 @@ class _ContinuePendingWorkdayOverState
 
   Future<void> _handleScanNewOperator(PendingProvider prov) async {
     final data = prov.pendingDetail.first;
-
     final code = await Navigator.push<String>(
       context,
       MaterialPageRoute(builder: (_) => const MobileScannerPage()),
@@ -245,10 +244,7 @@ class _ContinuePendingWorkdayOverState
 
       final success = await prov.continueWorkdayOverNewOperator(
         idRecord: data.idRecord,
-        idEmployeeLama: data.idEmployee,
-        idEmployeeBaru: _scannedEmployeeId,
-        qtyShoot: int.parse(_qtyShootController.text),
-        ngData: _addedNgItems,
+        idEmployee: _scannedEmployeeId,
       );
 
       if (!mounted) return;
@@ -325,7 +321,7 @@ class _ContinuePendingWorkdayOverState
   @override
   Widget build(BuildContext context) {
     final prov = context.watch<PendingProvider>();
-    final ngProvider = context.watch<NGProvider>();
+    // final ngProvider = context.watch<NGProvider>();
     final employeeProv = context.read<EmployeeProvider>();
 
     return Scaffold(
@@ -334,12 +330,12 @@ class _ContinuePendingWorkdayOverState
         preferredSize: const Size.fromHeight(60),
         child: customDialogAppBar(
           title: _showNewOperatorForm
-              ? "CONTINUE WITH NEW OPERATOR"
-              : "CONTINUE SAME OPERATOR",
+              ? "DILANJUTKAN OLEH OPERATOR BARU"
+              : "DILANJUTKAN OLEH OPERATOR YANG SAMA",
         ),
       ),
       body: SafeArea(
-        child: prov.isLoading || prov.pendingDetail.isEmpty
+        child: prov.isDetailLoading || prov.pendingDetail.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
@@ -351,7 +347,7 @@ class _ContinuePendingWorkdayOverState
                           if (_showNewOperatorForm) ...[
                             WorkdayOverNewOperatorPanel(
                               prov: prov,
-                              ngProvider: ngProvider,
+                              // ngProvider: ngProvider,
                               qtyShootController: _qtyShootController,
                               scannedEmployeeId: _scannedEmployeeId,
                               scannedEmployeeName: _scannedEmployeeName,

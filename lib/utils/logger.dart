@@ -302,7 +302,7 @@ PreferredSizeWidget customDialogAppBar({
           title,
           style: GoogleFonts.poppins(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
         ),

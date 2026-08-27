@@ -109,12 +109,12 @@ class _ContinuePendingWorkdayOverState
         preferredSize: const Size.fromHeight(60),
         child: customDialogAppBar(
           title: _showNewOperatorForm
-              ? "CONTINUE WORKDAY OVER WITH NEW OPERATOR"
+              ? "DILANJUTKAN OLEH OPERATOR BARU"
               : "CONTINUE WORKDAY OVER WITH SAME OPERATOR",
         ),
       ),
       body: SafeArea(
-        child: prov.isLoading || prov.pendingDetail.isEmpty
+        child: prov.isDetailLoading || prov.pendingDetail.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
@@ -505,7 +505,7 @@ class _ContinuePendingWorkdayOverState
 
             const SizedBox(width: 8),
 
-            // SUBMIT
+            // SUBMIT BUTTON
             Expanded(
               child: SizedBox(
                 height: 80,
@@ -573,7 +573,6 @@ class _ContinuePendingWorkdayOverState
         ),
 
         const SizedBox(height: 10),
-
         // ── Row 2: CONTINUE NEW OPERATOR ──────────────────────────────────
         SizedBox(
           width: double.infinity,
@@ -603,7 +602,7 @@ class _ContinuePendingWorkdayOverState
     );
   }
 
-  // ================= NEW OPERATOR FORM =================
+  // ================= NEW OPERATOR FORM (JIKA DI TERUSKAN OLEH OPERATOR BARU)=================
 
   Widget _buildNewOperatorForm(PendingProvider prov) {
     final data = prov.pendingDetail.first;
@@ -631,7 +630,7 @@ class _ContinuePendingWorkdayOverState
                 stopPauseOnTap: true,
                 animatedTexts: [
                   TyperAnimatedText(
-                    '📢 Scan QRCode ID Card Employee untuk operator baru',
+                    '📢 Scan QRCode ID Card Employee untuk operator baruUUUUUUU',
                     speed: const Duration(milliseconds: 100),
                     textStyle: GoogleFonts.poppins(
                       fontSize: 22,
@@ -678,7 +677,7 @@ class _ContinuePendingWorkdayOverState
             _buildHeader(prov),
             const SizedBox(height: 5),
 
-            // ── MAIN CONTENT ──────────────────────────────────────
+            // ── MAIN CONTENT ALIAS CONTEN UTAMA ──────────────────────────── //
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -1103,8 +1102,7 @@ class _ContinuePendingWorkdayOverState
                                           Colors.grey.shade600,
                                         ],
                                 ),
-                                onPressed: _scannedEmployeeId.isEmpty ||
-                                        _qtyShootController.text.isEmpty
+                                onPressed: _scannedEmployeeId.isEmpty
                                     ? null
                                     : () async {
                                         final overlay = Overlay.of(context);
@@ -1115,11 +1113,7 @@ class _ContinuePendingWorkdayOverState
                                           final success = await prov
                                               .continueWorkdayOverNewOperator(
                                             idRecord: data.idRecord,
-                                            idEmployeeLama: data.idEmployee,
-                                            idEmployeeBaru: _scannedEmployeeId,
-                                            qtyShoot: int.parse(
-                                                _qtyShootController.text),
-                                            ngData: _addedNgItems,
+                                            idEmployee: _scannedEmployeeId,
                                           );
 
                                           if (!mounted) return;
@@ -1133,7 +1127,6 @@ class _ContinuePendingWorkdayOverState
                                               isSuccess: true,
                                             );
 
-                                            // ✅ CLOSE DIALOG + RETURN TRUE
                                             Navigator.pop(context, true);
                                           }
                                         } catch (e) {
