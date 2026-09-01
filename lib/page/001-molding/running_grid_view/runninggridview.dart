@@ -52,12 +52,10 @@ class _RunningGridViewState extends State<RunningGridView> {
       if (!mounted) return;
       if (getcode == null || getcode.isEmpty || getcode == "-1") return;
 
-      if (!RegExp(r'^[a-zA-Z0-9]{9}[0-9]{10}[0-9]{5}$').hasMatch(getcode)) {
-        CustomSnackbar.showWithOverlay(
-          overlay,
-          "Invalid QR Code format.",
-          isSuccess: false,
-        );
+      if (!RegExp(r'^[a-zA-Z0-9]{9}[0-9]{10}[0-9]{2}[0-9]{3,5}$')
+          .hasMatch(getcode)) {
+        CustomSnackbar.showWithOverlay(overlay, "Invalid QR Code format.",
+            isSuccess: false);
         return;
       }
 

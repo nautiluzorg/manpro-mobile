@@ -31,8 +31,6 @@ class RunningListTopMenu extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Row(
             children: [
-              // JOBNUMBER BUTTON
-
               SizedBox(
                 width: widthApp * 0.25,
                 child: OutlinedButton(

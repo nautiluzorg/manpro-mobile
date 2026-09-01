@@ -260,6 +260,7 @@ class RecordFormGrid extends StatelessWidget {
                         }
 
                         final error = await provider.scanMachine(code);
+
                         if (!context.mounted) return;
 
                         if (error != null) {

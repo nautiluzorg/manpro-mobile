@@ -51,7 +51,9 @@ class _StopListViewState extends State<StopListView> {
         return;
       }
 
-      if (!RegExp(r'^[a-zA-Z0-9]{9}[0-9]{10}[0-9]{5}$').hasMatch(getcode)) {
+      // 9 (bcode) + 10 (jobnumber) + 2 (total jobnumber) + 3-5 (qty) = 24-26 char
+      if (!RegExp(r'^[a-zA-Z0-9]{9}[0-9]{10}[0-9]{2}[0-9]{3,5}$')
+          .hasMatch(getcode)) {
         if (!mounted) return;
         CustomSnackbar.show(context, "Invalid QR Code format.",
             isSuccess: false);

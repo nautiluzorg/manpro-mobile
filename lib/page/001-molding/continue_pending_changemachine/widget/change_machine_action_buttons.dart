@@ -52,7 +52,79 @@ class ChangeMachineActionButtons extends StatelessWidget {
         const SizedBox(width: 8),
 
         // ---------------- ADD MACHINE ----------------
+
+// ---------------- ADD MACHINE ----------------
         Expanded(
+          child: SizedBox(
+            height: 80,
+            child: buildCustomButton(
+              text: 'NEW MC',
+              height: 80,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              gradient: LinearGradient(
+                colors: [Colors.orangeAccent, Colors.deepOrange.shade900],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              onPressed: () async {
+                // 1️⃣ Scan QR code
+                final scannedCode = await Navigator.push<String>(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MobileScannerPage()),
+                );
+
+                if (!context.mounted ||
+                    scannedCode == null ||
+                    scannedCode.isEmpty ||
+                    scannedCode == "-1") {
+                  return;
+                }
+
+                // ✅ Ambil provider setelah memastikan widget masih mounted
+                final machineProv = context.read<MachineProvider>();
+                final pendingProv = context.read<PendingProvider>();
+
+                // 2️⃣ Validasi dan ambil detail mesin dari MachineProvider
+                final errorMessage = await machineProv.scanMachine(scannedCode);
+
+                if (!context.mounted) {
+                  return;
+                } // cek mounted lagi sebelum update UI/provider
+
+                if (errorMessage != null) {
+                  CustomSnackbar.show(context, errorMessage, isSuccess: false);
+                  return;
+                }
+
+                // 3️⃣ Ambil data mesin dari MachineProvider
+                final machineData = machineProv.machine;
+
+                // 4️⃣ Validasi apakah mesin sedang digunakan (in_use / running)
+                final validationError =
+                    await machineProv.validateMachineDropdown(machineData.idMc);
+
+                if (!context.mounted) return;
+
+                if (validationError != null) {
+                  CustomSnackbar.show(context, validationError,
+                      isSuccess: false);
+                  return;
+                }
+
+                // 5️⃣ Update PendingProvider dengan data mesin yang benar
+                pendingProv.setNextMachine(
+                  id: machineData.idMc,
+                  name: machineData.nmMc,
+                );
+              },
+            ),
+          ),
+        ),
+
+/*
+        Expanded(
+
           child: SizedBox(
             height: 80,
             child: buildCustomButton(
@@ -107,6 +179,8 @@ class ChangeMachineActionButtons extends StatelessWidget {
             ),
           ),
         ),
+
+        */
 
         const SizedBox(width: 8),
 
