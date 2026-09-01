@@ -134,24 +134,19 @@ class ChangeMachineActionButtons extends StatelessWidget {
                   ),
                   onPressed: isEnabled
                       ? () async {
-                          final navigator =
-                              Navigator.of(context, rootNavigator: true);
+                          final navigator = Navigator.of(context);
+
                           // SESUDAH
                           final idRecord = prov.pendingDetail.first
                               .idRecord; // ← ambil dari detail
 
                           final success = await prov.updatePendingRecordMc(
                             idPending: int.parse(idPending),
-                            idRecord: idRecord, // ← pass id_record
+                            idRecord: idRecord,
                           );
 
                           if (!context.mounted) return;
-                          // 🔥 TAMBAHAN: refresh list-nya di sini, gak gantung ke pop chain
-                          if (success) {
-                            await prov.fetchPending('001');
-                          }
 
-                          if (!context.mounted) return;
                           if (onSuccess != null) {
                             onSuccess!(success);
                           }

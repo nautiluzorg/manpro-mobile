@@ -130,8 +130,6 @@ class PendingMachineInfoTable extends StatelessWidget {
                                 ),
                             ],
                           )
-
-                        // -------- NORMAL ROW --------
                         : Text(
                             [
                               ": ${data.jobnumber}",
