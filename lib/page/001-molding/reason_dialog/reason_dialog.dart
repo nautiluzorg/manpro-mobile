@@ -241,10 +241,12 @@ class _ReasonSelectDialogState extends State<ReasonSelectDialog> {
                         onChanged: _handleReasonChanged,
                       ),
                       const SizedBox(height: 10),
+
                       ActionButtonsRow(
                         onCancel: _handleCancel,
                         onSubmit: _handleSubmit,
                       ),
+
                       const SizedBox(height: 10),
 
 //Ini untuk Reason Workday Over

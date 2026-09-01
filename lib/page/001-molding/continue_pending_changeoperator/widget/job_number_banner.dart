@@ -11,39 +11,36 @@ class JobNumberBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.cyanAccent, Colors.cyan.shade900],
+          colors: [Colors.blueAccent, Colors.blue.shade900],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: Center(
-        child: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: "CONTINUE RUNNING MOLDING FOR JOBNUMBER ",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-              TextSpan(
-                text: jobNumber,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.yellowAccent,
-                ),
-              ),
-            ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "NEXT OPERATOR",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.white,
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
+          Text(
+            "JOB NUMBER $jobNumber",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }

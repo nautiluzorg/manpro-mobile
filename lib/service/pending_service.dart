@@ -214,7 +214,7 @@ class PendingService {
       };
 
       await _dio.patch(
-        "/api/update-record-pending-with-ng/",
+        "/api/update-record-pending-changeoperator/",
         data: payload,
       );
 

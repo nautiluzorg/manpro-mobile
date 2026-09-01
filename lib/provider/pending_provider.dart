@@ -332,7 +332,8 @@ class PendingProvider extends ChangeNotifier {
         idPending: idPending,
         idEmployee: confirmedEmployee.idEmployee, // ✅ rename di sini
       );
-      clearConfirmedEmployee();
+      // clearConfirmedEmployee();
+      resetEmployeeState();
       return true;
     } catch (e) {
       _setError(e.toString());

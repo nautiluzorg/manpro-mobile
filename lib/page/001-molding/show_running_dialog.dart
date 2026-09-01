@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/page/001-molding/continue_pending.dart';
-import 'package:flutter_provider_data/page/001-molding/continue_pending_changemachine.dart';
-// import 'package:flutter_provider_data/page/001-molding/continue_pending_changeoperator.dart';
+import 'package:flutter_provider_data/page/001-molding/continue_pending_changemachine/continue_pending_changemachine.dart';
 import 'package:flutter_provider_data/page/001-molding/continue_pending_changeoperator/continue_pending_changeoperator.dart';
 import 'package:flutter_provider_data/page/001-molding/continue_pending_workdayover/continue_pending_workdayover.dart';
 
