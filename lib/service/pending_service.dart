@@ -117,6 +117,7 @@ class PendingService {
     required int idPending,
     required String idRecord,
     required String idMachine,
+    String? idEmployeeNew, // ← tambahan, opsional
   }) async {
     final payload = {
       "records": [
@@ -124,6 +125,7 @@ class PendingService {
           "id_record": idRecord,
           "id_pending": idPending,
           "id_mc_new": idMachine,
+          if (idEmployeeNew != null) "id_employee_new": idEmployeeNew,
         }
       ]
     };

@@ -359,8 +359,48 @@ class PendingProvider extends ChangeNotifier {
 
   Future<bool> updatePendingRecordMc({
     required int idPending,
-    required String idRecord, // ← tambah
+    required String idRecord,
   }) async {
+    if (!hasNextMachine) {
+      _setError("PLEASE SELECT MACHINE");
+      return false;
+    }
+
+    _setSubmitting(true);
+    _setError(null);
+
+    try {
+      // Cek apakah operator ikut diganti (beda dari operator awal record ini)
+      final bool employeeChanged = hasConfirmedEmployee &&
+          _confirmedEmployee.idEmployee != _storedEmployeeId;
+
+      await _service.updateRecordPendingMc(
+        idPending: idPending,
+        idRecord: idRecord,
+        idMachine: _nextMachineId,
+        idEmployeeNew: employeeChanged ? _confirmedEmployee.idEmployee : null,
+      );
+
+      clearConfirmedEmployee();
+      clearNextMachine();
+      return true;
+    } catch (e) {
+      _setError(e.toString());
+      return false;
+    } finally {
+      _setSubmitting(false);
+    }
+  }
+
+/*
+  Future<bool> updatePendingRecordMc({
+
+    required int idPending,
+    required String idRecord,
+    
+  }) async {
+
+
     if (!hasNextMachine) {
       _setError("PLEASE SELECT MACHINE");
       return false;
@@ -384,7 +424,9 @@ class PendingProvider extends ChangeNotifier {
     } finally {
       _setSubmitting(false);
     }
+
   }
+  */
 
   Future<bool> updatePendingRecordNormal(int idPending) async {
     _setLoading(true);

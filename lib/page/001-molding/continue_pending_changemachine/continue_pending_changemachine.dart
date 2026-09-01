@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/provider/pending_provider.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:provider/provider.dart';
-
 import 'widget/machine_header_row.dart';
 import 'widget/employee_photo_column.dart';
 import 'widget/pending_machine_info_table.dart';
@@ -31,10 +30,7 @@ class _ContinuePendingChangeMachineState
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final prov = context.read<PendingProvider>();
-
       prov.resetPendingDetail();
-      // prov.clearConfirmedEmployee();
-      // prov.resetEmployeeScan();
       prov.resetEmployeeScanState();
       prov.clearNextMachine();
       await prov.fetchPendingDetail(widget.idPending);
@@ -92,6 +88,95 @@ class _ContinuePendingChangeMachineState
   }
 
   // ================= MAIN CONTENT =================
+
+  Widget _buildMainContent(PendingProvider prov) {
+    final data = prov.pendingDetail.first;
+
+    // Kalau sudah scan employee baru, pakai data dari nextOperator.
+    // Kalau belum, fallback ke data pending asli.
+    final displayId = prov.isNextOperatorReady
+        ? prov.nextOperator.idEmployee
+        : data.idEmployee;
+    final displayName =
+        prov.isNextOperatorReady ? prov.nameNextOperator : data.employeeName;
+    final displayNrp =
+        prov.isNextOperatorReady ? prov.nrpNextOperator : data.nrp;
+    final displaySection =
+        prov.isNextOperatorReady ? prov.secNextOperator : data.section;
+    final displayDivision =
+        prov.isNextOperatorReady ? prov.divNextOperator : data.division;
+
+    return Card(
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // AREA OPERATOR & TABLE
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  EmployeePhotoColumn(
+                    idEmployee: displayId,
+                    employeeName: displayName,
+                    nrp: displayNrp,
+                    section: displaySection,
+                    division: displayDivision,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PendingMachineInfoTable(
+                          data: data,
+                          prov: prov,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // ================= ACTION BUTTONS FULL-WIDTH =================
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: ChangeMachineActionButtons(
+                prov: prov,
+                idPending: widget.idPending,
+                onSuccess: widget.onSuccess,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+            Container(
+              height: 6,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
   Widget _buildMainContent(PendingProvider prov) {
     final data = prov.pendingDetail.first;
 
@@ -164,4 +249,6 @@ class _ContinuePendingChangeMachineState
       ),
     );
   }
+
+*/
 }

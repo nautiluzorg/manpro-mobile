@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_provider_data/provider/employee_provider.dart';
 import 'package:flutter_provider_data/provider/machine_provider.dart';
 import 'package:flutter_provider_data/provider/pending_provider.dart';
 import 'package:flutter_provider_data/utils/custom_button.dart';
@@ -104,74 +103,6 @@ class ChangeMachineActionButtons extends StatelessWidget {
                   id: machineData.idMc,
                   name: machineData.nmMc,
                 );
-
-                CustomSnackbar.show(
-                    context, "Mesin berhasil dipilih: ${machineData.nmMc}",
-                    isSuccess: true);
-              },
-            ),
-          ),
-        ),
-
-        const SizedBox(width: 8),
-
-        // ---------------- CONFIRM ----------------
-        Expanded(
-          child: SizedBox(
-            height: 80,
-            child: Builder(
-              builder: (context) {
-                final bool isEnabled =
-                    prov.hasNextMachine && !prov.isSubmitting;
-
-                return buildCustomButton(
-                  text: 'CONFIRM',
-                  height: 80,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  gradient: LinearGradient(
-                    colors: isEnabled
-                        ? [Colors.greenAccent, Colors.green.shade900]
-                        : [Colors.grey.shade400, Colors.grey.shade600],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  onPressed: isEnabled
-                      ? () async {
-                          final ctx = context; // ⬅ simpan context lokal
-
-                          final code = await Navigator.push<String>(
-                            ctx,
-                            MaterialPageRoute(
-                              builder: (_) => const MobileScannerPage(),
-                            ),
-                          );
-
-                          if (!ctx.mounted ||
-                              code == null ||
-                              code.isEmpty ||
-                              code == "-1") {
-                            return;
-                          }
-
-                          final employeeProv = ctx.read<EmployeeProvider>();
-                          final pendingProv = ctx.read<PendingProvider>();
-
-                          final success = await employeeProv.scanEmployee(code);
-
-                          if (!success) {
-                            CustomSnackbar.show(
-                              ctx,
-                              employeeProv.errorMessage ?? "Scan failed",
-                              isSuccess: false,
-                            );
-                            return;
-                          }
-
-                          pendingProv.attachEmployee(employeeProv.employee);
-                        }
-                      : null,
-                );
               },
             ),
           ),
@@ -185,8 +116,9 @@ class ChangeMachineActionButtons extends StatelessWidget {
             height: 80,
             child: Builder(
               builder: (context) {
-                final bool isEnabled =
-                    prov.isEmployeeValid() && !prov.isSubmitting;
+                final bool isEnabled = prov.hasNextMachine &&
+                    // prov.isEmployeeValid() &&
+                    !prov.isSubmitting;
 
                 return buildCustomButton(
                   text: 'SUBMIT',
@@ -202,12 +134,6 @@ class ChangeMachineActionButtons extends StatelessWidget {
                   ),
                   onPressed: isEnabled
                       ? () async {
-                          if (!prov.isEmployeeConfirmationValid) {
-                            CustomSnackbar.show(context, "CONFIRM TIDAK SAMA",
-                                isSuccess: false);
-                            return;
-                          }
-
                           final navigator =
                               Navigator.of(context, rootNavigator: true);
                           // SESUDAH
