@@ -18,8 +18,7 @@ String formatDateTime(String? dateTimeStr) {
 class BatchSummaryDetail extends StatefulWidget {
   final String batchNumber;
 
-  const BatchSummaryDetail({Key? key, required this.batchNumber})
-      : super(key: key);
+  const BatchSummaryDetail({super.key, required this.batchNumber});
 
   @override
   State<BatchSummaryDetail> createState() => _BatchSummaryDetailState();

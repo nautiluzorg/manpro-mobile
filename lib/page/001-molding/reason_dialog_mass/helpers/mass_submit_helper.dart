@@ -28,10 +28,12 @@ class MassSubmitHelper {
     logPrint("selectedItems count: ${selectedItems.length}");
     logPrint("idEmployeeConfirm: ${controller.idEmployeeConfirm}");
     logPrint("selectedReason: ${reasonProv.selectedReason}");
-    selectedItems.forEach((item) {
+
+    for (final item in selectedItems) {
       logPrint("item.idEmployee: ${item.activeEmployee?.idEmployee}");
       logPrint("item.idRecord: ${item.idRecord}");
-    });
+    }
+
     logPrint("====================");
 
     try {

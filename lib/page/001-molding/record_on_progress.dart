@@ -23,7 +23,7 @@ class RecordOnProgress extends StatefulWidget {
       {super.key, required this.title, required this.idProses});
 
   @override
-  _RecordOnProgressState createState() => _RecordOnProgressState();
+  State<RecordOnProgress> createState() => _RecordOnProgressState();
 }
 
 class _RecordOnProgressState extends State<RecordOnProgress> {
@@ -1444,10 +1444,15 @@ class _RecordOnProgressState extends State<RecordOnProgress> {
                                           ),
                                         ),
                                         onTap: () async {
-                                          if (_isSelectingDrawing) return;
+                                          if (_isSelectingDrawing) {
+                                            return;
+                                          }
+
                                           _isSelectingDrawing = true;
 
-                                          if (!mounted) return;
+                                          if (!mounted) {
+                                            return;
+                                          }
                                           setState(() {
                                             selectedDrawingItem = item;
                                             selectedDrawingNumber =

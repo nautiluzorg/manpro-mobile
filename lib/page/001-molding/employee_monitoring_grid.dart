@@ -9,8 +9,7 @@ class EmployeeMonitoringGrid extends StatefulWidget {
   final String title;
   final String idProses;
   const EmployeeMonitoringGrid(
-      {Key? key, required this.title, required this.idProses})
-      : super(key: key);
+      {super.key, required this.title, required this.idProses});
 
   @override
   State<EmployeeMonitoringGrid> createState() => _EmployeeMonitoringGridState();
@@ -330,13 +329,18 @@ class _EmployeeMonitoringGridState extends State<EmployeeMonitoringGrid> {
                                             ],
                                           ),
                                         );
-
+                                        if (!context.mounted) {
+                                          return;
+                                        }
+                                        // ⬅ cek setelah await showDialog
                                         if (confirm == true) {
                                           try {
                                             await Provider.of<RecordProvider>(
                                                     context,
                                                     listen: false)
                                                 .deleteRecord(r.idRecord);
+
+                                            if (!context.mounted) return;
 
                                             // Tampilkan Snackbar
                                             CustomSnackbar.show(
@@ -345,6 +349,10 @@ class _EmployeeMonitoringGridState extends State<EmployeeMonitoringGrid> {
                                               isSuccess: true,
                                             );
                                           } catch (e) {
+                                            if (!context.mounted) {
+                                              return;
+                                            }
+                                            // ⬅ cek juga di catch
                                             // Kalau ada error, tampilkan Snackbar error
                                             CustomSnackbar.show(
                                               context,
@@ -391,14 +399,14 @@ class FireAuraAvatar extends StatefulWidget {
   final String runStatus; // "running" atau "pending"
 
   const FireAuraAvatar({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.radius = 45,
     this.runStatus = 'pending',
-  }) : super(key: key);
+  });
 
   @override
-  _FireAuraAvatarState createState() => _FireAuraAvatarState();
+  State<FireAuraAvatar> createState() => _FireAuraAvatarState();
 }
 
 class _FireAuraAvatarState extends State<FireAuraAvatar>

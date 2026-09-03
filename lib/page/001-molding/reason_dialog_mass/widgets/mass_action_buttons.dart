@@ -107,7 +107,9 @@ class _MassActionButtonsState extends State<MassActionButtons> {
 
   Future<void> _handleConfirm(BuildContext context) async {
     await widget.controller.handleConfirmQr(context);
-    if (mounted) setState(() {}); // Refresh UI
+
+    if (!context.mounted) return;
+    setState(() {}); // Refresh UI
   }
 
   Future<void> _handleSubmit(BuildContext context) async {
@@ -124,6 +126,7 @@ class _MassActionButtonsState extends State<MassActionButtons> {
     );
 
     final success = await helper.submit();
-    if (success && mounted) Navigator.pop(context);
+    if (!context.mounted) return;
+    if (success) Navigator.pop(context);
   }
 }

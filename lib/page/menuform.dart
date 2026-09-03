@@ -11,8 +11,7 @@ class MenuForm extends StatefulWidget {
   final String title;
   final String idProses;
 
-  const MenuForm({Key? key, required this.title, required this.idProses})
-      : super(key: key);
+  const MenuForm({super.key, required this.title, required this.idProses});
 
   @override
   State<MenuForm> createState() => _MenuFormState();
@@ -239,8 +238,7 @@ class FormPage extends StatelessWidget {
   final String title;
   final String idProses;
 
-  const FormPage({Key? key, required this.title, required this.idProses})
-      : super(key: key);
+  const FormPage({super.key, required this.title, required this.idProses});
 
   @override
   Widget build(BuildContext context) {

@@ -9,8 +9,8 @@ class MenuSubTesting extends StatefulWidget {
   final String title;
   final String idProses;
 
-  const MenuSubTesting({Key? key, required this.title, required this.idProses})
-      : super(key: key);
+  const MenuSubTesting(
+      {super.key, required this.title, required this.idProses});
 
   @override
   State<MenuSubTesting> createState() => _MenuSubTestingState();
@@ -127,20 +127,7 @@ class _MenuSubTestingState extends State<MenuSubTesting> {
       {
         "title": "MEASUREMENT CHECK",
         "icon": Icons.ac_unit_rounded,
-        "onTap": () {
-/*
-          Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-              pageBuilder: (_, __, ___) => TestingCompleted(
-                  title: "TESTING COMPLETED", idProses: widget.idProses),
-              transitionsBuilder: (_, animation, __, child) =>
-                  FadeTransition(opacity: animation, child: child),
-              transitionDuration: const Duration(milliseconds: 800),
-            ),
-          );
-          */
-        }
+        "onTap": () {}
       },
     ];
 
@@ -188,8 +175,9 @@ class _MenuSubTestingState extends State<MenuSubTesting> {
                     height: isTablet ? 90 : 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.1),
-                      border: Border.all(color: Colors.white.withOpacity(0.2)),
+                      color: Colors.white.withValues(alpha: 0.1),
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.2)),
                     ),
                     child: Center(
                       child: Icon(

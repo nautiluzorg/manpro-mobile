@@ -384,55 +384,6 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
         },
       ),
     );
-
-/*
-    SizedBox(
-      width: 180,
-      height: 70,
-      child: buildCustomButton(
-        text: "CONFIRM",
-        height: 70,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        gradient: LinearGradient(
-          colors: [
-            Colors.greenAccent,
-            Colors.green.shade500,
-            Colors.green.shade900,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-        onPressed: () async {
-          final pendingProvider = context.read<PendingProvider>();
-
-          final code = await Navigator.push<String>(
-            context,
-            MaterialPageRoute(builder: (_) => const MobileScannerPage()),
-          );
-
-          if (!context.mounted ||
-              code == null ||
-              code.isEmpty ||
-              code == "-1") {
-            return;
-          }
-
-          final success = await pendingProvider.scanEmployee(code);
-
-          if (!context.mounted) return;
-
-          if (!success) {
-            CustomSnackbar.show(
-              context,
-              pendingProvider.errorMessage ?? "Employee scan failed",
-              isSuccess: false,
-            );
-          }
-        },
-      ),
-    );
-*/
   }
 
   Widget _buildSubmitButton(BuildContext context) {
@@ -479,6 +430,9 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
 
                     if (success) {
                       await prov.reload(widget.idProses);
+
+                      if (!context.mounted) return;
+
                       widget.selectedItems.clear();
                       Navigator.pop(context);
                       CustomSnackbar.show(

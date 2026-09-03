@@ -3,8 +3,6 @@ import 'package:flutter_provider_data/page/001-molding/menu_sub_testing.dart';
 import 'package:flutter_provider_data/page/001-molding/monitoring_master_page.dart';
 import 'package:flutter_provider_data/page/001-molding/runningmoldingpage.dart';
 import 'package:flutter_provider_data/page/001-molding/stopmoldingpage.dart';
-// import 'package:flutter_provider_data/page/002-oven/oven_running.dart'; // REMOVED\n// import 'package:flutter_provider_data/page/002-oven/record_oven.dart'; // REMOVED
-// import 'package:flutter_provider_data/page/003-finishing/record_finishing.dart'; // DELETED
 import 'package:flutter_provider_data/page/menu_sub.dart';
 import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
 import 'package:flutter_provider_data/page/main_menu_admin.dart';
@@ -16,8 +14,7 @@ class Menu extends StatefulWidget {
   final String kode;
   final String proses;
 
-  const Menu({Key? key, required this.kode, required this.proses})
-      : super(key: key);
+  const Menu({super.key, required this.kode, required this.proses});
 
   @override
   State<Menu> createState() => _MenuState();

@@ -26,6 +26,7 @@ class _MachineDetailStopDialogState extends State<MachineDetailStopDialog> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      if (!mounted) return;
       context
           .read<PendingProvider>()
           .loadPendingDetail(widget.machine.activeRecordId!);

@@ -35,7 +35,7 @@ class ReasonSelectDialog extends StatefulWidget {
   });
 
   @override
-  _ReasonSelectDialogState createState() => _ReasonSelectDialogState();
+  State<ReasonSelectDialog> createState() => _ReasonSelectDialogState();
 }
 
 class _ReasonSelectDialogState extends State<ReasonSelectDialog> {

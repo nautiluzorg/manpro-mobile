@@ -26,7 +26,7 @@ class RecordStop extends StatefulWidget {
   });
 
   @override
-  _RecordStopState createState() => _RecordStopState();
+  State<RecordStop> createState() => _RecordStopState();
 }
 
 class _RecordStopState extends State<RecordStop> {
@@ -1397,8 +1397,7 @@ class NumBlockKeyboardDialog extends StatefulWidget {
   final String idPending;
   final String Function(String) formatDateTime;
   const NumBlockKeyboardDialog(
-      {Key? key, required this.idPending, required this.formatDateTime})
-      : super(key: key);
+      {super.key, required this.idPending, required this.formatDateTime});
 
   @override
   _NumBlockKeyboardDialogState createState() => _NumBlockKeyboardDialogState();
@@ -2767,8 +2766,7 @@ class ChangeOperatorDialog extends StatefulWidget {
   final String idPending;
   final String Function(String) formatDateTime;
   const ChangeOperatorDialog(
-      {Key? key, required this.idPending, required this.formatDateTime})
-      : super(key: key);
+      {super.key, required this.idPending, required this.formatDateTime});
 
   @override
   _ChangeOperatorDialogState createState() => _ChangeOperatorDialogState();
@@ -4536,8 +4534,7 @@ class ChangeMachineDialog extends StatefulWidget {
   final String idPending;
   final String Function(String) formatDateTime;
   const ChangeMachineDialog(
-      {Key? key, required this.idPending, required this.formatDateTime})
-      : super(key: key);
+      {super.key, required this.idPending, required this.formatDateTime});
 
   @override
   _ChangeMachineDialogState createState() => _ChangeMachineDialogState();

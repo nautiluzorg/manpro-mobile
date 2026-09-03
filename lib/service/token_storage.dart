@@ -14,8 +14,8 @@ class TokenStorage {
     required String access,
     required String refresh,
   }) async {
-    print("💾 Simpan ACCESS_TOKEN: $access");
-    print("💾 Simpan REFRESH_TOKEN: $refresh");
+    logPrint("💾 Simpan ACCESS_TOKEN: $access");
+    logPrint("💾 Simpan REFRESH_TOKEN: $refresh");
     await _storage.write(key: _accessToken, value: access);
     await _storage.write(key: _refreshToken, value: refresh);
   }

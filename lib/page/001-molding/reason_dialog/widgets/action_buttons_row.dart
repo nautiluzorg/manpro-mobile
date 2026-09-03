@@ -63,8 +63,9 @@ class ActionButtonsRow extends StatelessWidget {
                           ),
                         );
 
-                        if (code == null || code.isEmpty || code == "-1")
+                        if (code == null || code.isEmpty || code == "-1") {
                           return;
+                        }
 
                         final success = await empProv.scanEmployee(code);
 

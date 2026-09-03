@@ -10,8 +10,7 @@ class MenuSub extends StatefulWidget {
   final String title;
   final String idProses;
 
-  const MenuSub({Key? key, required this.title, required this.idProses})
-      : super(key: key);
+  const MenuSub({super.key, required this.title, required this.idProses});
 
   @override
   State<MenuSub> createState() => _MenuSubState();

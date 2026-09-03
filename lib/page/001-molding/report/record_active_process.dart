@@ -10,8 +10,7 @@ class RecordActiveProcess extends StatefulWidget {
   final String title;
   final String idProses;
   const RecordActiveProcess(
-      {Key? key, required this.title, required this.idProses})
-      : super(key: key);
+      {super.key, required this.title, required this.idProses});
 
   @override
   State<RecordActiveProcess> createState() => _RecordActiveProcessState();

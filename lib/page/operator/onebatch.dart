@@ -936,6 +936,7 @@ class _OneBatchState extends State<OneBatch>
                         builder: (_) => const MobileScannerPage(),
                       ),
                     );
+                    if (!mounted) return;
 
                     if (qrCode == null || qrCode.isEmpty) return;
 
@@ -945,6 +946,7 @@ class _OneBatchState extends State<OneBatch>
                       // 🔥 HANYA jobnumber yang pakai controller
                       jobNumberCtrl.text = prov.jobNumber;
                     } catch (e) {
+                      if (!context.mounted) return;
                       CustomSnackbar.show(
                         context,
                         e.toString(),

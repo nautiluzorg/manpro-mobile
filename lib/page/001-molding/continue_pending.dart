@@ -15,11 +15,11 @@ class ContinuePending extends StatefulWidget {
   final void Function(bool)? onSuccess;
 
   const ContinuePending({
-    Key? key,
+    super.key,
     required this.idPending,
     required this.idProses,
     this.onSuccess,
-  }) : super(key: key);
+  });
 
   @override
   State<ContinuePending> createState() => _ContinuePendingState();
@@ -78,7 +78,7 @@ class _ContinuePendingState extends State<ContinuePending> {
   Widget _buildHeader(PendingProvider prov) {
     final data = prov.pendingDetail.first;
 
-    Widget _headerText(String text) => Text(
+    Widget headerText(String text) => Text(
           text,
           style: GoogleFonts.poppins(
               fontSize: 18,
@@ -100,10 +100,10 @@ class _ContinuePendingState extends State<ContinuePending> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _headerText(data.idRecord),
-          _headerText(data.customer),
-          _headerText(data.productCategory),
-          _headerText(data.productType),
+          headerText(data.idRecord),
+          headerText(data.customer),
+          headerText(data.productCategory),
+          headerText(data.productType),
         ],
       ),
     );

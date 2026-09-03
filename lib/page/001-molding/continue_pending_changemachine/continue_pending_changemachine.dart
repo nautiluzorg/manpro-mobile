@@ -12,10 +12,10 @@ class ContinuePendingChangeMachine extends StatefulWidget {
   final void Function(bool)? onSuccess;
 
   const ContinuePendingChangeMachine({
-    Key? key,
+    super.key,
     required this.idPending,
     this.onSuccess,
-  }) : super(key: key);
+  });
 
   @override
   State<ContinuePendingChangeMachine> createState() =>

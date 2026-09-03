@@ -23,12 +23,12 @@ class ContinuePendingWorkdayOver extends StatefulWidget {
   final void Function(bool)? onSuccess;
 
   const ContinuePendingWorkdayOver({
-    Key? key,
+    super.key,
     required this.idPending,
     required this.idProses,
     required this.productType,
     this.onSuccess,
-  }) : super(key: key);
+  });
 
   @override
   State<ContinuePendingWorkdayOver> createState() =>

@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'mass_employee_card.dart';
 
 class MassEmployeeGrid extends StatelessWidget {
+  const MassEmployeeGrid({super.key});
+
   @override
   Widget build(BuildContext context) {
     final runningItems =

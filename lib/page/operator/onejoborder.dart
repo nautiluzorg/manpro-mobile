@@ -354,8 +354,8 @@ class _OneJoborderState extends State<OneJoborder>
                 0;
             sisaShoot = totalShoot - totalHalfShoot;
             isFinish = false;
-            this.isAvailable = isAvailable;
-            this.idRecUpdate = idRecordUpdate;
+            isAvailable = isAvailable;
+            idRecUpdate = idRecordUpdate;
 
             isJobNumberScanned = true;
             isMixLotScanned = false;
@@ -1103,6 +1103,8 @@ class _OneJoborderState extends State<OneJoborder>
             .timeout(const Duration(seconds: 15));
       }
 
+      if (!context.mounted) return false;
+
       // 🔹 Evaluasi hasil response
       debugPrint("Response Code: ${response.statusCode}");
       debugPrint("Response Body: ${response.body}");
@@ -1124,6 +1126,7 @@ class _OneJoborderState extends State<OneJoborder>
         return false;
       }
     } on TimeoutException {
+      if (!context.mounted) return false;
       CustomSnackbar.show(
         context,
         "Request timeout, periksa koneksi jaringan.",
@@ -1131,6 +1134,7 @@ class _OneJoborderState extends State<OneJoborder>
       );
       return false;
     } on SocketException {
+      if (!context.mounted) return false;
       CustomSnackbar.show(
         context,
         "Tidak ada koneksi internet.",
@@ -1140,6 +1144,7 @@ class _OneJoborderState extends State<OneJoborder>
     } catch (e, stackTrace) {
       debugPrint("❌ Exception: $e");
       debugPrint("StackTrace: $stackTrace");
+      if (!context.mounted) return false;
       CustomSnackbar.show(
         context,
         "Terjadi kesalahan: $e",
@@ -1314,810 +1319,778 @@ class _OneJoborderState extends State<OneJoborder>
 
     return Scaffold(
       appBar: myAppBar,
-      body: Container(
-        // decoration: GlassStyle.pageBackground(),
-        child: LayoutBuilder(builder: (context, constraints) {
-          return SingleChildScrollView(
-            padding: EdgeInsets.all(isTablet ? 5.0 : 3.0),
-            scrollDirection: Axis.vertical,
-            child: Column(children: [
-              Container(
-                // Ganti GlassWrapper dengan Container
-                decoration: BoxDecoration(
-                  // Pengganti GlassStyle.infoGradient()
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.blue.shade900.withAlpha(200),
-                      Colors.blue.shade700.withAlpha(150),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(40),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+      body: LayoutBuilder(builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(isTablet ? 5.0 : 3.0),
+          scrollDirection: Axis.vertical,
+          child: Column(children: [
+            _container(
+              // Pastikan fungsi _container ini masih ada di code kamu
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  TyperAnimatedText(
+                    'Please be carefully for all process record...',
+                    textStyle: textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                      foreground: Paint()
+                        ..shader = const LinearGradient(
+                          colors: [Colors.red, Colors.orange, Colors.yellow],
+                        ).createShader(
+                            const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)),
                     ),
-                  ],
-                ),
-                child: _container(
-                  // Pastikan fungsi _container ini masih ada di code kamu
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      TyperAnimatedText(
-                        'Please be carefully for all process record...',
-                        textStyle: textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()
-                            ..shader = const LinearGradient(
-                              colors: [
-                                Colors.red,
-                                Colors.orange,
-                                Colors.yellow
-                              ],
-                            ).createShader(
-                                const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)),
-                        ),
-                      ),
-                      TyperAnimatedText(
-                        'Keep spirit for get good result..',
-                        textStyle: textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()
-                            ..shader = LinearGradient(
-                              colors: [
-                                Colors.yellow.shade400,
-                                Colors.orange.shade300,
-                                Colors.red.shade300,
-                              ],
-                            ).createShader(
-                                const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)),
-                        ),
-                      ),
-                      TyperAnimatedText(
-                        'Inform to leader if any problem as soon as!',
-                        textStyle: textStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()
-                            ..shader = LinearGradient(
-                              colors: [
-                                Colors.yellow.shade400,
-                                Colors.orange.shade600,
-                                Colors.red.shade500,
-                              ],
-                            ).createShader(
-                                const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)),
-                        ),
-                      ),
-                    ],
-                    repeatForever: true,
                   ),
-                ),
+                  TyperAnimatedText(
+                    'Keep spirit for get good result..',
+                    textStyle: textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                      foreground: Paint()
+                        ..shader = LinearGradient(
+                          colors: [
+                            Colors.yellow.shade400,
+                            Colors.orange.shade300,
+                            Colors.red.shade300,
+                          ],
+                        ).createShader(
+                            const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)),
+                    ),
+                  ),
+                  TyperAnimatedText(
+                    'Inform to leader if any problem as soon as!',
+                    textStyle: textStyle.copyWith(
+                      fontWeight: FontWeight.bold,
+                      foreground: Paint()
+                        ..shader = LinearGradient(
+                          colors: [
+                            Colors.yellow.shade400,
+                            Colors.orange.shade600,
+                            Colors.red.shade500,
+                          ],
+                        ).createShader(
+                            const Rect.fromLTWH(0.0, 0.0, 300.0, 70.0)),
+                    ),
+                  ),
+                ],
+                repeatForever: true,
               ),
+            ),
 
-              SizedBox(height: 5.0),
+            SizedBox(height: 5.0),
 
-              Container(
-                width: widthApp,
-                height: heightBody * 0.26,
-                // Ganti GlassStyle.card dengan BoxDecoration standar
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.white.withAlpha(150),
-                      Colors.blueGrey.shade100.withAlpha(100),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: Colors.white.withAlpha(120),
-                    width: 1.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(30),
-                      blurRadius: 12,
-                      offset: const Offset(0, 5),
-                    ),
+            Container(
+              width: widthApp,
+              height: heightBody * 0.26,
+              // Ganti GlassStyle.card dengan BoxDecoration standar
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white.withAlpha(150),
+                    Colors.blueGrey.shade100.withAlpha(100),
                   ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                child: Row(
-                  children: [
-                    // Kiri: Foto & Identitas Karyawan (30%)
-                    Expanded(
-                      flex: 3,
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Container(
-                            width: constraints.maxWidth,
-                            height: constraints.maxHeight,
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 2.0, vertical: 2.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.shade600,
-                                width: 0.5,
-                              ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
-                            ),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 6,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(top: 5.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2.0),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withAlpha(20),
-                                          blurRadius: 4,
-                                        )
-                                      ],
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      child: Image.network(
-                                        "${AppConfig.baseUrl}/media/img/employee/$photoEmployee",
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                const Icon(Icons.person,
-                                                    size: 50,
-                                                    color: Colors.grey),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          nameEmployee2,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.grey.shade700,
-                                            fontSize:
-                                                constraints.maxWidth * 0.08,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 1.0),
-                                        Text(
-                                          nrp,
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.grey.shade700,
-                                            fontSize: isTablet
-                                                ? constraints.maxWidth * 0.06
-                                                : constraints.maxWidth * 0.08,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(1.0),
-                                    margin: const EdgeInsets.only(bottom: 5.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          division,
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey.shade700,
-                                            fontSize: isTablet
-                                                ? constraints.maxWidth * 0.06
-                                                : constraints.maxWidth * 0.07,
-                                          ),
-                                        ),
-                                        Text(
-                                          section,
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey.shade700,
-                                            fontSize: isTablet
-                                                ? constraints.maxWidth * 0.05
-                                                : constraints.maxWidth * 0.07,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-
-                    // Kanan: Detail Tabel Job (70%)
-                    Expanded(
-                      flex: 7,
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Container(
-                            height: constraints.maxHeight,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: isTablet ? 4.0 : 3.0,
-                                vertical: isTablet ? 10.0 : 5.0),
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(100),
-                              border: Border.all(
-                                  color: Colors.grey.shade600, width: 0.5),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Table(
-                                border: const TableBorder(
-                                  bottom: BorderSide(
-                                      color: Colors.grey, width: 1.0),
-                                  horizontalInside: BorderSide(
-                                      color: Colors.grey, width: 0.5),
-                                ),
-                                columnWidths: const {
-                                  0: FlexColumnWidth(0.4),
-                                  1: FlexColumnWidth(0.6),
-                                },
-                                children: List.generate(10, (index) {
-                                  final dataList = [
-                                    ["JOB NUMBER", jobNumber],
-                                    ["DATE", _formatDateTime(jobDate)],
-                                    ["PROCESS", jobProcess],
-                                    ["JOBCODE", batchNumber],
-                                    ["LOT NUMBER", lotNumber],
-                                    ["TOTAL LOT", totalLotNumber],
-                                    ["CATEGORY", categoryProduct],
-                                    ["TYPE", typeProduct],
-                                    [
-                                      "GOLD PILL LOT NO",
-                                      "$germanSilverLn  $uedaUshinLn  $materialLn"
-                                    ],
-                                    ["CARBON PILL LOT NO", carbonLot],
-                                  ];
-
-                                  final Color rowColor = index % 2 == 0
-                                      ? Colors.grey.shade100
-                                      : Colors.white;
-
-                                  return TableRow(
-                                    children: [
-                                      Container(
-                                        color: rowColor,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: isTablet ? 8.0 : 4.0,
-                                          horizontal: isTablet ? 6.0 : 3.0,
-                                        ),
-                                        child: Text(
-                                          dataList[index][0],
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: dataList[index][0] ==
-                                                    "JOB NUMBER"
-                                                ? FontWeight.bold
-                                                : FontWeight.w600,
-                                            fontSize: isTablet
-                                                ? constraints.maxWidth * 0.025
-                                                : constraints.maxWidth * 0.045,
-                                            color: Colors.blue.shade900,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        color: rowColor,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: isTablet ? 8.0 : 4.0,
-                                          horizontal: isTablet ? 6.0 : 3.0,
-                                        ),
-                                        child: Text(
-                                          ": ${dataList[index][1]}",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: dataList[index][0] ==
-                                                    "JOB NUMBER"
-                                                ? FontWeight.bold
-                                                : FontWeight.w500,
-                                            fontSize: isTablet
-                                                ? constraints.maxWidth * 0.025
-                                                : constraints.maxWidth * 0.045,
-                                            color: Colors.grey.shade800,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                  ],
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.white.withAlpha(120),
+                  width: 1.5,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(30),
+                    blurRadius: 12,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
-              SizedBox(height: 5.0),
-
-              Container(
-                width: widthApp,
-                height: conTextfieldHeight,
-                padding: EdgeInsets.all(isTablet ? 5.0 : 5.0),
-                // Ganti GlassStyle.card & inputGradient dengan BoxDecoration standar
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.white.withAlpha(200),
-                      Colors.grey.shade200.withAlpha(150),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                      color: Colors.white.withAlpha(100), width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(30),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    int columnCount = constraints.maxWidth > 600 ? 4 : 2;
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 5),
-                      alignment: Alignment.center,
-                      width: constraints.maxWidth,
-                      height: constraints.maxHeight,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        border: Border.all(
-                          color: Colors.grey.shade600,
-                          width: 0.5,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                      ),
-                      child: GridView.count(
-                        physics: const NeverScrollableScrollPhysics(),
-                        crossAxisCount: columnCount,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 3.5,
-                        shrinkWrap: true,
-                        children: [
-                          // Hapus FocusGlow pembungkus karena widgetnya sudah tidak ada
-                          _buildTextField(
-                            controller: jobNumberController,
-                            label: "Job Number",
-                            hint: "Scan Job Number",
-                            icon: Icons.qr_code_scanner,
-                            onIconTap: () => scanJobNumber(widget.idProses),
-                            readOnly: true,
-                          ),
-                          _buildTextField(
-                            controller: idMachineController,
-                            label: "Machine",
-                            hint: "Scan Machine ID",
-                            icon: Icons.qr_code_scanner,
-                            onIconTap: scanMachine,
-                            readOnly: true,
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.search,
-                                  color: Colors.grey.shade600, size: 24),
-                              onPressed: () => _showMachineDialog(context),
+              child: Row(
+                children: [
+                  // Kiri: Foto & Identitas Karyawan (30%)
+                  Expanded(
+                    flex: 3,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Container(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 2.0, vertical: 2.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade600,
+                              width: 0.5,
                             ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5)),
                           ),
-                          _buildTextField(
-                            controller: idEmployeeController,
-                            label: "Employee",
-                            hint: "Scan Employee ID",
-                            icon: Icons.qr_code_scanner,
-                            onIconTap: scanEmployee,
-                            readOnly: true,
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.person_search,
-                                  color: Colors.grey.shade600, size: 24),
-                              onPressed: () => _showEmployeeDialog(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                ),
-              ),
-              SizedBox(height: 5.0),
-              //####################BATAS CONTAINER KE 3 DISINI ######################**************************************
-
-              Container(
-                width: widthApp,
-                height: heightBody * 0.1,
-                // Ganti GlassStyle.card dengan BoxDecoration
-                decoration: BoxDecoration(
-                  color: Colors.white
-                      .withAlpha(180), // Memberikan efek semi-transparan
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: Colors.white.withAlpha(100),
-                    width: 1.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(40), // shadowOpacity: 40
-                      blurRadius: 15,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // ================== SUBMIT BUTTON ==================
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 2.0, vertical: 2.0),
-                              width: constraints.maxWidth * 0.32,
-                              height: constraints.maxHeight * 0.9,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: SizedBox.expand(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 6,
                                 child: Container(
+                                  margin: const EdgeInsets.only(top: 5.0),
                                   decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.blue.shade400,
-                                        Colors.blue.shade900
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: Colors.white, width: 2.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withAlpha(20),
+                                        blurRadius: 4,
+                                      )
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Image.network(
+                                      "${AppConfig.baseUrl}/media/img/employee/$photoEmployee",
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              const Icon(Icons.person,
+                                                  size: 50, color: Colors.grey),
                                     ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        nameEmployee2,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey.shade700,
+                                          fontSize: constraints.maxWidth * 0.08,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 1.0),
+                                      Text(
+                                        nrp,
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey.shade700,
+                                          fontSize: isTablet
+                                              ? constraints.maxWidth * 0.06
+                                              : constraints.maxWidth * 0.08,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  padding: const EdgeInsets.all(1.0),
+                                  margin: const EdgeInsets.only(bottom: 5.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        division,
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey.shade700,
+                                          fontSize: isTablet
+                                              ? constraints.maxWidth * 0.06
+                                              : constraints.maxWidth * 0.07,
+                                        ),
+                                      ),
+                                      Text(
+                                        section,
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey.shade700,
+                                          fontSize: isTablet
+                                              ? constraints.maxWidth * 0.05
+                                              : constraints.maxWidth * 0.07,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Kanan: Detail Tabel Job (70%)
+                  Expanded(
+                    flex: 7,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Container(
+                          height: constraints.maxHeight,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: isTablet ? 4.0 : 3.0,
+                              vertical: isTablet ? 10.0 : 5.0),
+                          padding: const EdgeInsets.all(5.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(100),
+                            border: Border.all(
+                                color: Colors.grey.shade600, width: 0.5),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Table(
+                              border: const TableBorder(
+                                bottom:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                                horizontalInside:
+                                    BorderSide(color: Colors.grey, width: 0.5),
+                              ),
+                              columnWidths: const {
+                                0: FlexColumnWidth(0.4),
+                                1: FlexColumnWidth(0.6),
+                              },
+                              children: List.generate(10, (index) {
+                                final dataList = [
+                                  ["JOB NUMBER", jobNumber],
+                                  ["DATE", _formatDateTime(jobDate)],
+                                  ["PROCESS", jobProcess],
+                                  ["JOBCODE", batchNumber],
+                                  ["LOT NUMBER", lotNumber],
+                                  ["TOTAL LOT", totalLotNumber],
+                                  ["CATEGORY", categoryProduct],
+                                  ["TYPE", typeProduct],
+                                  [
+                                    "GOLD PILL LOT NO",
+                                    "$germanSilverLn  $uedaUshinLn  $materialLn"
+                                  ],
+                                  ["CARBON PILL LOT NO", carbonLot],
+                                ];
+
+                                final Color rowColor = index % 2 == 0
+                                    ? Colors.grey.shade100
+                                    : Colors.white;
+
+                                return TableRow(
+                                  children: [
+                                    Container(
+                                      color: rowColor,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: isTablet ? 8.0 : 4.0,
+                                        horizontal: isTablet ? 6.0 : 3.0,
+                                      ),
+                                      child: Text(
+                                        dataList[index][0],
+                                        style: GoogleFonts.poppins(
+                                          fontWeight:
+                                              dataList[index][0] == "JOB NUMBER"
+                                                  ? FontWeight.bold
+                                                  : FontWeight.w600,
+                                          fontSize: isTablet
+                                              ? constraints.maxWidth * 0.025
+                                              : constraints.maxWidth * 0.045,
+                                          color: Colors.blue.shade900,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: rowColor,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: isTablet ? 8.0 : 4.0,
+                                        horizontal: isTablet ? 6.0 : 3.0,
+                                      ),
+                                      child: Text(
+                                        ": ${dataList[index][1]}",
+                                        style: GoogleFonts.poppins(
+                                          fontWeight:
+                                              dataList[index][0] == "JOB NUMBER"
+                                                  ? FontWeight.bold
+                                                  : FontWeight.w500,
+                                          fontSize: isTablet
+                                              ? constraints.maxWidth * 0.025
+                                              : constraints.maxWidth * 0.045,
+                                          color: Colors.grey.shade800,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 5.0),
+
+            Container(
+              width: widthApp,
+              height: conTextfieldHeight,
+              padding: EdgeInsets.all(isTablet ? 5.0 : 5.0),
+              // Ganti GlassStyle.card & inputGradient dengan BoxDecoration standar
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white.withAlpha(200),
+                    Colors.grey.shade200.withAlpha(150),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(18),
+                border:
+                    Border.all(color: Colors.white.withAlpha(100), width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(30),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: LayoutBuilder(builder: (context, constraints) {
+                  int columnCount = constraints.maxWidth > 600 ? 4 : 2;
+                  return Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+                    alignment: Alignment.center,
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      border: Border.all(
+                        color: Colors.grey.shade600,
+                        width: 0.5,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    ),
+                    child: GridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: columnCount,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 3.5,
+                      shrinkWrap: true,
+                      children: [
+                        // Hapus FocusGlow pembungkus karena widgetnya sudah tidak ada
+                        _buildTextField(
+                          controller: jobNumberController,
+                          label: "Job Number",
+                          hint: "Scan Job Number",
+                          icon: Icons.qr_code_scanner,
+                          onIconTap: () => scanJobNumber(widget.idProses),
+                          readOnly: true,
+                        ),
+                        _buildTextField(
+                          controller: idMachineController,
+                          label: "Machine",
+                          hint: "Scan Machine ID",
+                          icon: Icons.qr_code_scanner,
+                          onIconTap: scanMachine,
+                          readOnly: true,
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.search,
+                                color: Colors.grey.shade600, size: 24),
+                            onPressed: () => _showMachineDialog(context),
+                          ),
+                        ),
+                        _buildTextField(
+                          controller: idEmployeeController,
+                          label: "Employee",
+                          hint: "Scan Employee ID",
+                          icon: Icons.qr_code_scanner,
+                          onIconTap: scanEmployee,
+                          readOnly: true,
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.person_search,
+                                color: Colors.grey.shade600, size: 24),
+                            onPressed: () => _showEmployeeDialog(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
+            SizedBox(height: 5.0),
+            //####################BATAS CONTAINER KE 3 DISINI ######################**************************************
+
+            Container(
+              width: widthApp,
+              height: heightBody * 0.1,
+              // Ganti GlassStyle.card dengan BoxDecoration
+              decoration: BoxDecoration(
+                color: Colors.white
+                    .withAlpha(180), // Memberikan efek semi-transparan
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withAlpha(100),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(40), // shadowOpacity: 40
+                    blurRadius: 15,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: LayoutBuilder(builder: (context, constraints) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // ================== SUBMIT BUTTON ==================
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 2.0, vertical: 2.0),
+                            width: constraints.maxWidth * 0.32,
+                            height: constraints.maxHeight * 0.9,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: SizedBox.expand(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue.shade400,
+                                      Colors.blue.shade900
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: OutlinedButton(
+                                  // icon-nya kosong, pakai OutlinedButton biasa saja
+
+                                  onPressed: isSubmitting
+                                      ? null
+                                      : () async {
+                                          if (idEmployeeController
+                                                  .text.isEmpty ||
+                                              idMachineController
+                                                  .text.isEmpty ||
+                                              mixLotNumberController
+                                                  .text.isEmpty) {
+                                            CustomSnackbar.show(
+                                              context,
+                                              "Please complete QRCode Scanning.",
+                                              isSuccess: false,
+                                            );
+                                            return;
+                                          }
+
+                                          setState(() {
+                                            isSubmitting = true;
+                                          });
+
+                                          bool isSuccess = await postRecordData(
+                                            context,
+                                            idRecordUpdate: idRecUpdate,
+                                          );
+
+                                          if (isSuccess) {
+                                            resetForm();
+                                            setState(() {
+                                              idRecUpdate = null;
+                                            });
+                                          }
+
+                                          setState(() {
+                                            isSubmitting = false;
+                                          });
+                                        },
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                        color: Colors.transparent),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                  ),
+
+                                  child: Text(
+                                    isSubmitting ? "SUBMITTING..." : "SUBMIT",
+                                    style: GoogleFonts.poppins(
+                                      color: isSubmitting
+                                          ? Colors.grey[400]
+                                          : Colors.white,
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // ================== CLEAR BUTTON ==================
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 2.0, vertical: 2.0),
+                            width: constraints.maxWidth * 0.32,
+                            height: constraints.maxHeight * 0.9,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: SizedBox.expand(
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  resetForm();
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: Colors.blue.shade600,
+                                    width: 2,
+                                  ),
+                                  shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  child: OutlinedButton(
-                                    // icon-nya kosong, pakai OutlinedButton biasa saja
-                                    child: Text(
-                                      isSubmitting ? "SUBMITTING..." : "SUBMIT",
-                                      style: GoogleFonts.poppins(
-                                        color: isSubmitting
-                                            ? Colors.grey[400]
-                                            : Colors.white,
-                                        fontSize: 30.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    onPressed: isSubmitting
-                                        ? null
-                                        : () async {
-                                            if (idEmployeeController
-                                                    .text.isEmpty ||
-                                                idMachineController
-                                                    .text.isEmpty ||
-                                                mixLotNumberController
-                                                    .text.isEmpty) {
-                                              CustomSnackbar.show(
-                                                context,
-                                                "Please complete QRCode Scanning.",
-                                                isSuccess: false,
-                                              );
-                                              return;
-                                            }
-
-                                            setState(() {
-                                              isSubmitting = true;
-                                            });
-
-                                            bool isSuccess =
-                                                await postRecordData(
-                                              context,
-                                              idRecordUpdate: idRecUpdate,
-                                            );
-
-                                            if (isSuccess) {
-                                              resetForm();
-                                              setState(() {
-                                                idRecUpdate = null;
-                                              });
-                                            }
-
-                                            setState(() {
-                                              isSubmitting = false;
-                                            });
-                                          },
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                          color: Colors.transparent),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                    ),
+                                  backgroundColor: Colors.white,
+                                ),
+                                child: Text(
+                                  "CLEAR",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.blue.shade800,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
                             ),
+                          ),
 
-                            // ================== CLEAR BUTTON ==================
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 2.0, vertical: 2.0),
-                              width: constraints.maxWidth * 0.32,
-                              height: constraints.maxHeight * 0.9,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: SizedBox.expand(
-                                child: OutlinedButton(
-                                  child: Text(
-                                    "CLEAR",
+                          // ================== ADD NG BUTTON ==================
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 2.0, vertical: 2.0),
+                            width: constraints.maxWidth * 0.32,
+                            height: constraints.maxHeight * 0.9,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: SizedBox.expand(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.red.shade400,
+                                      Colors.red.shade900
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: OutlinedButton.icon(
+                                  label: Text(
+                                    "ADD NG",
                                     style: GoogleFonts.poppins(
-                                      color: Colors.blue.shade800,
+                                      color: Colors.white,
                                       fontSize: 30,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
+                                  icon: const Icon(Icons.add,
+                                      color: Colors.white, size: 24),
                                   onPressed: () {
-                                    resetForm();
+                                    // addNgAction();
                                   },
                                   style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                      color: Colors.blue.shade600,
-                                      width: 2,
-                                    ),
+                                    side: const BorderSide(
+                                        color: Colors.transparent),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    backgroundColor: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
                                   ),
                                 ),
                               ),
                             ),
-
-                            // ================== ADD NG BUTTON ==================
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 2.0, vertical: 2.0),
-                              width: constraints.maxWidth * 0.32,
-                              height: constraints.maxHeight * 0.9,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: SizedBox.expand(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.red.shade400,
-                                        Colors.red.shade900
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: OutlinedButton.icon(
-                                    label: Text(
-                                      "ADD NG",
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    icon: const Icon(Icons.add,
-                                        color: Colors.white, size: 24),
-                                    onPressed: () {
-                                      // addNgAction();
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      side: const BorderSide(
-                                          color: Colors.transparent),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }),
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      );
+                    }),
+                  ),
+                ],
               ),
+            ),
 
-              SizedBox(height: 5.0),
+            SizedBox(height: 5.0),
 
-              // Tambahkan ini di bawah container button
-              // =================== TABLE KOSONG ===================
-              Container(
-                padding: const EdgeInsets.all(5),
-                color: Colors.grey.shade200,
-                height: heightBody * 0.6, // Atur tinggi sesuai kebutuhan
-                width: double.infinity,
+            // Tambahkan ini di bawah container button
+            // =================== TABLE KOSONG ===================
+            Container(
+              padding: const EdgeInsets.all(5),
+              color: Colors.grey.shade200,
+              height: heightBody * 0.6, // Atur tinggi sesuai kebutuhan
+              width: double.infinity,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      // Ganti GlassWrapper dengan Container + Decoration
-                      child: Container(
-                        clipBehavior: Clip
-                            .antiAlias, // Memastikan konten tidak keluar dari radius
-                        decoration: BoxDecoration(
+                  scrollDirection: Axis.horizontal,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    // Ganti GlassWrapper dengan Container + Decoration
+                    child: Container(
+                      clipBehavior: Clip
+                          .antiAlias, // Memastikan konten tidak keluar dari radius
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                        border:
+                            Border.all(color: Colors.grey.shade300, width: 1),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(20),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: DataTable(
+                        columnSpacing: 20,
+                        headingRowColor: WidgetStateColor.resolveWith(
+                            (states) => Colors.blue.shade800),
+                        headingTextStyle: GoogleFonts.poppins(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(18),
-                          border:
-                              Border.all(color: Colors.grey.shade300, width: 1),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withAlpha(20),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                        child: DataTable(
-                          columnSpacing: 20,
-                          headingRowColor: WidgetStateColor.resolveWith(
-                              (states) => Colors.blue.shade800),
-                          headingTextStyle: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          dataTextStyle: GoogleFonts.poppins(
-                            color: Colors.black87,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          columns: const [
-                            DataColumn(label: Text('NO')),
-                            DataColumn(label: Text('NG NAME')),
-                            DataColumn(label: Text('QUANTITY')),
-                            DataColumn(label: Text('ACTION')),
-                          ],
-                          rows: const [], // Kosong
+                        dataTextStyle: GoogleFonts.poppins(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
+                        columns: const [
+                          DataColumn(label: Text('NO')),
+                          DataColumn(label: Text('NG NAME')),
+                          DataColumn(label: Text('QUANTITY')),
+                          DataColumn(label: Text('ACTION')),
+                        ],
+                        rows: const [], // Kosong
                       ),
                     ),
                   ),
                 ),
               ),
+            ),
 
-              SizedBox(height: 5.0),
+            SizedBox(height: 5.0),
 
-              Container(
-                // padding: EdgeInsets.all(5),
-                width: widthApp,
-                height: heightBody * 0.2,
-                // color: Colors.grey.shade500,
+            Container(
+              // padding: EdgeInsets.all(5),
+              width: widthApp,
+              height: heightBody * 0.2,
+              // color: Colors.grey.shade500,
 
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 4)],
-                ),
-
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return Container(
-                    width: constraints.maxWidth,
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Table(
-                          border: TableBorder(
-                            bottom: BorderSide(color: Colors.grey, width: 1.0),
-                            horizontalInside:
-                                BorderSide(color: Colors.grey, width: 0.5),
-                          ),
-                          columnWidths: {
-                            0: FlexColumnWidth(
-                                constraints.maxWidth * 0.4), // Kolom label
-                            1: FlexColumnWidth(
-                                constraints.maxWidth * 0.6), // Kolom tanda ":"
-                          },
-                          children: List.generate(6, (index) {
-                            final dataBottom = [
-                              ["MACHINE", nameMachine],
-                              ["MACHINE AREA", areaMachine],
-                              ["CUSTOMER", customer],
-                              ["MOLD CAVITY", cavity],
-                              ["TOTAL SHOT", totalShootView],
-                              ["QTY LOT", lotQuantity],
-                            ];
-
-                            // Pastikan menggunakan data.length
-                            // Warna selang-seling
-                            final Color rowColor = index % 2 == 0
-                                ? Colors.grey[200]!
-                                : Colors.white;
-
-                            return TableRow(
-                              children: [
-                                // Kolom 1: Label
-                                Container(
-                                  color: rowColor,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: isTablet ? 4.0 : 2.0,
-                                      horizontal: isTablet ? 6.0 : 3.0),
-                                  child: Text(
-                                    dataBottom[index]
-                                        [0], // Label (misal "PROCESS")
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: isTablet
-                                          ? widthApp * 0.025
-                                          : widthApp * 0.04,
-                                      color: Colors.grey.shade800,
-                                    ),
-                                  ),
-                                ),
-                                // Kolom 2: Tanda ":"
-
-                                // Kolom 3: Isi Data
-                                Container(
-                                  color: rowColor,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: isTablet ? 4.0 : 2.0,
-                                      horizontal: isTablet ? 6.0 : 3.0),
-                                  child: Text(
-                                    ":${dataBottom[index][1]}", // Isi data (misal "MOULDING")
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: isTablet
-                                          ? widthApp * 0.025
-                                          : widthApp * 0.04,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }),
-                        )),
-                  );
-                }),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 4)],
               ),
-            ]),
-          );
-        }),
-      ),
+
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Container(
+                  width: constraints.maxWidth,
+                  color: Colors.white,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Table(
+                        border: TableBorder(
+                          bottom: BorderSide(color: Colors.grey, width: 1.0),
+                          horizontalInside:
+                              BorderSide(color: Colors.grey, width: 0.5),
+                        ),
+                        columnWidths: {
+                          0: FlexColumnWidth(
+                              constraints.maxWidth * 0.4), // Kolom label
+                          1: FlexColumnWidth(
+                              constraints.maxWidth * 0.6), // Kolom tanda ":"
+                        },
+                        children: List.generate(6, (index) {
+                          final dataBottom = [
+                            ["MACHINE", nameMachine],
+                            ["MACHINE AREA", areaMachine],
+                            ["CUSTOMER", customer],
+                            ["MOLD CAVITY", cavity],
+                            ["TOTAL SHOT", totalShootView],
+                            ["QTY LOT", lotQuantity],
+                          ];
+
+                          // Pastikan menggunakan data.length
+                          // Warna selang-seling
+                          final Color rowColor =
+                              index % 2 == 0 ? Colors.grey[200]! : Colors.white;
+
+                          return TableRow(
+                            children: [
+                              // Kolom 1: Label
+                              Container(
+                                color: rowColor,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: isTablet ? 4.0 : 2.0,
+                                    horizontal: isTablet ? 6.0 : 3.0),
+                                child: Text(
+                                  dataBottom[index]
+                                      [0], // Label (misal "PROCESS")
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: isTablet
+                                        ? widthApp * 0.025
+                                        : widthApp * 0.04,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ),
+                              // Kolom 2: Tanda ":"
+
+                              // Kolom 3: Isi Data
+                              Container(
+                                color: rowColor,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: isTablet ? 4.0 : 2.0,
+                                    horizontal: isTablet ? 6.0 : 3.0),
+                                child: Text(
+                                  ":${dataBottom[index][1]}", // Isi data (misal "MOULDING")
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: isTablet
+                                        ? widthApp * 0.025
+                                        : widthApp * 0.04,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      )),
+                );
+              }),
+            ),
+          ]),
+        );
+      }),
       //SINGLECHILDSCROLLVIEW SAMPAI SINI
     );
   }
@@ -2455,7 +2428,7 @@ class _OneJoborderState extends State<OneJoborder>
 
   Future<void> _showMachineDialog(BuildContext context) async {
     if (!isMixLotScanned) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       CustomSnackbar.show(
         context,
         "Mohon Input Mix Lot No.",
@@ -2464,16 +2437,16 @@ class _OneJoborderState extends State<OneJoborder>
       return;
     }
 
-    List<MachineModelDropdown> _machineList = [];
+    List<MachineModelDropdown> machineList = [];
 
     try {
-      _machineList = await fetchMachineList();
+      machineList = await fetchMachineList();
     } catch (e) {
       logPrint("Error fetching machines: $e");
     }
 
-    if (_machineList.isEmpty) {
-      if (!mounted) return;
+    if (machineList.isEmpty) {
+      if (!context.mounted) return;
       CustomSnackbar.show(
         context,
         "Data Machine belum tersedia.",
@@ -2482,13 +2455,13 @@ class _OneJoborderState extends State<OneJoborder>
       return;
     }
 
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) {
-        MachineModelDropdown? _selectedMachineItem;
+        MachineModelDropdown? selectedMachineItem;
         bool isOkMachineEnabled = false;
 
         return StatefulBuilder(
@@ -2528,12 +2501,12 @@ class _OneJoborderState extends State<OneJoborder>
                         ),
                         const SizedBox(height: 16),
                         DropdownSearch<MachineModelDropdown>(
-                          items: (f, cs) => _machineList,
+                          items: (f, cs) => machineList,
                           itemAsString: (item) => item.nmMc,
                           compareFn: (a, b) => a.idMc == b.idMc,
                           onChanged: (MachineModelDropdown? selected) {
                             localSetState(() {
-                              _selectedMachineItem = selected;
+                              selectedMachineItem = selected;
                               isOkMachineEnabled = selected != null;
                             });
                           },
@@ -2614,7 +2587,7 @@ class _OneJoborderState extends State<OneJoborder>
                                 child: InkWell(
                                   onTap: () {
                                     localSetState(() {
-                                      _selectedMachineItem = item;
+                                      selectedMachineItem = item;
                                       isOkMachineEnabled = true;
                                     });
                                   },
@@ -2749,7 +2722,7 @@ class _OneJoborderState extends State<OneJoborder>
                                   onPressed: isOkMachineEnabled
                                       ? () {
                                           final selectedItem =
-                                              _selectedMachineItem;
+                                              selectedMachineItem;
 
                                           if (selectedItem != null) {
                                             setState(() {
@@ -2795,7 +2768,7 @@ class _OneJoborderState extends State<OneJoborder>
 
   Future<void> _showEmployeeDialog(BuildContext context) async {
     if (!isMachineScanned) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       CustomSnackbar.show(
         context,
         "Mohon Input Machine terlebih dahulu.",
@@ -2809,7 +2782,7 @@ class _OneJoborderState extends State<OneJoborder>
     }
 
     if (_employeeList.isEmpty) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       CustomSnackbar.show(
         context,
         "Data Employee belum tersedia.",
@@ -2818,13 +2791,13 @@ class _OneJoborderState extends State<OneJoborder>
       return;
     }
 
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) {
-        EmployeeModel? _selectedEmployeeItem;
+        EmployeeModel? selectedEmployeeItem;
         bool isOkEmployeeEnabled = false;
 
         return StatefulBuilder(
@@ -2869,7 +2842,7 @@ class _OneJoborderState extends State<OneJoborder>
                           compareFn: (a, b) => a.idEmployee == b.idEmployee,
                           onChanged: (EmployeeModel? selected) {
                             localSetState(() {
-                              _selectedEmployeeItem = selected;
+                              selectedEmployeeItem = selected;
                               isOkEmployeeEnabled = selected != null;
                             });
                           },
@@ -2952,7 +2925,7 @@ class _OneJoborderState extends State<OneJoborder>
                                 child: InkWell(
                                   onTap: () {
                                     localSetState(() {
-                                      _selectedEmployeeItem = item;
+                                      selectedEmployeeItem = item;
                                       isOkEmployeeEnabled = true;
                                     });
                                   },
@@ -3101,7 +3074,7 @@ class _OneJoborderState extends State<OneJoborder>
                                   onPressed: isOkEmployeeEnabled
                                       ? () {
                                           final selectedItem =
-                                              _selectedEmployeeItem;
+                                              selectedEmployeeItem;
                                           Navigator.pop(dialogContext);
 
                                           if (selectedItem != null) {
