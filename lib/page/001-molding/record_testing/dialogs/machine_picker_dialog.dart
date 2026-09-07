@@ -23,6 +23,7 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
   }
 
   if (provider.machineList.isEmpty) {
+    if (!context.mounted) return;
     CustomSnackbar.show(context, "Data Machine kosong!", isSuccess: false);
     return;
   }
@@ -39,7 +40,8 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
         builder: (dialogContext, localSetState) {
           return Dialog(
             backgroundColor: Colors.blue.shade500,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
@@ -71,15 +73,16 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                       items: (f, cs) => provider.machineList,
                       itemAsString: (item) => item.nmMc,
                       compareFn: (a, b) => a.idMc == b.idMc,
-                      onChanged: (item) => localSetState(() => selectedItem = item),
+                      onChanged: (item) =>
+                          localSetState(() => selectedItem = item),
                       decoratorProps: const DropDownDecoratorProps(
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: "Machine",
                           hintText: "Nama Machine",
                           isDense: true,
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 12),
                         ),
                       ),
                       popupProps: PopupProps.menu(
@@ -108,21 +111,29 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide:
-                                  const BorderSide(color: Colors.blue, width: 2),
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2),
                             ),
                           ),
                         ),
-                        itemBuilder: (context, MachineModelDropdown item, isDisabled, isSelected) {
+                        itemBuilder: (context, MachineModelDropdown item,
+                            isDisabled, isSelected) {
                           return AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 12),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(14),
                               gradient: LinearGradient(
                                 colors: isSelected
-                                    ? [Colors.blue.shade200, Colors.lightBlue.shade100]
-                                    : [Colors.grey.shade50, Colors.grey.shade100],
+                                    ? [
+                                        Colors.blue.shade200,
+                                        Colors.lightBlue.shade100
+                                      ]
+                                    : [
+                                        Colors.grey.shade50,
+                                        Colors.grey.shade100
+                                      ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
@@ -147,9 +158,11 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                             ),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(14),
-                              onTap: () => localSetState(() => selectedItem = item),
+                              onTap: () =>
+                                  localSetState(() => selectedItem = item),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 12),
                                 child: ListTile(
                                   contentPadding: EdgeInsets.zero,
                                   leading: Container(
@@ -158,11 +171,15 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       gradient: LinearGradient(
-                                        colors: [Colors.blue.shade100, Colors.blue.shade300],
+                                        colors: [
+                                          Colors.blue.shade100,
+                                          Colors.blue.shade300
+                                        ],
                                       ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withValues(alpha: 0.25),
+                                          color: Colors.black
+                                              .withValues(alpha: 0.25),
                                           blurRadius: 6,
                                           offset: const Offset(2, 2),
                                         ),
@@ -181,15 +198,21 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
-                                      color: isSelected ? Colors.blue.shade900 : Colors.black87,
+                                      color: isSelected
+                                          ? Colors.blue.shade900
+                                          : Colors.black87,
                                     ),
                                   ),
                                   subtitle: Text(
                                     "AREA: ${item.areaMc}",
-                                    style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.grey.shade700),
                                   ),
                                   trailing: isSelected
-                                      ? Icon(Icons.check_circle, color: Colors.amber.shade400, size: 28)
+                                      ? Icon(Icons.check_circle,
+                                          color: Colors.amber.shade400,
+                                          size: 28)
                                       : null,
                                 ),
                               ),
@@ -206,7 +229,8 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                         menuProps: const MenuProps(
                           margin: EdgeInsets.only(top: 8),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(5))),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
                         ),
                       ),
                     ),
@@ -220,8 +244,10 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                             height: 70,
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: Colors.blue, width: 1),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                side: const BorderSide(
+                                    color: Colors.blue, width: 1),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
                               ),
                               onPressed: () => Navigator.pop(dialogContext),
                               child: Text(
@@ -243,39 +269,52 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
                               borderRadius: BorderRadius.circular(5),
                               gradient: selectedItem == null
                                   ? LinearGradient(
-                                      colors: [Colors.blueGrey.shade50, Colors.blueGrey.shade600],
+                                      colors: [
+                                        Colors.blueGrey.shade50,
+                                        Colors.blueGrey.shade600
+                                      ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
                                     )
                                   : LinearGradient(
-                                      colors: [Colors.blueAccent, Colors.blue.shade800],
+                                      colors: [
+                                        Colors.blueAccent,
+                                        Colors.blue.shade800
+                                      ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
                                     ),
                             ),
                             child: TextButton(
-                              onPressed: (selectedItem == null || provider.isValidating)
+                              onPressed: (selectedItem == null ||
+                                      provider.isValidating)
                                   ? null
                                   : () async {
-                                      final machineProvider = context.read<MachineProvider>();
-                                      final testingProvider = context.read<TestingProvider>();
+                                      final machineProvider =
+                                          context.read<MachineProvider>();
+                                      final testingProvider =
+                                          context.read<TestingProvider>();
 
-                                      final error = await machineProvider.setMachineByIdTesting(
+                                      final error = await machineProvider
+                                          .setMachineByIdTesting(
                                         selectedItem!.idMc,
                                       );
 
                                       if (!context.mounted) return;
 
                                       if (error != null) {
-                                        CustomSnackbar.show(context, error, isSuccess: false);
+                                        CustomSnackbar.show(context, error,
+                                            isSuccess: false);
                                         return;
                                       }
 
-                                      testingProvider.setMachine(machineProvider.machine);
+                                      testingProvider
+                                          .setMachine(machineProvider.machine);
                                       Navigator.pop(dialogContext);
                                     },
                               child: provider.isValidating
-                                  ? const CircularProgressIndicator(color: Colors.white)
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white)
                                   : Text(
                                       "OK",
                                       style: GoogleFonts.poppins(

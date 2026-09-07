@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/model/master/employee_model.dart';
 import 'package:flutter_provider_data/model/master/product_model.dart';
 import 'package:flutter_provider_data/page/001-molding/menu_sub_testing.dart';
-
 import 'package:flutter_provider_data/page/001-molding/report/paginated_testing_completed.dart';
 import 'package:flutter_provider_data/utils/mobile_scanner_page.dart';
 import 'package:http/http.dart' as http;
@@ -2059,7 +2058,7 @@ class _TestingCompletedState extends State<TestingCompleted> {
 class StatusBadge extends StatelessWidget {
   final String status;
 
-  const StatusBadge(this.status, {Key? key}) : super(key: key);
+  const StatusBadge(this.status, {super.key});
 
   @override
   Widget build(BuildContext context) {

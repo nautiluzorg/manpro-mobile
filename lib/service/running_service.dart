@@ -155,39 +155,6 @@ class RunningService {
     }
   }
 
-  /// Service workday over
-  /*
-  Future<bool> submitWorkdayOver({
-    required String idRecord,
-    required String idEmployee,
-    required String idProses,
-    required String bcode,
-  }) async {
-    try {
-      await _dio.post(
-        '/api/submit-workday-over/',
-        data: {
-          "id_record": idRecord,
-          "id_reason": "02",
-          "id_employee": idEmployee,
-          "id_proses": idProses,
-          "bcode": bcode,
-        },
-      );
-
-      return true;
-    } on DioException catch (e) {
-      final errorMessage = _extractErrorMessage(e.response?.data);
-      throw Exception(
-          'SUBMIT_WORKDAY_OVER_FAILED: $errorMessage (${e.response?.statusCode})');
-    } on Exception {
-      rethrow;
-    } catch (e) {
-      throw Exception('SUBMIT_WORKDAY_OVER_ERROR: $e');
-    }
-  }
-  */
-
   /// Service pergantian operator
   Future<bool> submitChangeOperator({
     required String idRecord,

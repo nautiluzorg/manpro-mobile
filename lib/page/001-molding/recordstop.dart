@@ -456,7 +456,7 @@ class _RecordStopState extends State<RecordStop> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        shadowColor: Colors.black.withOpacity(0.1),
+                        shadowColor: Colors.black.withValues(alpha: 0.1),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -558,17 +558,18 @@ class _RecordStopState extends State<RecordStop> {
                                                   shape: BoxShape.circle,
                                                   gradient: RadialGradient(
                                                     colors: [
-                                                      Colors.grey
-                                                          .withOpacity(0.4),
-                                                      Colors.white
-                                                          .withOpacity(0.1),
+                                                      Colors.grey.withValues(
+                                                          alpha: 0.4),
+                                                      Colors.white.withValues(
+                                                          alpha: 0.1),
                                                     ],
                                                     stops: const [0.5, 1.0],
                                                   ),
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: Colors.grey
-                                                          .withOpacity(0.5),
+                                                          .withValues(
+                                                              alpha: 0.5),
                                                       spreadRadius: 4,
                                                       blurRadius: 14,
                                                     ),
@@ -3135,7 +3136,8 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
                                         color: Colors.grey.shade100,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.grey.withOpacity(0.2),
+                                            color: Colors.grey
+                                                .withValues(alpha: 0.2),
                                             offset: const Offset(0, 2),
                                             blurRadius: 4,
                                           )
@@ -3223,7 +3225,7 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.red.shade200
-                                                .withOpacity(0.3),
+                                                .withValues(alpha: 0.3),
                                             offset: const Offset(0, 2),
                                             blurRadius: 6,
                                           )
@@ -3276,7 +3278,7 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.blue.shade200
-                                                .withOpacity(0.3),
+                                                .withValues(alpha: 0.3),
                                             offset: const Offset(0, 2),
                                             blurRadius: 6,
                                           )
@@ -5042,7 +5044,8 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
                                         color: Colors.grey.shade100,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.grey.withOpacity(0.2),
+                                            color: Colors.grey
+                                                .withValues(alpha: 0.2),
                                             offset: const Offset(0, 2),
                                             blurRadius: 4,
                                           )
@@ -5280,7 +5283,7 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.blue.shade200
-                                                  .withOpacity(0.3),
+                                                  .withValues(alpha: 0.3),
                                               offset: const Offset(0, 2),
                                               blurRadius: 6,
                                             )
@@ -5355,7 +5358,7 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.red.shade200
-                                                .withOpacity(0.3),
+                                                .withValues(alpha: 0.3),
                                             offset: const Offset(0, 2),
                                             blurRadius: 6,
                                           )

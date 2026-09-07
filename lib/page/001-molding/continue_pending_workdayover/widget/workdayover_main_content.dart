@@ -148,7 +148,7 @@ class WorkdayOverMainContent extends StatelessWidget {
                       defaultVerticalAlignment:
                           TableCellVerticalAlignment.middle,
                       children: [
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 9; i++)
                           TableRow(
                             decoration: BoxDecoration(
                               color: i.isEven
@@ -167,6 +167,7 @@ class WorkdayOverMainContent extends StatelessWidget {
                                     'TIME STOP',
                                     'PENDING REASON',
                                     'STOP DURATION',
+                                    'QTY SHOOT FINISHED',
                                     'EMPLOYEE CONFIRM',
                                   ][i],
                                   style: GoogleFonts.poppins(
@@ -179,7 +180,7 @@ class WorkdayOverMainContent extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(6.0),
-                                child: i == 7
+                                child: i == 8
                                     ? Row(
                                         children: [
                                           Text(
@@ -222,6 +223,7 @@ class WorkdayOverMainContent extends StatelessWidget {
                                           ": ${formatDateTime(data.startPending)}",
                                           ": ${data.reason}",
                                           ": ${getStopDuration(data.startPending)}",
+                                          ": ${data.lastQtyShoot}",
                                         ][i],
                                         style: GoogleFonts.poppins(
                                           fontSize: 15,

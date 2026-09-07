@@ -63,7 +63,7 @@ class ListRecordRunning extends StatefulWidget {
   const ListRecordRunning({super.key, required this.idProses});
 
   @override
-  _ListRecordRunningState createState() => _ListRecordRunningState();
+  State<ListRecordRunning> createState() => _ListRecordRunningState();
 }
 
 class _ListRecordRunningState extends State<ListRecordRunning> {
@@ -1674,7 +1674,7 @@ class NumBlockKeyboardDialog extends StatefulWidget {
   const NumBlockKeyboardDialog({super.key, required this.idRecord});
 
   @override
-  _NumBlockKeyboardDialogState createState() => _NumBlockKeyboardDialogState();
+  State<NumBlockKeyboardDialog> createState() => _NumBlockKeyboardDialogState();
 }
 
 class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
@@ -2868,6 +2868,8 @@ class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
                                                   "ng_data": ngData
                                                 }),
                                               );
+
+                                              if (!context.mounted) return;
 
                                               if (response.statusCode == 200) {
                                                 setState(() {

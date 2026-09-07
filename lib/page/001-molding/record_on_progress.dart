@@ -1120,8 +1120,10 @@ class _RecordOnProgressState extends State<RecordOnProgress> {
                                     (EmployeeModel? a, EmployeeModel? b) =>
                                         a?.idEmployee == b?.idEmployee,
                                 onChanged: (EmployeeModel? selected) async {
-                                  if (_isSelectingEmployee || selected == null)
+                                  if (_isSelectingEmployee ||
+                                      selected == null) {
                                     return; // cegah double tap
+                                  }
 
                                   _isSelectingEmployee = true;
 
@@ -1249,10 +1251,14 @@ class _RecordOnProgressState extends State<RecordOnProgress> {
                                                   const Duration(
                                                       milliseconds: 200), () {
                                                 if (!mounted) return;
+
                                                 loadDataPage(
                                                     page: 1,
                                                     pageSize: _rowsPerPage);
+                                                if (!context.mounted) return;
+
                                                 Navigator.of(context).pop(item);
+
                                                 _isSelectingEmployee = false;
                                               });
                                             },
@@ -1464,6 +1470,7 @@ class _RecordOnProgressState extends State<RecordOnProgress> {
                                           if (!mounted) return;
                                           await loadDataPage(
                                               page: 1, pageSize: _rowsPerPage);
+                                          if (!context.mounted) return;
                                           Navigator.of(context).pop(item);
                                           _isSelectingDrawing = false;
                                         },

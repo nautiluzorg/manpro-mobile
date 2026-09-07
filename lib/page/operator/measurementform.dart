@@ -1688,12 +1688,12 @@ class _MeasurementFormState extends State<MeasurementForm> {
                                 return; // keluar, dialog tidak dibuka
                               }
 
-                              List<MachineModelDropdown> _machineList = [];
+                              List<MachineModelDropdown> machineList = [];
                               // bool _isSelectingMachine = false;
                               MachineModelDropdown? selectedMachineItem;
 
                               try {
-                                _machineList = await fetchMachineList();
+                                machineList = await fetchMachineList();
                               } catch (e) {
                                 logPrint("Error fetching machines: $e");
                               }
@@ -1739,8 +1739,7 @@ class _MeasurementFormState extends State<MeasurementForm> {
 
                                                 DropdownSearch<
                                                     MachineModelDropdown>(
-                                                  items: (f, cs) =>
-                                                      _machineList,
+                                                  items: (f, cs) => machineList,
                                                   itemAsString: (item) =>
                                                       item.nmMc,
                                                   compareFn: (a, b) =>

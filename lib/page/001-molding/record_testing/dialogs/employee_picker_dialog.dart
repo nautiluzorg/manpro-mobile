@@ -30,11 +30,15 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
   }
 
   if (employeeProv.employeeList.isEmpty) {
-    CustomSnackbar.show(context, "Data Employee belum tersedia.", isSuccess: false);
+    if (!context.mounted) return;
+    CustomSnackbar.show(context, "Data Employee belum tersedia.",
+        isSuccess: false);
     return;
   }
 
   EmployeeModel? selectedItem;
+
+  if (!context.mounted) return;
 
   await showDialog(
     context: context,
@@ -44,7 +48,8 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
         builder: (dialogContext, localSetState) {
           return Dialog(
             backgroundColor: Colors.blue.shade500,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             child: Container(
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
@@ -53,8 +58,8 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
               ),
               child: Container(
                 padding: const EdgeInsets.fromLTRB(5, 5, 5, 15),
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: MediaQuery.of(context).size.width * 0.4,
+                width: MediaQuery.of(dialogContext).size.width * 0.95,
+                height: MediaQuery.of(dialogContext).size.width * 0.4,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.grey, width: 2),
@@ -76,14 +81,16 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
                       items: (f, cs) => employeeProv.employeeList,
                       itemAsString: (item) => item.fullName,
                       compareFn: (a, b) => a.idEmployee == b.idEmployee,
-                      onChanged: (item) => localSetState(() => selectedItem = item),
+                      onChanged: (item) =>
+                          localSetState(() => selectedItem = item),
                       decoratorProps: const DropDownDecoratorProps(
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: "Operator",
                           hintText: "Nama Operator",
                           isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 12),
                         ),
                       ),
                       popupProps: PopupProps.menu(
@@ -104,15 +111,16 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
                             border: InputBorder.none,
                             filled: true,
                             fillColor: Colors.white,
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 18),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
                               borderSide: const BorderSide(color: Colors.grey),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
-                              borderSide: const BorderSide(color: Colors.blue, width: 2),
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2),
                             ),
                           ),
                         ),
@@ -122,15 +130,22 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
 
                           return AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 12),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               gradient: isSelected
                                   ? LinearGradient(
-                                      colors: [Colors.blue.shade200, Colors.lightBlue.shade100],
+                                      colors: [
+                                        Colors.blue.shade200,
+                                        Colors.lightBlue.shade100
+                                      ],
                                     )
                                   : LinearGradient(
-                                      colors: [Colors.grey.shade50, Colors.grey.shade100],
+                                      colors: [
+                                        Colors.grey.shade50,
+                                        Colors.grey.shade100
+                                      ],
                                     ),
                               boxShadow: [
                                 BoxShadow(
@@ -145,26 +160,34 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
                                 ),
                               ],
                               border: Border.all(
-                                color: isSelected ? Colors.lightBlue.shade400 : Colors.grey.shade300,
+                                color: isSelected
+                                    ? Colors.lightBlue.shade400
+                                    : Colors.grey.shade300,
                                 width: isSelected ? 2 : 1,
                               ),
                             ),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(5),
-                              onTap: () => localSetState(() => selectedItem = item),
+                              onTap: () =>
+                                  localSetState(() => selectedItem = item),
                               child: ListTile(
-                                contentPadding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+                                contentPadding:
+                                    const EdgeInsets.fromLTRB(12, 6, 12, 6),
                                 leading: Container(
                                   width: 55,
                                   height: 55,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     gradient: LinearGradient(
-                                      colors: [Colors.blue.shade100, Colors.blue.shade300],
+                                      colors: [
+                                        Colors.blue.shade100,
+                                        Colors.blue.shade300
+                                      ],
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.25),
+                                        color: Colors.black
+                                            .withValues(alpha: 0.25),
                                         blurRadius: 6,
                                         offset: const Offset(2, 2),
                                       ),
@@ -174,7 +197,8 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
                                     child: Image.network(
                                       photoUrl,
                                       fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) => const Icon(Icons.person),
+                                      errorBuilder: (_, __, ___) =>
+                                          const Icon(Icons.person),
                                     ),
                                   ),
                                 ),
@@ -183,24 +207,32 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
-                                    color: isSelected ? Colors.blue.shade900 : Colors.black87,
+                                    color: isSelected
+                                        ? Colors.blue.shade900
+                                        : Colors.black87,
                                   ),
                                 ),
                                 subtitle: Text(
                                   "NRP: ${item.nrp}",
-                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey.shade700),
                                 ),
                                 trailing: isSelected
-                                    ? Icon(Icons.check_circle, color: Colors.amber.shade400, size: 28)
+                                    ? Icon(Icons.check_circle,
+                                        color: Colors.amber.shade400, size: 28)
                                     : null,
                               ),
                             ),
                           );
                         },
                         constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height * 0.8,
-                          maxWidth: MediaQuery.of(context).size.width * 0.95,
-                          minWidth: MediaQuery.of(context).size.width * 0.95,
+                          maxHeight:
+                              MediaQuery.of(dialogContext).size.height * 0.8,
+                          maxWidth:
+                              MediaQuery.of(dialogContext).size.width * 0.95,
+                          minWidth:
+                              MediaQuery.of(dialogContext).size.width * 0.95,
                         ),
                         scrollbarProps: const ScrollbarProps(
                           trackVisibility: true,
@@ -223,8 +255,10 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
                             height: 70,
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: Colors.blue, width: 1),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                side: const BorderSide(
+                                    color: Colors.blue, width: 1),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
                               ),
                               onPressed: () => Navigator.pop(dialogContext),
                               child: Text(
@@ -246,12 +280,18 @@ Future<void> showEmployeePickerDialog(BuildContext context) async {
                               borderRadius: BorderRadius.circular(5),
                               gradient: selectedItem == null
                                   ? LinearGradient(
-                                      colors: [Colors.blueGrey.shade50, Colors.blueGrey.shade600],
+                                      colors: [
+                                        Colors.blueGrey.shade50,
+                                        Colors.blueGrey.shade600
+                                      ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
                                     )
                                   : LinearGradient(
-                                      colors: [Colors.blueAccent, Colors.blue.shade800],
+                                      colors: [
+                                        Colors.blueAccent,
+                                        Colors.blue.shade800
+                                      ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
                                     ),

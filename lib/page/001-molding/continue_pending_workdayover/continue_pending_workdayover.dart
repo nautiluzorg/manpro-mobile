@@ -64,9 +64,6 @@ class _ContinuePendingWorkdayOverState
       pendingProv.resetPendingDetail();
       pendingProv.resetEmployeeScanState();
       pendingProv.clearNextMachine();
-      // await pendingProv.loadPendingDetailWithNg(int.parse(widget.idPending));
-
-      // ← jalankan parallel, tidak saling tunggu
       await Future.wait([
         pendingProv.fetchPendingDetailWorkdayOver(widget.idPending),
         ngProvider.loadNGList(

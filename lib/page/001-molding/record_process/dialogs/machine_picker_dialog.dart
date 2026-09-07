@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_provider_data/model/machine_model_dropdown.dart';
 import 'package:flutter_provider_data/provider/machine_provider.dart';
 import 'package:flutter_provider_data/utils/custom_snackbar.dart';
@@ -17,15 +16,15 @@ Future<void> showMachinePickerDialog(BuildContext context) async {
 
   // Load machine list
   final error = await provider.loadMachines();
+
   if (error != null) {
     if (!context.mounted) return;
-    if (context.mounted) {
-      CustomSnackbar.show(context, error, isSuccess: false);
-    }
+    CustomSnackbar.show(context, error, isSuccess: false);
     return;
   }
 
   if (provider.machineList.isEmpty) {
+    if (!context.mounted) return;
     CustomSnackbar.show(context, 'Data Machine kosong!', isSuccess: false);
     return;
   }
