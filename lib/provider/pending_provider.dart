@@ -392,42 +392,6 @@ class PendingProvider extends ChangeNotifier {
     }
   }
 
-/*
-  Future<bool> updatePendingRecordMc({
-
-    required int idPending,
-    required String idRecord,
-    
-  }) async {
-
-
-    if (!hasNextMachine) {
-      _setError("PLEASE SELECT MACHINE");
-      return false;
-    }
-
-    _setSubmitting(true);
-    _setError(null);
-
-    try {
-      await _service.updateRecordPendingMc(
-        idPending: idPending,
-        idRecord: idRecord, // ← tambah
-        idMachine: _nextMachineId,
-      );
-      clearConfirmedEmployee();
-      clearNextMachine();
-      return true;
-    } catch (e) {
-      _setError(e.toString());
-      return false;
-    } finally {
-      _setSubmitting(false);
-    }
-
-  }
-  */
-
   Future<bool> updatePendingRecordNormal(int idPending) async {
     _setLoading(true);
     _setError(null);
@@ -567,8 +531,7 @@ class PendingProvider extends ChangeNotifier {
     }
   }
 
-  /// ================= CONTINUE WORKDAY OVER NEW OPERATOR =================
-  /// ================= CONTINUE WORKDAY OVER NEW OPERATOR =================
+  /// ================= CONTINUE WORKDAY OVER NEW OPERATOR ==========================================================================================
   Future<bool> continueWorkdayOverNewOperator({
     required String idRecord,
     required String idEmployee,
@@ -583,6 +546,8 @@ class PendingProvider extends ChangeNotifier {
       );
 
       logPrint('CONTINUE WORKDAY OVER SUCCESS: $response');
+      // Clear employee yang sudah di-scan
+      resetEmployeeState();
 
       return true;
     } catch (e) {

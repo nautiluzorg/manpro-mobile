@@ -3727,7 +3727,7 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
                                                               EdgeInsets.all(
                                                                   6.0),
                                                           child: Text(data[0]
-                                                              .shootTotal
+                                                              .shootQty
                                                               .toString()),
                                                         ),
                                                       ],
@@ -3763,7 +3763,7 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
                                                               EdgeInsets.all(
                                                                   6.0),
                                                           child: Text(data[0]
-                                                              .shootTotal
+                                                              .shootQty
                                                               .toString()),
                                                         ),
                                                       ],

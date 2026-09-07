@@ -57,8 +57,11 @@ class PendingDetailSection extends StatelessWidget {
       ('START JOB', formatDateTime(data.startTime), false),
       ('PENDING TIME', formatDateTime(data.startPending), false),
       ('REASON', data.reason.toString(), false),
+
+      // Shoot
       ('TOTAL SHOOT', data.shootQty.toString(), false),
-      ('DONE SHOOT', data.shootTotal.toString(), false),
+      ('DONE SHOOT', data.lastQtyShoot.toString(), false),
+      ('SISA SHOOT', data.sisaShoot.toString(), false),
     ];
 
     return Table(
@@ -69,12 +72,19 @@ class PendingDetailSection extends StatelessWidget {
       },
       children: List.generate(rows.length, (index) {
         final item = rows[index];
+
         final bool isReason = item.$1 == 'REASON';
+        final bool isSisaShoot = item.$1 == 'SISA SHOOT';
+
         return _tableRow(
           label: item.$1,
           value: item.$2,
-          isBold: isReason,
-          valueColor: isReason ? Colors.red : null,
+          isBold: isReason || isSisaShoot,
+          valueColor: isReason
+              ? Colors.red
+              : isSisaShoot
+                  ? Colors.orange.shade800
+                  : null,
           index: index,
         );
       }),
@@ -93,7 +103,9 @@ class PendingDetailSection extends StatelessWidget {
         color: index.isEven
             ? Colors.indigo.shade200.withValues(alpha: 0.15)
             : Colors.white,
-        border: const Border(bottom: BorderSide(color: Colors.grey)),
+        border: const Border(
+          bottom: BorderSide(color: Colors.grey),
+        ),
       ),
       children: [
         Padding(
@@ -107,7 +119,10 @@ class PendingDetailSection extends StatelessWidget {
         ),
         const Padding(
           padding: EdgeInsets.all(6),
-          child: Text(':', textAlign: TextAlign.center),
+          child: Text(
+            ':',
+            textAlign: TextAlign.center,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(6),
@@ -144,10 +159,14 @@ class PendingDetailSection extends StatelessWidget {
                 color: Colors.black,
               ),
               children: [
-                const TextSpan(text: 'NG LIST OLEH OPERATOR '),
+                const TextSpan(
+                  text: 'NG LIST OLEH OPERATOR ',
+                ),
                 TextSpan(
                   text: data.employeeName,
-                  style: const TextStyle(color: Colors.blue),
+                  style: const TextStyle(
+                    color: Colors.blue,
+                  ),
                 ),
               ],
             ),
@@ -158,7 +177,9 @@ class PendingDetailSection extends StatelessWidget {
               ngList[0].ngName.toUpperCase() == 'NO NG')
             Text(
               'SO FAR IS GOOD NO NG FOUND.',
-              style: TextStyle(color: Colors.green.shade800),
+              style: TextStyle(
+                color: Colors.green.shade800,
+              ),
             )
           else
             _ngTable(ngList),
@@ -173,9 +194,13 @@ class PendingDetailSection extends StatelessWidget {
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+            constraints: BoxConstraints(
+              minWidth: constraints.maxWidth,
+            ),
             child: Table(
-              border: TableBorder.all(color: Colors.grey.shade400),
+              border: TableBorder.all(
+                color: Colors.grey.shade400,
+              ),
               columnWidths: const {
                 0: FlexColumnWidth(1),
                 1: FlexColumnWidth(4),
@@ -195,9 +220,15 @@ class PendingDetailSection extends StatelessWidget {
                           : Colors.white,
                     ),
                     children: [
-                      _ngCell((index + 1).toString(), alignCenter: true),
+                      _ngCell(
+                        (index + 1).toString(),
+                        alignCenter: true,
+                      ),
                       _ngCell(ng.ngName),
-                      _ngCell(ng.qty.toString(), alignCenter: true),
+                      _ngCell(
+                        ng.qty.toString(),
+                        alignCenter: true,
+                      ),
                     ],
                   );
                 }),
@@ -213,7 +244,10 @@ class PendingDetailSection extends StatelessWidget {
     return TableRow(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.blueAccent, Colors.blue.shade900],
+          colors: [
+            Colors.blueAccent,
+            Colors.blue.shade900,
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -232,13 +266,18 @@ class PendingDetailSection extends StatelessWidget {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style:
-            const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
       ),
     );
   }
 
-  Widget _ngCell(String text, {bool alignCenter = false}) {
+  Widget _ngCell(
+    String text, {
+    bool alignCenter = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Text(

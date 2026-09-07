@@ -30,8 +30,6 @@ class RecordPendingDetailModel extends Equatable {
 
   // Shoot
   final int shootQty;
-  final int shootTotal;
-  final int sisaShoot;
 
   // Last Operator
   final String? lastOperatorId;
@@ -67,8 +65,6 @@ class RecordPendingDetailModel extends Equatable {
 
     // Shoot
     required this.shootQty,
-    required this.shootTotal,
-    required this.sisaShoot,
 
     // Last Operator
     this.lastOperatorId,
@@ -79,7 +75,13 @@ class RecordPendingDetailModel extends Equatable {
     required this.ngList,
   });
 
+  // ── Computed Property ─────────────────────────────────────
+
+  /// Sisa shoot = shoot quantity - last operator shoot quantity
+  int get sisaShoot => shootQty - lastQtyShoot;
+
   // ── Static Empty ──────────────────────────────────────────
+
   static const empty = RecordPendingDetailModel(
     idPending: 0,
     idRecord: '',
@@ -106,8 +108,6 @@ class RecordPendingDetailModel extends Equatable {
 
     // Shoot
     shootQty: 0,
-    shootTotal: 0,
-    sisaShoot: 0,
 
     // Last Operator
     lastOperatorId: null,
@@ -118,11 +118,14 @@ class RecordPendingDetailModel extends Equatable {
     ngList: [],
   );
 
+  // ── Empty Check ───────────────────────────────────────────
+
   bool get isEmpty => this == RecordPendingDetailModel.empty;
 
   bool get isNotEmpty => this != RecordPendingDetailModel.empty;
 
   // ── fromJson ──────────────────────────────────────────────
+
   factory RecordPendingDetailModel.fromJson(
     Map<String, dynamic> json,
   ) {
@@ -174,10 +177,6 @@ class RecordPendingDetailModel extends Equatable {
       // Shoot
       shootQty: json.safeInt('shoot_qty'),
 
-      shootTotal: json.safeInt('shoot_total'),
-
-      sisaShoot: json.safeInt('sisa_shoot'),
-
       // Last Operator
       lastOperatorId: json['last_operator_id']?.toString(),
 
@@ -196,6 +195,7 @@ class RecordPendingDetailModel extends Equatable {
   }
 
   // ── toJson ────────────────────────────────────────────────
+
   Map<String, dynamic> toJson() {
     return {
       'id_pending': idPending,
@@ -223,8 +223,6 @@ class RecordPendingDetailModel extends Equatable {
 
       // Shoot
       'shoot_qty': shootQty,
-      'shoot_total': shootTotal,
-      'sisa_shoot': sisaShoot,
 
       // Last Operator
       'last_operator_id': lastOperatorId,
@@ -237,6 +235,7 @@ class RecordPendingDetailModel extends Equatable {
   }
 
   // ── copyWith ──────────────────────────────────────────────
+
   RecordPendingDetailModel copyWith({
     int? idPending,
     String? idRecord,
@@ -263,8 +262,6 @@ class RecordPendingDetailModel extends Equatable {
 
     // Shoot
     int? shootQty,
-    int? shootTotal,
-    int? sisaShoot,
 
     // Last Operator
     String? lastOperatorId,
@@ -300,8 +297,6 @@ class RecordPendingDetailModel extends Equatable {
 
       // Shoot
       shootQty: shootQty ?? this.shootQty,
-      shootTotal: shootTotal ?? this.shootTotal,
-      sisaShoot: sisaShoot ?? this.sisaShoot,
 
       // Last Operator
       lastOperatorId: lastOperatorId ?? this.lastOperatorId,
@@ -314,6 +309,7 @@ class RecordPendingDetailModel extends Equatable {
   }
 
   // ── Equatable ─────────────────────────────────────────────
+
   @override
   List<Object?> get props => [
         idPending,
@@ -341,8 +337,6 @@ class RecordPendingDetailModel extends Equatable {
 
         // Shoot
         shootQty,
-        shootTotal,
-        sisaShoot,
 
         // Last Operator
         lastOperatorId,
@@ -353,7 +347,6 @@ class RecordPendingDetailModel extends Equatable {
         ngList,
       ];
 }
-
 
 /*
 import 'package:equatable/equatable.dart';
