@@ -363,6 +363,7 @@ class _RecordProcessState extends State<RecordProcess>
     }
 
     if (provider.machineList.isEmpty) {
+      if (!context.mounted) return;
       CustomSnackbar.show(context, "Data Machine kosong!", isSuccess: false);
       return;
     }
@@ -1381,6 +1382,7 @@ class _RecordProcessState extends State<RecordProcess>
                               final jobProvider =
                                   context.read<JobNumberProvider>();
                               if (jobProvider.jobNumber.isEmpty) {
+                                if (!context.mounted) return;
                                 CustomSnackbar.show(
                                     context, "Harap scan Jobnumber dulu",
                                     isSuccess: false);
@@ -1390,6 +1392,7 @@ class _RecordProcessState extends State<RecordProcess>
                               // Proses scan Mix Lot
                               final result = await provider.scanMixLotNumber();
                               if (result == null) {
+                                if (!context.mounted) return;
                                 CustomSnackbar.show(
                                     context, "Mix Lot Number tidak ditemukan",
                                     isSuccess: false);
@@ -1402,6 +1405,7 @@ class _RecordProcessState extends State<RecordProcess>
                                 final jobProvider =
                                     context.read<JobNumberProvider>();
                                 if (jobProvider.jobNumber.isEmpty) {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                       context, "Harap scan Jobnumber dulu",
                                       isSuccess: false);
@@ -1461,6 +1465,7 @@ class _RecordProcessState extends State<RecordProcess>
                               if (!context.mounted) return;
 
                               if (error != null) {
+                                if (!context.mounted) return;
                                 CustomSnackbar.show(context, error,
                                     isSuccess: false);
                               }
@@ -1507,6 +1512,7 @@ class _RecordProcessState extends State<RecordProcess>
                               if (employeeProvider.isLoading) return;
 
                               if (machineProvider.machine.idMc.isEmpty) {
+                                if (!context.mounted) return;
                                 CustomSnackbar.show(
                                   context,
                                   "Harap scan QRcode data machine lebih dulu",
@@ -1549,6 +1555,7 @@ class _RecordProcessState extends State<RecordProcess>
                               // 3. HANDLE UI FEEDBACK
                               // =====================
                               if (!success) {
+                                if (!context.mounted) return;
                                 CustomSnackbar.show(
                                   context,
                                   employeeProvider.errorMessage ??
@@ -1565,6 +1572,7 @@ class _RecordProcessState extends State<RecordProcess>
 
                                 // VALIDASI Machine dulu
                                 if (machineProvider.machine.idMc.isEmpty) {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                     context,
                                     "Harap scan QRcode data machine lebih dulu",
@@ -1628,12 +1636,14 @@ class _RecordProcessState extends State<RecordProcess>
                                 // Check success: valid ID and no fetch error
                                 if (provider.goldPillData.isValid &&
                                     provider.fetchError == null) {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                     context,
                                     "Gold Pill berhasil discan",
                                     isSuccess: true,
                                   );
                                 } else if (provider.fetchError != null) {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                     context,
                                     "Gagal mengambil detail Gold Pill: ${provider.fetchError}",
@@ -1641,6 +1651,7 @@ class _RecordProcessState extends State<RecordProcess>
                                   );
                                   provider.clearFetchError();
                                 } else {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                     context,
                                     "QR Code tidak valid",
@@ -1699,12 +1710,14 @@ class _RecordProcessState extends State<RecordProcess>
 
                                 if (provider.carbonPillData.isValid &&
                                     provider.fetchError == null) {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                     context,
                                     "Carbon Pill berhasil discan",
                                     isSuccess: true,
                                   );
                                 } else if (provider.fetchError != null) {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                     context,
                                     "Gagal mengambil detail Carbon Pill: ${provider.fetchError}",
@@ -1712,6 +1725,7 @@ class _RecordProcessState extends State<RecordProcess>
                                   );
                                   provider.clearFetchError();
                                 } else {
+                                  if (!context.mounted) return;
                                   CustomSnackbar.show(
                                     context,
                                     "QR Code tidak valid",
@@ -1936,6 +1950,7 @@ class _RecordProcessState extends State<RecordProcess>
                   if (idEmployeeController.text.isEmpty ||
                       idMachineController.text.isEmpty ||
                       mixLotNumberController.text.isEmpty) {
+                    if (!context.mounted) return;
                     CustomSnackbar.show(ctx, "Please complete QRCode Scanning.",
                         isSuccess: false);
                     return;
@@ -1952,6 +1967,7 @@ class _RecordProcessState extends State<RecordProcess>
                         : "";
 
                     if (goldId.isEmpty && carbonId.isEmpty) {
+                      if (!context.mounted) return;
                       CustomSnackbar.show(
                           ctx, "Gold Pill or Carbon Pill must be scanned!",
                           isSuccess: false);
@@ -1998,6 +2014,7 @@ class _RecordProcessState extends State<RecordProcess>
                   final provider = ctx.read<JobNumberProvider>();
 
                   if (provider.bcode.isEmpty) {
+                    if (!ctx.mounted) return;
                     CustomSnackbar.show(
                         ctx, "HARAP SCAN JOBNUMBER TERLEBIH DAHULU!.",
                         isSuccess: false);
@@ -2014,6 +2031,7 @@ class _RecordProcessState extends State<RecordProcess>
                       provider.idRecord,
                     );
                   } else {
+                    if (!ctx.mounted) return;
                     CustomSnackbar.show(ctx,
                         "START RECORD PROSES TIDAK BISA MENAMBAHKAN DATA NG.",
                         isSuccess: false);

@@ -17,13 +17,13 @@ class NgSummaryPage extends StatefulWidget {
   const NgSummaryPage({super.key, required this.title, required this.idProses});
 
   @override
-  _NgSummaryPageState createState() => _NgSummaryPageState();
+  State<NgSummaryPage> createState() => _NgSummaryPageState();
 }
 
 class _NgSummaryPageState extends State<NgSummaryPage> {
   late Future<List<NgSummaryModel>> futureNgSummary;
   final TextEditingController _dateRangeController = TextEditingController();
-  bool _buttonsEnabled = true;
+  final bool _buttonsEnabled = true;
   DateTime? _startDate;
   DateTime? _endDate;
 

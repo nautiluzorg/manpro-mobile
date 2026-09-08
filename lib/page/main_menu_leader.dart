@@ -61,6 +61,7 @@ class _MainMenuLeaderState extends State<MainMenuLeader>
   Future<void> _logout() async {
     Navigator.of(context).pop();
     await AuthSession.logout();
+    if (!mounted) return;
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginPage()),

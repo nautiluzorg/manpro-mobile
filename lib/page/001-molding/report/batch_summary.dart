@@ -23,7 +23,7 @@ class BatchSummary extends StatefulWidget {
   const BatchSummary({super.key, required this.title, required this.idProses});
 
   @override
-  _BatchSummaryState createState() => _BatchSummaryState();
+  State<BatchSummary> createState() => _BatchSummaryState();
 }
 
 class _BatchSummaryState extends State<BatchSummary> {

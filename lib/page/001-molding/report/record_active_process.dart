@@ -271,11 +271,13 @@ class _RecordActiveProcessState extends State<RecordActiveProcess> {
 
                                         if (confirm == true) {
                                           try {
+                                            if (!context.mounted) return;
                                             await Provider.of<RecordProvider>(
                                                     context,
                                                     listen: false)
                                                 .deleteRecord(r.idRecord);
 
+                                            if (!context.mounted) return;
                                             // Tampilkan Snackbar
                                             CustomSnackbar.show(
                                               context,
@@ -283,6 +285,7 @@ class _RecordActiveProcessState extends State<RecordActiveProcess> {
                                               isSuccess: true,
                                             );
                                           } catch (e) {
+                                            if (!context.mounted) return;
                                             // Kalau ada error, tampilkan Snackbar error
                                             CustomSnackbar.show(
                                               context,
@@ -329,14 +332,14 @@ class FireAuraAvatar extends StatefulWidget {
   final String runStatus; // "running" atau "pending"
 
   const FireAuraAvatar({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.radius = 45,
     this.runStatus = 'pending',
-  }) : super(key: key);
+  });
 
   @override
-  _FireAuraAvatarState createState() => _FireAuraAvatarState();
+  State<FireAuraAvatar> createState() => _FireAuraAvatarState();
 }
 
 class _FireAuraAvatarState extends State<FireAuraAvatar>

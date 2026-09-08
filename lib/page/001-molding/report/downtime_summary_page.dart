@@ -15,7 +15,7 @@ class DowntimeSummaryPage extends StatefulWidget {
       {super.key, required this.title, required this.idProses});
 
   @override
-  _DowntimeSummaryPageState createState() => _DowntimeSummaryPageState();
+  State<DowntimeSummaryPage> createState() => _DowntimeSummaryPageState();
 }
 
 class _DowntimeSummaryPageState extends State<DowntimeSummaryPage> {

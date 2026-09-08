@@ -350,8 +350,8 @@ class _InspectionFormState extends State<InspectionForm>
                 0;
             sisaShoot = totalShoot - totalHalfShoot;
             isFinish = false;
-            this.isAvailable = isAvailable;
-            this.idRecUpdate = idRecordUpdate;
+            isAvailable = isAvailable;
+            idRecUpdate = idRecordUpdate;
 
             isJobNumberScanned = true;
             isMixLotScanned = false;
@@ -883,6 +883,8 @@ class _InspectionFormState extends State<InspectionForm>
       debugPrint("Response Code: ${response.statusCode}");
       debugPrint("Response Body: ${response.body}");
 
+      if (!context.mounted) return false;
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         var responseData = jsonDecode(response.body);
         CustomSnackbar.show(
@@ -900,6 +902,7 @@ class _InspectionFormState extends State<InspectionForm>
         return false;
       }
     } on TimeoutException {
+      if (!context.mounted) return false;
       CustomSnackbar.show(
         context,
         "Request timeout, periksa koneksi jaringan.",
@@ -907,6 +910,7 @@ class _InspectionFormState extends State<InspectionForm>
       );
       return false;
     } on SocketException {
+      if (!context.mounted) return false;
       CustomSnackbar.show(
         context,
         "Tidak ada koneksi internet.",
@@ -914,6 +918,7 @@ class _InspectionFormState extends State<InspectionForm>
       );
       return false;
     } catch (e, stackTrace) {
+      if (!context.mounted) return false;
       debugPrint("❌ Exception: $e");
       debugPrint("StackTrace: $stackTrace");
       CustomSnackbar.show(
@@ -2081,7 +2086,7 @@ class _InspectionFormState extends State<InspectionForm>
     }
 
     if (_employeeList.isEmpty) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       CustomSnackbar.show(
         context,
         "Data Employee belum tersedia.",
@@ -2090,13 +2095,13 @@ class _InspectionFormState extends State<InspectionForm>
       return;
     }
 
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) {
-        EmployeeModel? _selectedEmployeeItem;
+        EmployeeModel? selectedEmployeeItem;
         bool isOkEmployeeEnabled = false;
 
         return StatefulBuilder(
@@ -2141,7 +2146,7 @@ class _InspectionFormState extends State<InspectionForm>
                           compareFn: (a, b) => a.idEmployee == b.idEmployee,
                           onChanged: (EmployeeModel? selected) {
                             localSetState(() {
-                              _selectedEmployeeItem = selected;
+                              selectedEmployeeItem = selected;
                               isOkEmployeeEnabled = selected != null;
                             });
                           },
@@ -2224,7 +2229,7 @@ class _InspectionFormState extends State<InspectionForm>
                                 child: InkWell(
                                   onTap: () {
                                     localSetState(() {
-                                      _selectedEmployeeItem = item;
+                                      selectedEmployeeItem = item;
                                       isOkEmployeeEnabled = true;
                                     });
                                   },
@@ -2373,7 +2378,7 @@ class _InspectionFormState extends State<InspectionForm>
                                   onPressed: isOkEmployeeEnabled
                                       ? () {
                                           final selectedItem =
-                                              _selectedEmployeeItem;
+                                              selectedEmployeeItem;
                                           Navigator.pop(dialogContext);
 
                                           if (selectedItem != null) {

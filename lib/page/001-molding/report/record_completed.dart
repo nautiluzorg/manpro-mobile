@@ -28,7 +28,7 @@ class RecordCompleted extends StatefulWidget {
       {super.key, required this.title, required this.idProses});
 
   @override
-  _RecordCompletedState createState() => _RecordCompletedState();
+  State<RecordCompleted> createState() => _RecordCompletedState();
 }
 
 class _RecordCompletedState extends State<RecordCompleted> {
@@ -1829,8 +1829,10 @@ class _RecordCompletedState extends State<RecordCompleted> {
                                     (EmployeeModel? a, EmployeeModel? b) =>
                                         a?.idEmployee == b?.idEmployee,
                                 onChanged: (EmployeeModel? selected) async {
-                                  if (_isSelectingEmployee || selected == null)
+                                  if (_isSelectingEmployee ||
+                                      selected == null) {
                                     return; // cegah double tap
+                                  }
 
                                   _isSelectingEmployee = true;
 
@@ -1961,6 +1963,7 @@ class _RecordCompletedState extends State<RecordCompleted> {
                                                 loadDataPage(
                                                     page: 1,
                                                     pageSize: _rowsPerPage);
+                                                if (!context.mounted) return;
                                                 Navigator.of(context).pop(item);
                                                 _isSelectingEmployee = false;
                                               });
@@ -2167,6 +2170,7 @@ class _RecordCompletedState extends State<RecordCompleted> {
                                           if (!mounted) return;
                                           await loadDataPage(
                                               page: 1, pageSize: _rowsPerPage);
+                                          if (!context.mounted) return;
                                           Navigator.of(context).pop(item);
                                           _isSelectingDrawing = false;
                                         },
@@ -3004,7 +3008,6 @@ class _RecordCompletedState extends State<RecordCompleted> {
 */
   }
 }
-
 
 /*
       SafeArea(

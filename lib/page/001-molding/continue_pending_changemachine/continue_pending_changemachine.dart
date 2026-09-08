@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_provider_data/config/app_config.dart';
+import 'package:flutter_provider_data/provider/employee_provider.dart';
+import 'package:flutter_provider_data/provider/machine_provider.dart';
 import 'package:flutter_provider_data/provider/pending_provider.dart';
+import 'package:flutter_provider_data/utils/custom_snackbar.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
+import 'package:flutter_provider_data/utils/mobile_scanner_page.dart';
 import 'package:provider/provider.dart';
 import 'widget/machine_header_row.dart';
 import 'widget/employee_photo_column.dart';
@@ -37,9 +42,104 @@ class _ContinuePendingChangeMachineState
     });
   }
 
+  Future<void> _handleScanEmployee() async {
+    final scannedCode = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const MobileScannerPage()),
+    );
+
+    if (!mounted ||
+        scannedCode == null ||
+        scannedCode.isEmpty ||
+        scannedCode == '-1') {
+      return;
+    }
+
+    final employeeProvider = context.read<EmployeeProvider>();
+    final success = await employeeProvider.scanEmployee(scannedCode);
+
+    if (!mounted) return;
+
+    if (!success) {
+      CustomSnackbar.show(
+        context,
+        employeeProvider.errorMessage ?? 'Scan failed',
+        isSuccess: false,
+      );
+      return;
+    }
+
+    context.read<PendingProvider>().attachEmployee(employeeProvider.employee);
+  }
+
+  Future<void> _handleScanMachine() async {
+    final scannedCode = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const MobileScannerPage()),
+    );
+
+    if (!mounted ||
+        scannedCode == null ||
+        scannedCode.isEmpty ||
+        scannedCode == '-1') {
+      return;
+    }
+
+    final machineProvider = context.read<MachineProvider>();
+    final pendingProvider = context.read<PendingProvider>();
+    final errorMessage = await machineProvider.scanMachine(scannedCode);
+
+    if (!mounted) return;
+
+    if (errorMessage != null) {
+      CustomSnackbar.show(context, errorMessage, isSuccess: false);
+      return;
+    }
+
+    final machine = machineProvider.machine;
+    final validationError =
+        await machineProvider.validateMachineDropdown(machine.idMc);
+
+    if (!mounted) return;
+
+    if (validationError != null) {
+      CustomSnackbar.show(context, validationError, isSuccess: false);
+      return;
+    }
+
+    pendingProvider.setNextMachine(id: machine.idMc, name: machine.nmMc);
+  }
+
+  void _handleCancel() {
+    context.read<PendingProvider>()
+      ..resetEmployeeState()
+      ..clearNextMachine();
+    context.read<MachineProvider>().clearMachine();
+    Navigator.pop(context);
+  }
+
+  Future<void> _handleSubmit() async {
+    final pendingProvider = context.read<PendingProvider>();
+    final navigator = Navigator.of(context);
+    final idRecord = pendingProvider.pendingDetail.first.idRecord;
+
+    final success = await pendingProvider.updatePendingRecordMc(
+      idPending: int.parse(widget.idPending),
+      idRecord: idRecord,
+    );
+
+    if (!mounted) return;
+
+    widget.onSuccess?.call(success);
+    navigator.pop(success);
+  }
+
   @override
   Widget build(BuildContext context) {
     final prov = context.watch<PendingProvider>();
+    final isScanningEmployee = context.select<EmployeeProvider, bool>(
+      (provider) => provider.isLoading,
+    );
 
     if (prov.isLoading || prov.pendingDetail.isEmpty) {
       return const Center(child: CircularProgressIndicator());
@@ -63,7 +163,7 @@ class _ContinuePendingChangeMachineState
                         children: [
                           _buildHeader(prov),
                           const SizedBox(height: 12),
-                          _buildMainContent(prov),
+                          _buildMainContent(prov, isScanningEmployee),
                           const SizedBox(height: 16),
                         ],
                       ),
@@ -89,7 +189,10 @@ class _ContinuePendingChangeMachineState
 
   // ================= MAIN CONTENT =================
 
-  Widget _buildMainContent(PendingProvider prov) {
+  Widget _buildMainContent(
+    PendingProvider prov,
+    bool isScanningEmployee,
+  ) {
     final data = prov.pendingDetail.first;
 
     // Kalau sudah scan employee baru, pakai data dari nextOperator.
@@ -133,6 +236,10 @@ class _ContinuePendingChangeMachineState
                     nrp: displayNrp,
                     section: displaySection,
                     division: displayDivision,
+                    imageUrl:
+                        '${AppConfig.baseUrl}/media/img/employee/$displayId.png',
+                    isScanning: isScanningEmployee,
+                    onScan: _handleScanEmployee,
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -141,7 +248,9 @@ class _ContinuePendingChangeMachineState
                       children: [
                         PendingMachineInfoTable(
                           data: data,
-                          prov: prov,
+                          isEmployeeScanned: prov.isEmployeeScanned,
+                          employeeName: prov.employeeName,
+                          nextMachineName: prov.nextMachineName,
                         ),
                       ],
                     ),
@@ -156,9 +265,10 @@ class _ContinuePendingChangeMachineState
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0),
               child: ChangeMachineActionButtons(
-                prov: prov,
-                idPending: widget.idPending,
-                onSuccess: widget.onSuccess,
+                canSubmit: prov.hasNextMachine && !prov.isSubmitting,
+                onCancel: _handleCancel,
+                onScanMachine: _handleScanMachine,
+                onSubmit: _handleSubmit,
               ),
             ),
 

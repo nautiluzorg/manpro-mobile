@@ -28,6 +28,7 @@ class _MonitorTestingState extends State<MonitorTesting> {
     super.initState();
 
     Future.microtask(() {
+      if (!mounted) return;
       context.read<TestingProvider>().fetchOnProgressTesting();
     });
   }
@@ -414,9 +415,6 @@ class _MonitorTestingState extends State<MonitorTesting> {
     );
   }
 }
-
-
-
 
 /*
 class MonitorTesting extends StatefulWidget {

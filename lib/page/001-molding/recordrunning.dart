@@ -3282,7 +3282,7 @@ class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
 
                                                       for (var item
                                                           in ngDataList) {
-                                                        print(
+                                                        logPrint(
                                                             "id_ng: ${item['id_ng']}, ngName: ${item['ngName']}, qty: ${item['qty']},idRecord: ${item['idRecord']},idEmployee: ${item['idEmployee']}, jobnumber: ${item['jobnumber']}");
                                                       }
                                                     });
@@ -3861,7 +3861,7 @@ class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
                                                 selectedReasonItem =
                                                     selected.nameReason;
                                               });
-                                              print(
+                                              logPrint(
                                                   'Selected: ${selected.idReason} - ${selected.nameReason}');
                                             }
                                           },

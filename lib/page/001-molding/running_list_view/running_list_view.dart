@@ -20,7 +20,7 @@ class RunningListView extends StatefulWidget {
   });
 
   @override
-  _RunningListViewState createState() => _RunningListViewState();
+  State<RunningListView> createState() => _RunningListViewState();
 }
 
 class _RunningListViewState extends State<RunningListView> {

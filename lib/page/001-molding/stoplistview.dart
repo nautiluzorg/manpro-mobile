@@ -19,7 +19,7 @@ class StopListView extends StatefulWidget {
   });
 
   @override
-  _StopListViewState createState() => _StopListViewState();
+  State<StopListView> createState() => _StopListViewState();
 }
 
 class _StopListViewState extends State<StopListView> {
@@ -46,8 +46,9 @@ class _StopListViewState extends State<StopListView> {
         ),
       );
 
-      if (!mounted || getcode == null || getcode.isEmpty || getcode == "-1")
+      if (!mounted || getcode == null || getcode.isEmpty || getcode == "-1") {
         return;
+      }
 
       if (!RegExp(r'^[a-zA-Z0-9]{9}[0-9]{10}[0-9]{5}$').hasMatch(getcode)) {
         CustomSnackbar.show(context, "Invalid QR Code format.",

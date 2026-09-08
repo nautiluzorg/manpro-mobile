@@ -109,6 +109,7 @@ class _RecordStopState extends State<RecordStop> {
 
       // 📌 Step 2: Validasi format QRCode (ubah regex sesuai kebutuhan)
       if (!RegExp(r'^[a-zA-Z0-9]{9}[0-9]{10}[0-9]{5}$').hasMatch(getcode)) {
+        if (!mounted) return;
         CustomSnackbar.show(
           context,
           "Invalid QR Code format.",
@@ -128,6 +129,7 @@ class _RecordStopState extends State<RecordStop> {
         _filterList();
       });
     } catch (e) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Error scanning: $e",
@@ -161,6 +163,7 @@ class _RecordStopState extends State<RecordStop> {
 
       // 📌 Step 2: Validasi QRCode Employee (8 digit)
       if (getcode.length != 8) {
+        if (!mounted) return;
         CustomSnackbar.show(
           context,
           "Yang discan bukan ID Employee",
@@ -177,6 +180,7 @@ class _RecordStopState extends State<RecordStop> {
         _filterList();
       });
     } catch (e) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Error scanning operator: $e",
@@ -783,556 +787,6 @@ class _RecordStopState extends State<RecordStop> {
                           ),
                         ),
                       );
-
-                      /*
-                      Card(
-                        elevation: 4,
-                        child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child:
-                                Column(children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          pending.idRecord,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20.0),
-                                        Text(
-                                          pending.nameProses,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20.0),
-                                        Text(
-                                          pending.bcode,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20.0),
-                                        Text(
-                                          pending.drawingNumber,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20.0),
-                                        Text(
-                                          pending.productType,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 20.0),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        // Image Section
-                                        Expanded(
-                                          flex: 3,
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                // color: Colors.amber[50],
-                                                width: double
-                                                    .infinity, // Lebar penuh untuk container
-                                                height: 120.0,
-
-                                                child: Center(
-                                                  child: LayoutBuilder(
-                                                    builder:
-                                                        (context, constraints) {
-                                                      // Menghitung ukuran gambar berdasarkan persentase lebar layar
-                                                      double imageWidth =
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.16; // 30% dari lebar layar
-                                                      double imageHeight =
-                                                          imageWidth; // Rasio gambar 1:1
-
-                                                      return ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4.0),
-                                                        child: Image.network(
-                                                          "${AppConfig.baseUrl}/media/img/employee/${pending.idEmployee}.png",
-                                                          width: imageWidth,
-                                                          height: imageHeight,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Text(
-                                                pending.employeeName,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Text(
-                                                pending.nrp,
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.black,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Text(
-                                                pending.section.toUpperCase(),
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.black,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Text(
-                                                pending.division,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.black,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        // Text Section
-                                        Expanded(
-                                          flex: 7,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  // Bagian kiri untuk Table
-                                                  Expanded(
-                                                    // flex: 7,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5.0),
-                                                      child: Table(
-                                                        columnWidths: const {
-                                                          0: FlexColumnWidth(
-                                                              2), // Kolom pertama
-                                                          1: FixedColumnWidth(
-                                                              25), // Kolom untuk ":"
-                                                          2: FlexColumnWidth(
-                                                              3), // Kolom kedua
-                                                        },
-                                                        children: [
-                                                          TableRow(
-                                                            decoration: const BoxDecoration(
-                                                                border: Border(
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .grey))),
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(
-                                                                    'JOB NUMBER',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(':',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        6.0),
-                                                                child: Text(
-                                                                    pending
-                                                                        .jobnumber
-                                                                        .toString(),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: const TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          TableRow(
-                                                            decoration: const BoxDecoration(
-                                                                border: Border(
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .grey))),
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(
-                                                                    'DRAW NO',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.normal)),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(':',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        6.0),
-                                                                child: Text(
-                                                                    pending
-                                                                        .drawingNumber,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: const TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.normal)),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          TableRow(
-                                                            decoration: const BoxDecoration(
-                                                                border: Border(
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .grey))),
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(
-                                                                    'MACHINE',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(':',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        6.0),
-                                                                child: Text(
-                                                                    pending
-                                                                        .machineName
-                                                                        .toString(),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          TableRow(
-                                                            decoration: const BoxDecoration(
-                                                                border: Border(
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .grey))),
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(
-                                                                    'PENDING TIME',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(':',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        6.0),
-                                                                child: Text(
-                                                                    _formatDateTime(
-                                                                        pending
-                                                                            .startPending),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          TableRow(
-                                                            decoration: const BoxDecoration(
-                                                                border: Border(
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .grey))),
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(
-                                                                    'REASON',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(':',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        6.0),
-                                                                child: Text(
-                                                                    pending
-                                                                        .reason,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          TableRow(
-                                                            decoration: const BoxDecoration(
-                                                                border: Border(
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .grey))),
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(
-                                                                    'QTY',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(':',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        6.0),
-                                                                child: Text(
-                                                                    pending.qty
-                                                                        .toString(),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          TableRow(
-                                                            decoration: const BoxDecoration(
-                                                                border: Border(
-                                                                    bottom: BorderSide(
-                                                                        color: Colors
-                                                                            .grey))),
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(
-                                                                    'START TIME',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            6.0),
-                                                                child: Text(':',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        6.0),
-                                                                child: Text(
-                                                                    _formatDateTime(
-                                                                        pending
-                                                                            .startPending), //disini ya waktu nya **************************************************************************************************************
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  // Garis pemisah
-
-                                                  // Bagian kanan untuk ElevatedButton
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        //Sampai sini ya *****
-                                      ],
-                                    ),
-                                    SizedBox(height: 10.0),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Colors.blue,
-                                            Colors.blue.shade800
-                                          ],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
-                                      ),
-                                      child: ElevatedButton.icon(
-                                        icon: Icon(Icons.play_arrow, size: 30),
-                                        label: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  12.0), // Tambah padding horizontal
-                                          child: Text(
-                                            "CONTINUE",
-                                            style: TextStyle(fontSize: 25),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          _showFullScreenDialog(
-                                            context,
-                                            pending.idPending.toString(),
-                                            pending.idReason.toString(),
-                                            _formatDateTime,
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor: Colors.transparent,
-                                          shadowColor: Colors.transparent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5.0, vertical: 15.0),
-                                        ),
-                                      ),
-                                    )
-                                  ])
-                                
-                                
-                               
-                                
-                                 
-
-
-
-
-
-
-
-
-
-
-                                  ),
-                      );
-
-                      */
                     },
                   ),
           ),
@@ -1401,7 +855,7 @@ class NumBlockKeyboardDialog extends StatefulWidget {
       {super.key, required this.idPending, required this.formatDateTime});
 
   @override
-  _NumBlockKeyboardDialogState createState() => _NumBlockKeyboardDialogState();
+  State<NumBlockKeyboardDialog> createState() => _NumBlockKeyboardDialogState();
 }
 
 class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
@@ -1473,6 +927,7 @@ class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
 
       // 📌 Step 2: Validasi QRCode Employee (8 digit)
       if (getcode.length != 8) {
+        if (!mounted) return;
         CustomSnackbar.show(
           context,
           "Wrong Employee QRCode",
@@ -1512,24 +967,28 @@ class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
         );
       }
     } on TimeoutException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Request timed out. Please try again.",
         isSuccess: false,
       );
     } on SocketException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Network error. Please check your internet connection and try again.",
         isSuccess: false,
       );
     } on FormatException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Error parsing data from server.",
         isSuccess: false,
       );
     } catch (e) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Unexpected error occurred: $e",
@@ -1625,6 +1084,7 @@ class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
 
   void submitDataStop() {
     if (employeeIdConfirm.isEmpty) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Please scan Employee QRCode!",
@@ -1633,6 +1093,7 @@ class _NumBlockKeyboardDialogState extends State<NumBlockKeyboardDialog> {
 
       return;
     } else if (employeeIdConfirm != storedEmployeeId) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Employee Confirm does not match!",
@@ -2770,7 +2231,7 @@ class ChangeOperatorDialog extends StatefulWidget {
       {super.key, required this.idPending, required this.formatDateTime});
 
   @override
-  _ChangeOperatorDialogState createState() => _ChangeOperatorDialogState();
+  State<ChangeOperatorDialog> createState() => _ChangeOperatorDialogState();
 }
 
 class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
@@ -2828,10 +2289,13 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
       if (!mounted) return;
       if (getCodeOperator == null ||
           getCodeOperator.isEmpty ||
-          getCodeOperator == "-1") return;
+          getCodeOperator == "-1") {
+        return;
+      }
 
       // 📌 Step 2: Validasi QRCode Employee (8 digit)
       if (getCodeOperator.length != 8) {
+        if (!mounted) return;
         CustomSnackbar.show(
           context,
           "Wrong Employee QRCode",
@@ -2876,24 +2340,28 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
         );
       }
     } on TimeoutException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Request timed out. Please try again.",
         isSuccess: false,
       );
     } on SocketException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Network error. Please check your internet connection and try again.",
         isSuccess: false,
       );
     } on FormatException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Error parsing data from server.",
         isSuccess: false,
       );
     } catch (e) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Unexpected error occurred: $e",
@@ -3287,6 +2755,7 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           if (idNextOperator.isEmpty) {
+                                            if (!mounted) return;
                                             CustomSnackbar.show(
                                               context,
                                               "Please scan Employee QRCode!.",
@@ -3300,6 +2769,7 @@ class _ChangeOperatorDialogState extends State<ChangeOperatorDialog> {
                                           int? id =
                                               int.tryParse(widget.idPending);
                                           if (id == null) {
+                                            if (!mounted) return;
                                             CustomSnackbar.show(
                                               context,
                                               "Invalid ID Pending format.",
@@ -4539,7 +4009,7 @@ class ChangeMachineDialog extends StatefulWidget {
       {super.key, required this.idPending, required this.formatDateTime});
 
   @override
-  _ChangeMachineDialogState createState() => _ChangeMachineDialogState();
+  State<ChangeMachineDialog> createState() => _ChangeMachineDialogState();
 }
 
 class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
@@ -4604,10 +4074,13 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
       if (!mounted) return;
       if (getCodeMachine == null ||
           getCodeMachine.isEmpty ||
-          getCodeMachine == "-1") return;
+          getCodeMachine == "-1") {
+        return;
+      }
 
       // 📌 Step 2: Validasi QRCode Machine (10 karakter)
       if (getCodeMachine.length != 10) {
+        if (!mounted) return;
         CustomSnackbar.show(
           context,
           "Wrong Machine QRCode",
@@ -4648,24 +4121,28 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
         );
       }
     } on TimeoutException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Request timed out. Please try again.",
         isSuccess: false,
       );
     } on SocketException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Network error. Please check your internet connection and try again.",
         isSuccess: false,
       );
     } on FormatException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Error parsing data from server.",
         isSuccess: false,
       );
     } catch (e) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Unexpected error occurred: $e",
@@ -4699,6 +4176,7 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
 
       // 📌 Step 2: Validasi QRCode Employee (8 digit)
       if (!RegExp(r'^\d{8}$').hasMatch(getcode)) {
+        if (!mounted) return;
         CustomSnackbar.show(
           context,
           "Invalid QR Code format. Must be 8 digits.",
@@ -4768,18 +4246,21 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
         isSuccess: false,
       );
     } on SocketException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Network error. Please check your internet connection.",
         isSuccess: false,
       );
     } on FormatException catch (_) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Error parsing data from server.",
         isSuccess: false,
       );
     } catch (e) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Unexpected error occurred: $e",
@@ -4880,6 +4361,7 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
 
       return;
     } else if (idEmployeeConfirm != storedEmployeeId) {
+      if (!mounted) return;
       CustomSnackbar.show(
         context,
         "Employee Confirmation salah!.",
@@ -5215,6 +4697,7 @@ class _ChangeMachineDialogState extends State<ChangeMachineDialog> {
                                             ? null // tombol disabled saat sedang scanning
                                             : () async {
                                                 if (idNextMachine.isEmpty) {
+                                                  if (!mounted) return;
                                                   CustomSnackbar.show(
                                                     context,
                                                     "Harap scan ID machine.",

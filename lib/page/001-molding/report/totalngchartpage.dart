@@ -19,7 +19,7 @@ class TotalNgChartPage extends StatefulWidget {
 class _TotalNgChartPageState extends State<TotalNgChartPage> {
   List<NgPerEmployee> data = [];
   bool isLoading = true;
-  bool _buttonsEnabled = true;
+  final bool _buttonsEnabled = true;
 
   @override
   void initState() {
@@ -145,7 +145,7 @@ class _TotalNgChartPageState extends State<TotalNgChartPage> {
                 boxShadow: [
                   BoxShadow(
                     color: const Color.fromARGB(255, 136, 135, 135)
-                        .withOpacity(0.1),
+                        .withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),

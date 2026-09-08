@@ -25,17 +25,17 @@ class TestingCompleted extends StatefulWidget {
       {super.key, required this.title, required this.idProses});
 
   @override
-  _TestingCompletedState createState() => _TestingCompletedState();
+  State<TestingCompleted> createState() => _TestingCompletedState();
 }
 
 class _TestingCompletedState extends State<TestingCompleted> {
   PaginatedTestingCompleted? paginatedData;
   List<EmployeeModel> _employeeList = [];
-  List<ProductModel> _productList = [];
+  final List<ProductModel> _productList = [];
   EmployeeModel? selectedEmployeeItem;
   ProductModel? selectedDrawingItem;
   bool _isEmployeeLoading = false;
-  bool _isDrawingLoading = false;
+  final bool _isDrawingLoading = false;
   bool isLoading = true;
   int _rowsPerPage = 20; // Jumlah row per page
   int _totalRecords = 0; // Total data dari API
@@ -1550,8 +1550,10 @@ class _TestingCompletedState extends State<TestingCompleted> {
                                     (EmployeeModel? a, EmployeeModel? b) =>
                                         a?.idEmployee == b?.idEmployee,
                                 onChanged: (EmployeeModel? selected) async {
-                                  if (_isSelectingEmployee || selected == null)
+                                  if (_isSelectingEmployee ||
+                                      selected == null) {
                                     return; // cegah double tap
+                                  }
 
                                   _isSelectingEmployee = true;
 
@@ -1682,6 +1684,7 @@ class _TestingCompletedState extends State<TestingCompleted> {
                                                 loadDataPage(
                                                     page: 1,
                                                     pageSize: _rowsPerPage);
+                                                if (!context.mounted) return;
                                                 Navigator.of(context).pop(item);
                                                 _isSelectingEmployee = false;
                                               });
@@ -1888,6 +1891,7 @@ class _TestingCompletedState extends State<TestingCompleted> {
                                           if (!mounted) return;
                                           await loadDataPage(
                                               page: 1, pageSize: _rowsPerPage);
+                                          if (!context.mounted) return;
                                           Navigator.of(context).pop(item);
                                           _isSelectingDrawing = false;
                                         },

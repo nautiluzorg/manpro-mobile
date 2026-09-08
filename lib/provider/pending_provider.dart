@@ -307,7 +307,8 @@ class PendingProvider extends ChangeNotifier {
         idRecord: idRecord, // ← tambah
         idMachine: _nextMachineId,
       );
-      clearConfirmedEmployee();
+      // clearConfirmedEmployee();
+      resetEmployeeState();
       clearNextMachine();
       return true;
     } catch (e) {
@@ -381,7 +382,8 @@ class PendingProvider extends ChangeNotifier {
         idEmployeeNew: employeeChanged ? _confirmedEmployee.idEmployee : null,
       );
 
-      clearConfirmedEmployee();
+      // clearConfirmedEmployee();
+      resetEmployeeState();
       clearNextMachine();
       return true;
     } catch (e) {
@@ -518,7 +520,8 @@ class PendingProvider extends ChangeNotifier {
 
       logPrint('✅ WORKOVER RESUME SUCCESS — Response: $result');
 
-      clearConfirmedEmployee();
+      // clearConfirmedEmployee();
+      resetEmployeeState();
       _pendingDetail = [];
       notifyListeners();
       return true;

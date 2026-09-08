@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_provider_data/provider/pending_provider.dart';
+import 'package:flutter_provider_data/model/record_pending_detail_model.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 
 class PendingMachineInfoTable extends StatelessWidget {
-  final dynamic data; // pending detail
-  final PendingProvider prov;
+  final RecordPendingDetailModel data;
+  final bool isEmployeeScanned;
+  final String employeeName;
+  final String nextMachineName;
 
   const PendingMachineInfoTable({
     super.key,
     required this.data,
-    required this.prov,
+    required this.isEmployeeScanned,
+    required this.employeeName,
+    required this.nextMachineName,
   });
 
   @override
@@ -60,19 +64,19 @@ class PendingMachineInfoTable extends StatelessWidget {
                     ? Row(
                         children: [
                           Text(
-                            ": ${prov.isEmployeeScanned ? prov.employeeName : "BELUM CONFIRM"}",
+                            ": ${isEmployeeScanned ? employeeName : "BELUM CONFIRM"}",
                             style: GoogleFonts.poppins(
                               fontSize: 15,
-                              fontWeight: prov.isEmployeeScanned
+                              fontWeight: isEmployeeScanned
                                   ? FontWeight.bold // ✅ BOLD SAAT CONFIRMED
                                   : FontWeight.normal,
-                              color: prov.isEmployeeScanned
+                              color: isEmployeeScanned
                                   ? Colors.green
                                   : Colors.black,
                             ),
                           ),
                           const Spacer(),
-                          if (prov.isEmployeeScanned)
+                          if (isEmployeeScanned)
                             Row(
                               children: const [
                                 Text(
@@ -98,19 +102,19 @@ class PendingMachineInfoTable extends StatelessWidget {
                         ? Row(
                             children: [
                               Text(
-                                ": ${prov.nextMachineName.isNotEmpty ? prov.nextMachineName.toUpperCase() : "BELUM DI TAMBAHKAN"}",
+                                ": ${nextMachineName.isNotEmpty ? nextMachineName.toUpperCase() : "BELUM DI TAMBAHKAN"}",
                                 style: GoogleFonts.poppins(
                                   fontSize: 15,
-                                  fontWeight: prov.nextMachineName.isNotEmpty
+                                  fontWeight: nextMachineName.isNotEmpty
                                       ? FontWeight.bold // ✅ BOLD SAAT ADDED
                                       : FontWeight.normal,
-                                  color: prov.nextMachineName.isNotEmpty
+                                  color: nextMachineName.isNotEmpty
                                       ? Colors.green
                                       : Colors.black,
                                 ),
                               ),
                               const Spacer(),
-                              if (prov.nextMachineName.isNotEmpty)
+                              if (nextMachineName.isNotEmpty)
                                 Row(
                                   children: const [
                                     Text(

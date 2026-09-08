@@ -84,6 +84,7 @@ class _MainMenuAdminState extends State<MainMenuAdmin> {
   Future<void> _logout() async {
     Navigator.pop(context); // tutup drawer
     await AuthSession.logout();
+    if (!mounted) return;
 
     Navigator.pushReplacementNamed(context, '/'); // atau ke halaman login
   }

@@ -13,11 +13,10 @@ class DetailRecordFinish extends StatefulWidget {
   final String title;
   final String idRecord;
   const DetailRecordFinish(
-      {Key? key, required this.title, required this.idRecord})
-      : super(key: key);
+      {super.key, required this.title, required this.idRecord});
 
   @override
-  _DetailRecordFinishState createState() => _DetailRecordFinishState();
+  State<DetailRecordFinish> createState() => _DetailRecordFinishState();
 }
 
 class _DetailRecordFinishState extends State<DetailRecordFinish> {
@@ -1571,7 +1570,7 @@ class _DetailRecordFinishState extends State<DetailRecordFinish> {
                                                               ),
                                                             ],
                                                           );
-                                                        }).toList(),
+                                                        }),
                                                       ],
                                                     ),
                                                   ),
@@ -1919,7 +1918,7 @@ class _DetailRecordFinishState extends State<DetailRecordFinish> {
                                                                       ),
                                                                     ],
                                                                   );
-                                                                }).toList(),
+                                                                }),
                                                               ],
                                                             ),
                                                           ),
@@ -3350,7 +3349,7 @@ class _DetailRecordFinishState extends State<DetailRecordFinish> {
                                                             ),
                                                           ],
                                                         );
-                                                      }).toList(),
+                                                      }),
                                                     ],
                                                   ),
                                                 ),
@@ -3701,7 +3700,7 @@ class _DetailRecordFinishState extends State<DetailRecordFinish> {
                                                                     ),
                                                                   ],
                                                                 );
-                                                              }).toList(),
+                                                              }),
                                                             ],
                                                           ),
                                                         ),

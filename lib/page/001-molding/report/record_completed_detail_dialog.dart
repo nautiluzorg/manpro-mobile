@@ -90,7 +90,7 @@ class _RecordCompletedDetailDialogState
             child: Column(
               children: [
                 // JOB NUMBER Card
-                ColorCard(
+                colorCard(
                   child: Text(
                     'JOB NUMBER ${record.detailsRecord.isNotEmpty ? record.detailsRecord.first.jobnumber : "-"}',
                     style: const TextStyle(
@@ -135,7 +135,7 @@ class _RecordCompletedDetailDialogState
   }
 
   // ===================== Helper Widget =====================
-  Widget ColorCard({required Widget child}) {
+  Widget colorCard({required Widget child}) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -207,7 +207,7 @@ class _RecordCompletedDetailDialogState
 
   // ===================== Detail Tables =====================
   Widget buildDetailTables(RecordFinishDetailModel record) {
-    return ColorCard(
+    return colorCard(
       child: Column(
         children: [
           // JOB CODE
@@ -300,7 +300,7 @@ class _RecordCompletedDetailDialogState
 
   // ===================== Operator, Machines, NG, Downtime =====================
   Widget buildOperatorCard(RecordFinishDetailModel record) {
-    return ColorCard(
+    return colorCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -335,7 +335,7 @@ class _RecordCompletedDetailDialogState
                     style: const TextStyle(color: Colors.cyanAccent)),
               ],
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -348,7 +348,7 @@ class _RecordCompletedDetailDialogState
             ['-', '-']
           ];
 
-    return ColorCard(
+    return colorCard(
       child: Table(
         border: TableBorder.all(color: Colors.grey.shade700),
         children: [
@@ -364,7 +364,7 @@ class _RecordCompletedDetailDialogState
   }
 
   Widget buildNgCard(RecordFinishDetailModel record) {
-    return ColorCard(
+    return colorCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -389,7 +389,7 @@ class _RecordCompletedDetailDialogState
   }
 
   Widget buildDowntimeCard(RecordFinishDetailModel record) {
-    return ColorCard(
+    return colorCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

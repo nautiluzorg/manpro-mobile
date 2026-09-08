@@ -46,6 +46,7 @@ class _MainMenuSimpleState extends State<MainMenuSimple> {
   Future<void> _logout() async {
     Navigator.pop(context);
     await AuthSession.logout();
+    if (!mounted) return;
     Navigator.pushReplacementNamed(context, '/');
   }
 

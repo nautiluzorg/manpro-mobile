@@ -416,8 +416,8 @@ class _MeasurementFormState extends State<MeasurementForm> {
                 0;
             sisaShoot = totalShoot - totalHalfShoot;
             isFinish = false;
-            this.isAvailable = isAvailable;
-            this.idRecUpdate = idRecordUpdate;
+            isAvailable = isAvailable;
+            idRecUpdate = idRecordUpdate;
 
             isJobNumberScanned = true;
             isMixLotScanned = false;
@@ -1159,6 +1159,8 @@ class _MeasurementFormState extends State<MeasurementForm> {
         );
       }
 
+      if (!context.mounted) return false;
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         var responseData = jsonDecode(response.body);
 
@@ -1179,6 +1181,7 @@ class _MeasurementFormState extends State<MeasurementForm> {
         return false;
       }
     } catch (e) {
+      if (!context.mounted) return false;
       CustomSnackbar.show(
         context,
         "An error occurred: $e",
@@ -1698,7 +1701,7 @@ class _MeasurementFormState extends State<MeasurementForm> {
                                 logPrint("Error fetching machines: $e");
                               }
 
-                              if (!mounted) return;
+                              if (!context.mounted) return;
 
                               // ... (Bagian sebelum showDialog)
 
@@ -2161,7 +2164,7 @@ class _MeasurementFormState extends State<MeasurementForm> {
                                 await fetchEmployeeList(); // tunggu data muncul dulu
                               }
 
-                              if (!mounted) return;
+                              if (!context.mounted) return;
 
                               showDialog(
                                 context: context,

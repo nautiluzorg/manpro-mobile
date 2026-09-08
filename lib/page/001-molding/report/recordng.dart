@@ -22,7 +22,7 @@ class RecordNg extends StatefulWidget {
   const RecordNg({super.key, required this.title, required this.idProses});
 
   @override
-  _RecordNgState createState() => _RecordNgState();
+  State<RecordNg> createState() => _RecordNgState();
 }
 
 class _RecordNgState extends State<RecordNg> {
@@ -407,7 +407,7 @@ class _RecordNgState extends State<RecordNg> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
+                              color: Colors.black.withValues(alpha: 0.15),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
                             ),
@@ -1987,7 +1987,6 @@ class _RecordNgState extends State<RecordNg> {
     */
   }
 }
-
 
 /*
 //FITUR INFINITE SCROLL DENGAN METODE SERVER SIDE

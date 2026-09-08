@@ -21,7 +21,7 @@ class StopGridView extends StatefulWidget {
   });
 
   @override
-  _StopGridViewState createState() => _StopGridViewState();
+  State<StopGridView> createState() => _StopGridViewState();
 }
 
 class _StopGridViewState extends State<StopGridView> {

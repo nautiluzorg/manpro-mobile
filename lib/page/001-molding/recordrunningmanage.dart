@@ -485,7 +485,7 @@ class _RecordRunningManageState extends State<RecordRunningManage> {
                                   await updateSelectedRecord(
                                       selectedEmployees, selectedReason!);
 
-                                  if (!mounted) return;
+                                  if (!context.mounted) return;
                                   Navigator.pop(context);
                                 } else {
                                   if (!mounted) return;

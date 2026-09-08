@@ -106,7 +106,7 @@ class _RecordFinishDtState extends State<RecordFinishDt> {
 
   // Fungsi untuk mengubah data JSON menjadi baris untuk FlutterDataTable
   setRow(List<RecordModel> records) {
-    print('Jumlah data:${records.length}');
+    debugPrint('Jumlah data:${records.length}');
     int index = 1;
 
     for (var record in records) {
@@ -179,7 +179,7 @@ class _RecordFinishDtState extends State<RecordFinishDt> {
                       .transparent, // Transparan untuk memastikan gradient bekerja
                 ),
                 onPressed: () {
-                  print("${record.idRecord}");
+                  debugPrint(record.idRecord);
 
                   Navigator.push(
                     context,
@@ -1057,7 +1057,7 @@ class _RecordFinishDtState extends State<RecordFinishDt> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: double.infinity,
                                                   child: Center(
                                                     child: LayoutBuilder(
