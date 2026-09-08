@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:flutter_provider_data/config/api_config.dart';
 import 'package:flutter_provider_data/main.dart'; // navigatorKey
 import 'package:flutter_provider_data/utils/app_logger.dart';
 import 'token_storage.dart';
@@ -20,6 +21,30 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    final isAuthFree =
+        ApiConfig.authFreeEndpoints.any((path) => options.path.contains(path));
+
+    if (isAuthFree) {
+      AppLogger.d("Skip auth header untuk endpoint auth-free: ${options.path}");
+      return handler.next(options);
+    }
+
+    final token = await TokenStorage.getAccessToken();
+    AppLogger.d("Interceptor jalan untuk: ${options.uri}");
+
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    } else {
+      AppLogger.w("Token kosong, request jalan tanpa Authorization header");
+    }
+
+    handler.next(options);
+  }
+
+/*
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+
     final token = await TokenStorage.getAccessToken();
 
     AppLogger.d("Interceptor jalan untuk: ${options.uri}");
@@ -31,7 +56,10 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
     }
 
     handler.next(options);
+
+
   }
+  */
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {

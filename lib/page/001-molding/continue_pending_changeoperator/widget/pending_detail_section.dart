@@ -57,10 +57,8 @@ class PendingDetailSection extends StatelessWidget {
       ('START JOB', formatDateTime(data.startTime), false),
       ('PENDING TIME', formatDateTime(data.startPending), false),
       ('REASON', data.reason.toString(), false),
-
-      // Shoot
       ('TOTAL SHOOT', data.shootQty.toString(), false),
-      ('DONE SHOOT', data.lastQtyShoot.toString(), false),
+      ('FINISH SHOOT', data.lastQtyShoot.toString(), false),
       ('SISA SHOOT', data.sisaShoot.toString(), false),
     ];
 
