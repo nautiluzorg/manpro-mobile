@@ -388,6 +388,7 @@ class JobNumberProvider extends ChangeNotifier {
             jobNumber: jobNumber,
             lotNumber: lotNumber,
             startQty: int.tryParse(qtyActual) ?? 0,
+            qtyShoot: int.tryParse(totalShoot) ?? 0, // ← TAMBAH INI
             selectedMold: selectedMold,
             moldCavity: int.tryParse(cavity) ?? 1,
             mixLotNo: mixLotNo,

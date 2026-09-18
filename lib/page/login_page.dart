@@ -347,7 +347,7 @@ class _LoginPageState extends State<LoginPage> {
 
       case ManproConnectionStatus.serverDown:
         color = Colors.red;
-        text = "MANPRO Server Down";
+        text = "MANPRO Connection Problem";
         icon = Icons.cloud_off_outlined;
         break;
     }

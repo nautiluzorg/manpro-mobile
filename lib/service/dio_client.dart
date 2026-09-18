@@ -22,6 +22,15 @@ class DioClient {
   static Dio get instance {
     if (!_authInterceptorAdded) {
       _dio.interceptors.add(AuthInterceptor(_dio));
+
+      // 🔍 DEBUG — tampilkan request & response body di console
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        requestHeader: false,
+        responseHeader: false,
+      ));
+
       _authInterceptorAdded = true;
     }
     return _dio;
