@@ -26,10 +26,11 @@ class MaterialProvider extends ChangeNotifier {
   // CARBON PILL (REVISI: Menggunakan Object Model sesuai standar baru)
   CarbonPillModel carbonPillData = CarbonPillModel.empty;
 
-  final RegExp _mixlotRegex = RegExp(r'^(?=.*[A-Z])(?=.*\d)[A-Z0-9\- ]{13}$');
+  final RegExp _mixlotRegex = RegExp(r'^\d{6} [A-Z]{2}-\d{3}$');
 
   // ================= MIX LOT FUNCTIONS =================
   // (Tetap sama, tidak ada perubahan)
+
   Future<String?> scanMixLotNumber() async {
     try {
       final picker = ImagePicker();
@@ -249,5 +250,16 @@ class MaterialProvider extends ChangeNotifier {
     fetchError = null;
     isFetchingDetail = false;
     notifyListeners();
+  }
+
+  bool setMixLotFromScan(String code) {
+    final cleaned = code.trim();
+    if (_mixlotRegex.hasMatch(cleaned)) {
+      mixLotNumber = cleaned;
+      isMixLotScanned = true;
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 }

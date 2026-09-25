@@ -189,12 +189,24 @@ class RecordFormGrid extends StatelessWidget {
                           return;
                         }
 
-                        final result = await provider.scanMixLotNumber();
+                        final code = await Navigator.push<String>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MobileScannerPage(),
+                          ),
+                        );
+
                         if (!context.mounted) return;
-                        if (result == null) {
+
+                        if (code == null || code.isEmpty || code == '-1') {
+                          return;
+                        }
+
+                        final success = provider.setMixLotFromScan(code);
+                        if (!success) {
                           CustomSnackbar.show(
                             context,
-                            'Mix Lot Number tidak ditemukan',
+                            'Format Mix Lot Number tidak valid',
                             isSuccess: false,
                           );
                         }

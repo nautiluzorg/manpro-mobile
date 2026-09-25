@@ -4,7 +4,7 @@ import 'package:flutter_provider_data/page/001-molding/monitoring_master_page.da
 import 'package:flutter_provider_data/page/001-molding/runningmoldingpage.dart';
 import 'package:flutter_provider_data/page/001-molding/stopmoldingpage.dart';
 import 'package:flutter_provider_data/page/menu_sub.dart';
-import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
+// import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
 import 'package:flutter_provider_data/page/main_menu_admin.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:flutter_provider_data/utils/page_transition_helper.dart';
@@ -104,18 +104,7 @@ class _MenuState extends State<Menu> {
                 title = "MOLD RECORD ";
                 idproses = widget.kode;
                 iconData = Icons.post_add_rounded;
-                onTap = () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (_, __, ___) =>
-                          RecordProcess(title: title, idProses: idproses),
-                      transitionsBuilder: (_, animation, __, child) =>
-                          FadeTransition(opacity: animation, child: child),
-                      transitionDuration: const Duration(milliseconds: 800),
-                    ),
-                  );
-                };
+                onTap = () {};
                 break;
               case 1:
                 title = "MOLD RUNNING";

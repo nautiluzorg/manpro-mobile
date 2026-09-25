@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/model/record_running_model.dart';
 import 'package:flutter_provider_data/page/001-molding/reason_dialog/reason_dialog.dart';
-import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
+// import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
 import 'package:flutter_provider_data/provider/running_provider.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:flutter_provider_data/utils/mobile_scanner_page.dart';
@@ -823,29 +823,7 @@ class _RunningListViewState extends State<RunningListView> {
                                                         .w600, // optional, bisa ditambah jika mau tebal
                                                   ),
                                                 ),
-                                                onPressed: () {
-                                                  Navigator.of(context,
-                                                          rootNavigator: true)
-                                                      .pushReplacement(
-                                                    PageRouteBuilder(
-                                                      pageBuilder: (_, __,
-                                                              ___) =>
-                                                          RecordProcess(
-                                                              title: "Molding",
-                                                              idProses: record
-                                                                  .idProses),
-                                                      transitionsBuilder:
-                                                          (_, a, sa, child) =>
-                                                              FadeTransition(
-                                                                  opacity: a,
-                                                                  child: child),
-                                                      transitionDuration:
-                                                          Duration(
-                                                              milliseconds:
-                                                                  1200),
-                                                    ),
-                                                  );
-                                                },
+                                                onPressed: () {},
                                                 style: OutlinedButton.styleFrom(
                                                   backgroundColor:
                                                       Colors.transparent,

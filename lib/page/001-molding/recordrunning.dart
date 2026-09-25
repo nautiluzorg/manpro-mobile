@@ -7,7 +7,7 @@ import 'package:flutter_provider_data/page/menu.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
+// import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
 import 'package:flutter_provider_data/page/001-molding/recordrunningmanage.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:flutter_provider_data/utils/mobile_scanner_page.dart';
@@ -1013,52 +1013,7 @@ class _ListRecordRunningState extends State<ListRecordRunning> {
                                                                 fontSize: 25.0,
                                                               ),
                                                             ),
-                                                            onPressed: () {
-                                                              Navigator
-                                                                  .pushReplacement(
-                                                                context,
-                                                                PageRouteBuilder(
-                                                                  pageBuilder: (context,
-                                                                          animation,
-                                                                          secondaryAnimation) =>
-                                                                      RecordProcess(
-                                                                          title:
-                                                                              "Moulding",
-                                                                          idProses:
-                                                                              record.idProses),
-                                                                  transitionsBuilder: (context,
-                                                                      animation,
-                                                                      secondaryAnimation,
-                                                                      child) {
-                                                                    const curve =
-                                                                        Curves
-                                                                            .easeIn;
-                                                                    var tween = Tween<double>(
-                                                                            begin:
-                                                                                0.0,
-                                                                            end:
-                                                                                1.0)
-                                                                        .chain(CurveTween(
-                                                                            curve:
-                                                                                curve));
-                                                                    var opacityAnimation =
-                                                                        animation
-                                                                            .drive(tween);
-
-                                                                    return FadeTransition(
-                                                                      opacity:
-                                                                          opacityAnimation,
-                                                                      child:
-                                                                          child,
-                                                                    );
-                                                                  },
-                                                                  transitionDuration:
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              1200),
-                                                                ),
-                                                              );
-                                                            },
+                                                            onPressed: () {},
                                                             style:
                                                                 OutlinedButton
                                                                     .styleFrom(
@@ -1553,52 +1508,7 @@ class _ListRecordRunningState extends State<ListRecordRunning> {
                                                                         : 16.0,
                                                               ),
                                                             ),
-                                                            onPressed: () {
-                                                              Navigator
-                                                                  .pushReplacement(
-                                                                context,
-                                                                PageRouteBuilder(
-                                                                  pageBuilder: (context,
-                                                                          animation,
-                                                                          secondaryAnimation) =>
-                                                                      RecordProcess(
-                                                                          title:
-                                                                              "Molding",
-                                                                          idProses:
-                                                                              record.idProses),
-                                                                  transitionsBuilder: (context,
-                                                                      animation,
-                                                                      secondaryAnimation,
-                                                                      child) {
-                                                                    const curve =
-                                                                        Curves
-                                                                            .easeIn;
-                                                                    var tween = Tween<double>(
-                                                                            begin:
-                                                                                0.0,
-                                                                            end:
-                                                                                1.0)
-                                                                        .chain(CurveTween(
-                                                                            curve:
-                                                                                curve));
-                                                                    var opacityAnimation =
-                                                                        animation
-                                                                            .drive(tween);
-
-                                                                    return FadeTransition(
-                                                                      opacity:
-                                                                          opacityAnimation,
-                                                                      child:
-                                                                          child,
-                                                                    );
-                                                                  },
-                                                                  transitionDuration:
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              1200),
-                                                                ),
-                                                              );
-                                                            },
+                                                            onPressed: () {},
                                                             style:
                                                                 OutlinedButton
                                                                     .styleFrom(
