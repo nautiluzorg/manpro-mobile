@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/model/record_stop_manage_model.dart';
-import 'package:flutter_provider_data/page/001-molding/recordstop.dart';
+// import 'package:flutter_provider_data/page/001-molding/recordstop.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:http/http.dart' as http;
 import '../../config/app_config.dart';
@@ -355,18 +355,7 @@ class _RecordStopManageState extends State<RecordStopManage> {
 
                   const SizedBox(width: 20),
                   OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => RecordStop(
-                              title: widget.title, idProses: widget.idProses),
-                          transitionsBuilder: (_, animation, __, child) =>
-                              FadeTransition(opacity: animation, child: child),
-                          transitionDuration: const Duration(milliseconds: 800),
-                        ),
-                      );
-                    },
+                    onPressed: () {},
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 16),

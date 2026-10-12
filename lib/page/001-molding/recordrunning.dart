@@ -7,7 +7,6 @@ import 'package:flutter_provider_data/page/menu.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-// import 'package:flutter_provider_data/page/001-molding/recordprocess.dart';
 import 'package:flutter_provider_data/page/001-molding/recordrunningmanage.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:flutter_provider_data/utils/mobile_scanner_page.dart';

@@ -4,7 +4,7 @@ import 'package:flutter_provider_data/page/001-molding/animationtext.dart';
 import 'package:flutter_provider_data/page/001-molding/recordrunningmanage.dart';
 import 'package:flutter_provider_data/page/001-molding/report/record_active_process.dart';
 import 'package:flutter_provider_data/page/menu.dart';
-import 'package:flutter_provider_data/page/menuform.dart';
+// import 'package:flutter_provider_data/page/menuform.dart';
 import 'package:flutter_provider_data/service/auth_session.dart';
 import 'package:flutter_provider_data/service/token_storage.dart';
 import 'package:flutter_provider_data/widget/app_drawer.dart';
@@ -198,16 +198,18 @@ class _MainMenuAdminState extends State<MainMenuAdmin> {
             leading: const Icon(Icons.forum_outlined, color: Colors.white),
             title: const Text('FORMS', style: TextStyle(color: Colors.white)),
             onTap: () {
+              /*
+
               Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (_, __, ___) =>
-                      MenuForm(title: "FORM RECORD", idProses: "001"),
+                  pageBuilder: (_, __, ___) =>MenuForm(title: "FORM RECORD", idProses: "001"),
                   transitionsBuilder: (_, animation, __, child) =>
                       FadeTransition(opacity: animation, child: child),
                   transitionDuration: const Duration(milliseconds: 800),
                 ),
               );
+              */
             },
           ),
 

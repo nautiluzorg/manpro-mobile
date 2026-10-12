@@ -1,11 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/service/material_service.dart';
 import 'package:flutter_provider_data/model/goldpill_model.dart';
 import 'package:flutter_provider_data/model/carbonpill_model.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class MaterialProvider extends ChangeNotifier {
   final MaterialService _materialService = MaterialService();
@@ -30,36 +27,6 @@ class MaterialProvider extends ChangeNotifier {
 
   // ================= MIX LOT FUNCTIONS =================
   // (Tetap sama, tidak ada perubahan)
-
-  Future<String?> scanMixLotNumber() async {
-    try {
-      final picker = ImagePicker();
-      final pickedImage = await picker.pickImage(source: ImageSource.camera);
-      if (pickedImage == null) return null;
-
-      final inputImage = InputImage.fromFile(File(pickedImage.path));
-      final textRecognizer = TextRecognizer();
-      final RecognizedText recognizedText =
-          await textRecognizer.processImage(inputImage);
-
-      for (var block in recognizedText.blocks) {
-        for (var line in block.lines) {
-          final textLine = line.text.trim();
-          if (_mixlotRegex.hasMatch(textLine)) {
-            mixLotNumber = textLine;
-            isMixLotScanned = true;
-            notifyListeners();
-            textRecognizer.close();
-            return textLine;
-          }
-        }
-      }
-      textRecognizer.close();
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
 
   void clearMixLot() {
     mixLotNumber = "";
