@@ -215,6 +215,11 @@ class RunningProvider extends ChangeNotifier {
   }
 
   Future<void> loadRunningRecords(String idProses) async {
+    // Setiap kali halaman running dimuat ulang, selection lama tidak boleh
+    // terbawa ke proses atau daftar record yang baru.
+    if (_selectedItems.isNotEmpty) {
+      _selectedItems.clear();
+    }
     _isLoading = true;
     _hasError = false;
     _errorMessage = '';
@@ -241,6 +246,7 @@ class RunningProvider extends ChangeNotifier {
     try {
       final data = await service.fetchRunningRecords(idProses);
       _allRecords = data;
+      _reconcileSelectedItems(data);
     } catch (e) {
       _hasError = true;
       _errorMessage = e.toString();
@@ -329,26 +335,95 @@ class RunningProvider extends ChangeNotifier {
   // ===========================================================================
 
   List<RecordRunningModel> _selectedItems = [];
-  List<RecordRunningModel> get selectedItems => _selectedItems;
+  List<RecordRunningModel> get selectedItems =>
+      List<RecordRunningModel>.unmodifiable(_selectedItems);
+
+  String _recordKey(String? idRecord) => (idRecord ?? '').trim();
+
+  String normalizeEmployeeId(String? idEmployee) =>
+      (idEmployee ?? '').trim().toUpperCase();
+
+  bool isSelected(String idRecord) {
+    final key = _recordKey(idRecord);
+    return key.isNotEmpty &&
+        _selectedItems.any((item) => _recordKey(item.idRecord) == key);
+  }
+
+  bool hasSameEmployee(Iterable<RecordRunningModel> items) {
+    final records = items.toList(growable: false);
+    if (records.isEmpty) return false;
+
+    final firstEmployeeId =
+        normalizeEmployeeId(records.first.activeEmployee?.idEmployee);
+
+    // Record tanpa employee tidak boleh dianggap sama hanya karena sama-sama
+    // menghasilkan string kosong.
+    if (firstEmployeeId.isEmpty) return false;
+
+    return records.every((item) =>
+        normalizeEmployeeId(item.activeEmployee?.idEmployee) ==
+        firstEmployeeId);
+  }
+
+  void _reconcileSelectedItems(List<RecordRunningModel> latestRecords) {
+    final latestById = <String, RecordRunningModel>{
+      for (final item in latestRecords)
+        if (_recordKey(item.idRecord).isNotEmpty)
+          _recordKey(item.idRecord): item,
+    };
+
+    final reconciledItems = _selectedItems
+        .map((selected) => latestById[_recordKey(selected.idRecord)])
+        .whereType<RecordRunningModel>()
+        .toList();
+
+    if (reconciledItems.length != _selectedItems.length ||
+        reconciledItems.any((item) => !_selectedItems.contains(item))) {
+      _selectedItems = reconciledItems;
+    } else if (_selectedItems.isNotEmpty) {
+      // Pakai object terbaru setelah refresh agar payload dan data dialog
+      // tidak menggunakan snapshot lama.
+      _selectedItems = reconciledItems;
+    }
+  }
 
   void setSelectedItems(List<RecordRunningModel> items) {
-    _selectedItems = items;
+    final seenIds = <String>{};
+    _selectedItems = items.where((item) {
+      final key = _recordKey(item.idRecord);
+      return key.isNotEmpty && seenIds.add(key);
+    }).toList();
     notifyListeners();
   }
 
   void addSelectedItem(RecordRunningModel item) {
-    _selectedItems.add(item);
+    if (!isSelected(item.idRecord)) {
+      _selectedItems.add(item);
+    }
     notifyListeners();
   }
 
   void removeSelectedItem(RecordRunningModel item) {
-    _selectedItems.remove(item);
+    final key = _recordKey(item.idRecord);
+    final index = _selectedItems.indexWhere(
+      (selected) => _recordKey(selected.idRecord) == key,
+    );
+    if (index >= 0) {
+      _selectedItems.removeAt(index);
+    }
     notifyListeners();
   }
 
   void toggleSelectedItem(RecordRunningModel item) {
-    if (_selectedItems.contains(item)) {
-      _selectedItems.remove(item);
+    final key = _recordKey(item.idRecord);
+    if (key.isEmpty) return;
+
+    final index = _selectedItems.indexWhere(
+      (selected) => _recordKey(selected.idRecord) == key,
+    );
+
+    if (index >= 0) {
+      _selectedItems.removeAt(index);
     } else {
       _selectedItems.add(item);
     }
@@ -356,7 +431,9 @@ class RunningProvider extends ChangeNotifier {
   }
 
   void clearSelectedItems() {
-    _selectedItems.clear();
+    if (_selectedItems.isNotEmpty) {
+      _selectedItems.clear();
+    }
     notifyListeners();
   }
 
@@ -550,12 +627,7 @@ class RunningProvider extends ChangeNotifier {
       return false;
     }
 
-    final first = selectedRecords.first.activeEmployee?.fullName ?? '';
-    final sameEmployee = selectedRecords.every(
-      (e) => e.activeEmployee?.fullName == first,
-    );
-
-    if (!sameEmployee) {
+    if (!hasSameEmployee(selectedRecords)) {
       _submitMessage = "Operator harus sama.";
       notifyListeners();
       return false;
@@ -653,7 +725,45 @@ class RunningProvider extends ChangeNotifier {
     idEmployeeConfirm = '';
     nameEmployeeConfirm = '';
     _expectedEmployeeId = null;
-    _selectedItems.clear();
+    if (_selectedItems.isNotEmpty) {
+      _selectedItems.clear();
+    }
+    notifyListeners();
+  }
+
+  /// Membersihkan state sementara yang berkaitan dengan user/session.
+  /// RunningProvider dibuat di level aplikasi, sehingga state ini harus
+  /// di-reset ketika user logout agar selection tidak diwariskan ke session
+  /// berikutnya.
+  void resetForLogout() {
+    if (_selectedItems.isNotEmpty) {
+      _selectedItems.clear();
+    }
+    _allRecords = [];
+    _recordDetails = [];
+    _reasonItems = [];
+    _isLoading = false;
+    _hasError = false;
+    _errorMessage = '';
+    _isLoadingDetails = false;
+    _isLoadingReason = false;
+    isTestingLoading = false;
+    _isSubmitting = false;
+    _isLoadingStop = false;
+    _selectedReason = null;
+    _expectedEmployeeId = null;
+    confirmedEmployee = null;
+    isEmployeeScanned = false;
+    isEmployeeConfirmed = false;
+    employeeName = '';
+    scannedEmployeeId = '';
+    idEmployeeConfirm = '';
+    nameEmployeeConfirm = '';
+    scannedFilterJobNumber = '';
+    scannedFilterEmployee = '';
+    detail = null;
+    error = null;
+    _submitMessage = null;
     notifyListeners();
   }
 }

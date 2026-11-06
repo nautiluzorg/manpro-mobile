@@ -40,12 +40,19 @@ class RunningMoldingGridBody extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = list[index];
                 final prov = context.read<RunningProvider>();
-                final isSelected = prov.selectedItems.contains(item);
 
-                return RunningMoldingCard(
-                  item: item,
-                  isSelected: isSelected,
-                  onTapCard: () => prov.toggleSelectedItem(item),
+                return Selector<RunningProvider, bool>(
+                  selector: (_, provider) => provider.isSelected(item.idRecord),
+                  builder: (context, isSelected, _) {
+                    return RepaintBoundary(
+                      key: ValueKey(item.idRecord),
+                      child: RunningMoldingCard(
+                        item: item,
+                        isSelected: isSelected,
+                        onTapCard: () => prov.toggleSelectedItem(item),
+                      ),
+                    );
+                  },
                 );
               },
             ),

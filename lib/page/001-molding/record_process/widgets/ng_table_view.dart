@@ -19,12 +19,12 @@ class NgTableView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(2),
       width: double.infinity,
-      height: heightBody * 0.15,
+      height: heightBody * 0.14,
       decoration: BoxDecoration(
         color: const Color(0xFFEFF3FF),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(6),
         boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 4)],
       ),
       child: LayoutBuilder(
@@ -39,7 +39,7 @@ class NgTableView extends StatelessWidget {
             height: constraints.maxHeight,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
               boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 4)],
             ),
             child: SingleChildScrollView(
@@ -69,8 +69,8 @@ class NgTableView extends StatelessWidget {
                               end: Alignment.bottomCenter,
                             ),
                             borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              topRight: Radius.circular(5),
+                              topLeft: Radius.circular(3),
+                              topRight: Radius.circular(3),
                             ),
                           ),
                         ),

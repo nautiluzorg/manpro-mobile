@@ -30,6 +30,12 @@ class _RunningGridViewState extends State<RunningGridView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final prov = context.read<RunningProvider>();
       prov.loadRunningRecords(widget.idProses);
+      // Prefetch agar dialog STOP tidak perlu menunggu daftar reason sebelum
+      // tampil. Dropdown akan menampilkan loading state bila request belum
+      // selesai saat dialog dibuka.
+      unawaited(context
+          .read<ReasonProvider>()
+          .loadReasonData(idProses: widget.idProses));
     });
   }
 
@@ -59,6 +65,7 @@ class _RunningGridViewState extends State<RunningGridView> {
         return;
       }
 
+      prov.clearSelectedItems();
       prov.setFilterSearch(jobNumber: getcode.substring(9, 19).trim());
     } catch (e) {
       CustomSnackbar.showWithOverlay(
@@ -97,6 +104,7 @@ class _RunningGridViewState extends State<RunningGridView> {
         return;
       }
 
+      prov.clearSelectedItems();
       prov.setFilterSearch(employee: getcode);
     } catch (e) {
       CustomSnackbar.showWithOverlay(
@@ -127,13 +135,7 @@ class _RunningGridViewState extends State<RunningGridView> {
       return;
     }
 
-    final firstEmployee =
-        prov.selectedItems.first.activeEmployee?.fullName ?? '';
-    final sameEmployee = prov.selectedItems.every(
-      (item) => item.activeEmployee?.fullName == firstEmployee,
-    );
-
-    if (!sameEmployee) {
+    if (!prov.hasSameEmployee(prov.selectedItems)) {
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -213,18 +215,18 @@ class _RunningGridViewState extends State<RunningGridView> {
     }
 
     final reasonProvider = context.read<ReasonProvider>();
-    await reasonProvider.loadReasonData(idProses: widget.idProses);
-
-    if (!mounted) return; // ← cek setelah await
+    // Request berjalan di background. Dialog dapat tampil langsung sementara
+    // dropdown reason menampilkan loading state.
+    unawaited(reasonProvider.loadReasonData(idProses: widget.idProses));
 
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 180),
+      transitionDuration: const Duration(milliseconds: 150),
       pageBuilder: (ctx, _, __) {
         return Center(
-          child: ReasonSelectedMassdialog(
+          child: MassReasonDialog(
             idProses: widget.idProses,
           ),
         );
@@ -269,10 +271,17 @@ class _RunningGridViewState extends State<RunningGridView> {
   @override
   Widget build(BuildContext context) {
     final widthApp = MediaQuery.of(context).size.width;
-    final prov = context.watch<RunningProvider>();
+    final prov = context.read<RunningProvider>();
+    final isLoading = context.select<RunningProvider, bool>((p) => p.isLoading);
+    final hasError = context.select<RunningProvider, bool>((p) => p.hasError);
+    final errorMessage =
+        context.select<RunningProvider, String>((p) => p.errorMessage);
+    final filteredRecords =
+        context.select<RunningProvider, List<RecordRunningModel>>(
+            (p) => p.filteredRecords);
 
-    if (prov.isLoading) return _buildProviderLoading();
-    if (prov.hasError) return _buildProviderError(prov.errorMessage);
+    if (isLoading) return _buildProviderLoading();
+    if (hasError) return _buildProviderError(errorMessage);
 
     return Scaffold(
       body: Column(
@@ -282,14 +291,20 @@ class _RunningGridViewState extends State<RunningGridView> {
             prov: prov,
             onScanJobNumber: scanFilterJobNumber,
             onScanEmployee: scanFilterEmployee,
-            onClearFilter: prov.clearFilterSearch,
+            onClearFilter: _clearFilterAndSelection,
             onStopSelected: _onStopPressed,
           ),
           RunningMoldingGridBody(
-            list: prov.filteredRecords,
+            list: filteredRecords,
           ),
         ],
       ),
     );
+  }
+
+  void _clearFilterAndSelection() {
+    final prov = context.read<RunningProvider>();
+    prov.clearSelectedItems();
+    prov.clearFilterSearch();
   }
 }

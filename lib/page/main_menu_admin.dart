@@ -7,8 +7,10 @@ import 'package:flutter_provider_data/page/menu.dart';
 // import 'package:flutter_provider_data/page/menuform.dart';
 import 'package:flutter_provider_data/service/auth_session.dart';
 import 'package:flutter_provider_data/service/token_storage.dart';
+import 'package:flutter_provider_data/provider/running_provider.dart';
 import 'package:flutter_provider_data/widget/app_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class MainMenuAdmin extends StatefulWidget {
   const MainMenuAdmin({super.key});
@@ -83,6 +85,7 @@ class _MainMenuAdminState extends State<MainMenuAdmin> {
 
   Future<void> _logout() async {
     Navigator.pop(context); // tutup drawer
+    context.read<RunningProvider>().resetForLogout();
     await AuthSession.logout();
     if (!mounted) return;
 

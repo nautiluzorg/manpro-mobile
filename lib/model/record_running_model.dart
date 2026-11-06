@@ -86,6 +86,30 @@ class RecordRunningModel extends Equatable {
             nameProses: json.safeString('id_proses'),
           );
 
+    // Endpoint running dapat mengirim employee dalam dua bentuk:
+    //
+    // 1. Nested, seperti {"active_employee": {"id_employee": ...}}
+    // 2. Flat, seperti endpoint pending:
+    //    {"id_employee": ..., "employee_name": ..., ...}
+    //
+    // Normalisasi keduanya ke EmployeeModel agar URL foto dan informasi
+    // operator tidak bergantung pada bentuk response endpoint.
+    final nestedEmployee = json.safeMap('active_employee');
+    final nestedEmployeeId =
+        nestedEmployee['id_employee']?.toString().trim() ?? '';
+    final flatEmployee = <String, dynamic>{
+      'id_employee': json['id_employee'],
+      'full_name': json['employee_name'] ?? json['full_name'],
+      'nrp': json['nrp'],
+      'division': json['division'],
+      'section': json['section'],
+      'status': json['status'],
+    };
+    final employeeMap =
+        nestedEmployeeId.isNotEmpty ? nestedEmployee : flatEmployee;
+
+    final employeeId = employeeMap['id_employee']?.toString().trim() ?? '';
+
     return RecordRunningModel(
       idRecord: json.safeString('id_record'),
       idProses: json.safeString('id_proses'),
@@ -108,7 +132,7 @@ class RecordRunningModel extends Equatable {
       ),
       proses: finalProses,
       activeEmployee:
-          json.safeObject('active_employee', EmployeeModel.fromJson),
+          employeeId.isEmpty ? null : EmployeeModel.fromJson(employeeMap),
       activeMachine: json.safeObject('active_machine', MachineModel.fromJson),
     );
   }

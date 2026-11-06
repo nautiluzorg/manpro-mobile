@@ -1,33 +1,47 @@
 // lib/service/auth_session.dart
 import '../service/token_storage.dart';
+import '../service/auth_service.dart';
 import '../utils/jwt_helper.dart';
 
 class AuthSession {
   static Map<String, dynamic>? _payload;
 
+  static Map<String, dynamic>? get payload => _payload;
+
   /// Load & decode JWT dari storage
   static Future<bool> load() async {
-    final token = await TokenStorage.getAccessToken();
+    var token = await TokenStorage.getAccessToken();
     if (token == null) {
       _payload = null;
       return false;
     }
 
-    try {
-      final payload = JwtHelper.decodePayload(token);
+    var payload = JwtHelper.decodePayload(token);
 
-      if (JwtHelper.isExpired(payload)) {
+    if (JwtHelper.isExpired(payload)) {
+      final refreshStatus = await AuthService().refreshTokenStatus();
+
+      if (refreshStatus == RefreshTokenStatus.invalid) {
         await TokenStorage.clear();
-        _payload = null;
-        return false;
       }
 
-      _payload = payload;
-      return true;
-    } catch (_) {
       _payload = null;
       return false;
     }
+
+    // Access token baru saja di-refresh oleh service lain.
+    // Ambil ulang dari secure storage agar session memakai payload terbaru.
+    token = await TokenStorage.getAccessToken();
+    payload = token == null ? null : JwtHelper.decodePayload(token);
+
+    if (JwtHelper.isExpired(payload)) {
+      await TokenStorage.clear();
+      _payload = null;
+      return false;
+    }
+
+    _payload = payload;
+    return true;
   }
 
   /// Apakah user sedang login

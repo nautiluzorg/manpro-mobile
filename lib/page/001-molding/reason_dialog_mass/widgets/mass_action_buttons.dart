@@ -3,6 +3,150 @@ import 'package:flutter_provider_data/page/001-molding/reason_dialog_mass/helper
 import 'package:flutter_provider_data/utils/custom_button.dart';
 import 'package:flutter_provider_data/provider/running_provider.dart';
 import 'package:flutter_provider_data/provider/reason_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../helpers/mass_reason_controller.dart';
+import 'package:provider/provider.dart';
+
+class MassActionButtons extends StatefulWidget {
+  final MassReasonController controller;
+  final String idProses;
+
+  const MassActionButtons(
+      {super.key, required this.controller, required this.idProses});
+
+  @override
+  State<MassActionButtons> createState() => _MassActionButtonsState();
+}
+
+class _MassActionButtonsState extends State<MassActionButtons> {
+  // ===== Design tokens =====
+  static const double _btnHeight = 88;
+  static const double _btnFont = 20;
+  static const double _btnRadius = 8;
+  static const double _gap = 12;
+
+  @override
+  Widget build(BuildContext context) {
+    final reasonSelected =
+        context.select<ReasonProvider, bool>((p) => p.selectedReason != null);
+    final isSubmitting =
+        context.select<RunningProvider, bool>((p) => p.isSubmitting);
+
+    return Row(
+      children: [
+        // CANCEL
+        Expanded(
+          child: SizedBox(
+            height: _btnHeight,
+            child: OutlinedButton(
+              onPressed: () => widget.controller
+                  .onCancel(() => Navigator.pop(context), context),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.red,
+                side: const BorderSide(color: Colors.red, width: 1.5),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(_btnRadius)),
+              ),
+              child: Text(
+                "CANCEL",
+                style: GoogleFonts.poppins(
+                  fontSize: _btnFont,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(width: _gap),
+
+        // CONFIRM (QR scanner)
+        Expanded(
+          child: SizedBox(
+            height: _btnHeight,
+            child: buildCustomButton(
+              text: "CONFIRM",
+              height: _btnHeight,
+              fontSize: _btnFont,
+              fontWeight: FontWeight.bold,
+              gradient: LinearGradient(
+                colors: [
+                  Colors.greenAccent,
+                  Colors.green.shade500,
+                  Colors.green.shade900,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              onPressed: reasonSelected ? () => _handleConfirm(context) : null,
+            ),
+          ),
+        ),
+
+        const SizedBox(width: _gap),
+
+        // SUBMIT (final validation)
+        Expanded(
+          child: SizedBox(
+            height: _btnHeight,
+            child: buildCustomButton(
+              text: "SUBMIT",
+              height: _btnHeight,
+              fontSize: _btnFont,
+              fontWeight: FontWeight.bold,
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.blueAccent,
+                  Colors.blue.shade600,
+                  Colors.blue.shade900,
+                ],
+              ),
+              onPressed: (!reasonSelected ||
+                      !widget.controller.isEmployeeConfirmed ||
+                      isSubmitting)
+                  ? null
+                  : () => _handleSubmit(context),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _handleConfirm(BuildContext context) async {
+    await widget.controller.handleConfirmQr(context);
+
+    if (!context.mounted) return;
+    setState(() {}); // Refresh UI
+  }
+
+  Future<void> _handleSubmit(BuildContext context) async {
+    final runningProv = context.read<RunningProvider>();
+    final selectedItems = runningProv.selectedItems;
+
+    // Use helper for validation + submit
+    final helper = MassSubmitHelper(
+      context: context,
+      controller: widget.controller,
+      selectedItems: selectedItems,
+      idProses: widget.idProses,
+    );
+
+    final success = await helper.submit();
+    if (!context.mounted) return;
+    if (success) Navigator.pop(context);
+  }
+}
+
+/*
+import 'package:flutter/material.dart';
+import 'package:flutter_provider_data/page/001-molding/reason_dialog_mass/helpers/mass_submit_helper.dart';
+import 'package:flutter_provider_data/utils/custom_button.dart';
+import 'package:flutter_provider_data/provider/running_provider.dart';
+import 'package:flutter_provider_data/provider/reason_provider.dart';
 import '../helpers/mass_reason_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -130,3 +274,4 @@ class _MassActionButtonsState extends State<MassActionButtons> {
     if (success) Navigator.pop(context);
   }
 }
+*/

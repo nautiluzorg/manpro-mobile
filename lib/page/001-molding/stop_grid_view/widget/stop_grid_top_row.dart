@@ -12,6 +12,7 @@ class StopGridTopRow extends StatelessWidget {
   final List<RecordPendingModel> selectedItems;
   final Future<void> Function() onScanJobNumber;
   final Future<void> Function() onScanEmployee;
+  final VoidCallback onClear;
   final VoidCallback onContinue;
 
   const StopGridTopRow({
@@ -21,6 +22,7 @@ class StopGridTopRow extends StatelessWidget {
     required this.selectedItems,
     required this.onScanJobNumber,
     required this.onScanEmployee,
+    required this.onClear,
     required this.onContinue,
   });
 
@@ -48,7 +50,7 @@ class StopGridTopRow extends StatelessWidget {
           SizedBox(width: widthApp * 0.01),
           if (prov.isFilterActive)
             StopGridClearButton(
-              onTap: () => prov.clearFilter(),
+              onTap: onClear,
             ),
           const Spacer(),
           StopGridContinueButton(

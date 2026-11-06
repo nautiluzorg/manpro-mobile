@@ -38,10 +38,12 @@ class MassSubmitHelper {
 
     try {
       // 🔥 Original exact validation logic
-      final wrongConfirm = selectedItems.any(
-        (item) =>
-            item.activeEmployee?.idEmployee != controller.idEmployeeConfirm,
-      );
+      final confirmedId = controller.idEmployeeConfirm.trim().toUpperCase();
+      final wrongConfirm = selectedItems.any((item) {
+        final itemId =
+            item.activeEmployee?.idEmployee.trim().toUpperCase() ?? '';
+        return itemId.isEmpty || itemId != confirmedId;
+      });
 
       if (wrongConfirm) {
         if (context.mounted) {

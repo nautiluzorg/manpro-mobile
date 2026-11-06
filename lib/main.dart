@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_provider_data/page/main_menu_admin.dart';
-import 'package:flutter_provider_data/page/login_page.dart';
 import 'package:flutter_provider_data/page/main_menu_leader.dart';
+import 'package:flutter_provider_data/page/auth_gate.dart';
 import 'package:flutter_provider_data/provider/employee_provider.dart';
 import 'package:flutter_provider_data/provider/jobnumber_provider.dart';
 import 'package:flutter_provider_data/provider/machine_provider.dart';
@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => const LoginPage(),
+          '/': (context) => const AuthGate(),
           '/landing': (context) => const MainMenuAdmin(),
           '/main_menu_operator': (context) =>
               const MainMenuLeader(title: "MAIN MENU")

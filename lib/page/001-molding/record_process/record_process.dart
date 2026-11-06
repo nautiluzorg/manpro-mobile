@@ -41,10 +41,6 @@ class _RecordProcessState extends State<RecordProcess>
   final TextEditingController carbonPillController = TextEditingController();
   final TextEditingController idMachineController = TextEditingController();
   final TextEditingController jobNumberController = TextEditingController();
-  final TextEditingController drawNumberController = TextEditingController();
-  final TextEditingController qtyLotController = TextEditingController();
-  final TextEditingController moldCavityController = TextEditingController();
-  final TextEditingController totalShotController = TextEditingController();
   final TextEditingController qtyActualController = TextEditingController();
 
   @override
@@ -69,11 +65,6 @@ class _RecordProcessState extends State<RecordProcess>
     carbonPillController.dispose();
     idMachineController.dispose();
     jobNumberController.dispose();
-    drawNumberController.dispose();
-    qtyLotController.dispose();
-    // moldNumberController.dispose();
-    moldCavityController.dispose();
-    totalShotController.dispose();
     qtyActualController.dispose();
 
     // Kembalikan semua orientasi
@@ -183,9 +174,11 @@ class _RecordProcessState extends State<RecordProcess>
             RecordInfoPanel(
               heightBody: heightBody,
               widthApp: widthApp,
+              qtyActualController: qtyActualController,
             ),
 
             SizedBox(height: 5.0),
+
             RecordFormGrid(
               idProses: widget.idProses,
               mixLotNumberController: mixLotNumberController,
@@ -194,11 +187,6 @@ class _RecordProcessState extends State<RecordProcess>
               carbonPillController: carbonPillController,
               idMachineController: idMachineController,
               jobNumberController: jobNumberController,
-              drawNumberController: drawNumberController,
-              qtyLotController: qtyLotController,
-              moldCavityController: moldCavityController,
-              totalShotController: totalShotController,
-              qtyActualController: qtyActualController,
               onBuildTextField: _buildTextField, // method tetap di parent
               onEditMixLotNumber: (ctx) => showMixLotDialog(ctx),
             ),
@@ -337,108 +325,97 @@ class _RecordProcessState extends State<RecordProcess>
     required TextEditingController controller,
     required String label,
     required String hint,
-    IconData? icon, // nullable
+    IconData? icon,
     bool readOnly = false,
     VoidCallback? onIconTap,
     List<TextInputFormatter>? inputFormatters,
     Widget? suffixIcon,
   }) {
+    const double fieldHeight = 65;
+    const double fieldRadius = 4;
+    const double innerRadius = fieldRadius - 1;
+    const double iconBoxWidth = 58; // <-- lebar prefix & suffix
+    const double iconSize = 30; // <-- ikut dibesarkan biar proporsional
     final bool hasPrefixIcon = icon != null;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 1.0),
-      child: TextField(
-        controller: controller,
-        readOnly: readOnly,
-        inputFormatters: inputFormatters,
-        keyboardType:
-            inputFormatters != null ? TextInputType.number : TextInputType.text,
-        style: GoogleFonts.poppins(
-          fontSize: 12.0,
-          color: Colors.black87,
+    return TextField(
+      controller: controller,
+      readOnly: readOnly,
+      inputFormatters: inputFormatters,
+      keyboardType:
+          inputFormatters != null ? TextInputType.number : TextInputType.text,
+      style: GoogleFonts.poppins(
+          fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.black87),
+      decoration: InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: const Color(0xFFF8FAFC),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(fieldRadius),
+          borderSide: BorderSide(color: Colors.blueGrey.shade100),
         ),
-        decoration: InputDecoration(
-          // Gunakan widget label dengan padding bawah
-          label: Padding(
-            padding: const EdgeInsets.only(bottom: 6), // jarak bawah label
-            child: Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 12.0,
-                color: Colors.black,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          border: const OutlineInputBorder(),
-          isDense: true,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: hasPrefixIcon ? 4 : 6,
-            vertical: 12,
-          ),
-
-          prefixIcon: hasPrefixIcon
-              ? Container(
-                  width: 28,
-                  height: 28,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.blue.shade300, Colors.blue.shade900],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    border: Border.all(color: Colors.grey.shade500, width: 0.5),
-                    borderRadius: BorderRadius.circular(4),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(fieldRadius),
+          borderSide: BorderSide(color: Colors.blueGrey.shade200),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(fieldRadius),
+          borderSide: BorderSide(color: Colors.blue.shade600, width: 1.5),
+        ),
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        prefixIcon: hasPrefixIcon
+            ? Container(
+                width: iconBoxWidth,
+                height: fieldHeight,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade600,
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(innerRadius),
                   ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: onIconTap,
-                      borderRadius: BorderRadius.circular(4),
-                      child: Center(
-                        child: Icon(
-                          icon,
-                          size: 16,
-                          color: Colors.white,
-                        ),
-                      ),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onIconTap,
+                    borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(innerRadius),
+                    ),
+                    child: Center(
+                      child: Icon(icon, size: iconSize, color: Colors.white),
                     ),
                   ),
-                )
-              : null,
-          suffixIcon: suffixIcon != null
-              ? Container(
-                  width: 28,
-                  height: 28,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blueGrey.shade50,
-                        Colors.blueGrey.shade400,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    border: Border.all(
-                      color: Colors.blueGrey.shade300,
-                      width: 0.5,
-                    ),
-                    borderRadius: BorderRadius.circular(4),
+                ),
+              )
+            : null,
+        prefixIconConstraints: const BoxConstraints(
+          minWidth: iconBoxWidth,
+          maxWidth: iconBoxWidth,
+          minHeight: fieldHeight,
+          maxHeight: fieldHeight,
+        ),
+        suffixIcon: suffixIcon != null
+            ? Container(
+                width: iconBoxWidth,
+                height: fieldHeight,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey.shade100,
+                  borderRadius: const BorderRadius.horizontal(
+                    right: Radius.circular(innerRadius),
                   ),
-                  child: suffixIcon,
-                )
-              : null,
-          hintText: hint,
-          hintStyle: GoogleFonts.poppins(
-            color: Colors.grey.shade500,
-            fontStyle: FontStyle.italic,
-            fontSize: 12.0,
-          ),
+                ),
+                child: suffixIcon,
+              )
+            : null,
+        suffixIconConstraints: const BoxConstraints(
+          minWidth: iconBoxWidth,
+          maxWidth: iconBoxWidth,
+          minHeight: fieldHeight,
+          maxHeight: fieldHeight,
+        ),
+        hintStyle: GoogleFonts.poppins(
+          color: Colors.blueGrey.shade400,
+          fontSize: 14.0,
         ),
       ),
     );

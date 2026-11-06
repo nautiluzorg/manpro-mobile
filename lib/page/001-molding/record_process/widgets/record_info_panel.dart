@@ -10,11 +10,13 @@ import 'package:flutter_provider_data/utils/logger.dart';
 class RecordInfoPanel extends StatelessWidget {
   final double heightBody;
   final double widthApp;
+  final TextEditingController qtyActualController;
 
   const RecordInfoPanel({
     super.key,
     required this.heightBody,
     required this.widthApp,
+    required this.qtyActualController,
   });
 
   @override
@@ -186,11 +188,16 @@ class RecordInfoPanel extends StatelessWidget {
 
                     final data = [
                       ["JOB NUMBER", jobNumber],
-                      ["DATE", formatDateTime(jobDate)],
-                      ["PROCESS", jobProcess],
-                      ["JOBCODE", batchNumber],
+                      ["MOLD CAVITY", jobNumberProvider.cavity],
+                      ["TOTAL SHOOT", jobNumberProvider.totalShoot],
+                      ["DRAW NUMBER", jobNumberProvider.drawNumber],
+                      ["JOB", batchNumber],
                       ["LOT NUMBER", lotNumber],
+                      ["QTY", jobNumberProvider.qtyLot],
                       ["TOTAL LOT", totalLotNumber],
+                      ["PROCESS", jobProcess],
+                      ["DATE", formatDateTime(jobDate)],
+                      ["QTY ACTUAL", jobNumberProvider.qtyActual],
                       ["CATEGORY", categoryProduct],
                       ["TYPE", typeProduct],
                       [
@@ -199,6 +206,15 @@ class RecordInfoPanel extends StatelessWidget {
                       ],
                       ["CARBON PILL LOT", carbonLot],
                     ];
+
+                    final qtyActual = jobNumberProvider.qtyActual;
+                    if (qtyActualController.text != qtyActual) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (qtyActualController.text != qtyActual) {
+                          qtyActualController.text = qtyActual;
+                        }
+                      });
+                    }
 
                     return Container(
                       height: constraints.maxHeight,
@@ -251,21 +267,46 @@ class RecordInfoPanel extends StatelessWidget {
                                   color: rowColor,
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 6.0),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Text(
-                                      ": ${data[index][1]}",
-                                      style: GoogleFonts.poppins(
-                                        fontWeight:
-                                            data[index][0] == "JOB NUMBER"
-                                                ? FontWeight.bold
-                                                : FontWeight.w500,
-                                        fontSize: constraints.maxWidth * 0.025,
-                                        color: Colors.grey.shade800,
-                                      ),
-                                      softWrap: false,
-                                    ),
-                                  ),
+                                  child: data[index][0] == "QTY ACTUAL"
+                                      ? TextField(
+                                          controller: qtyActualController,
+                                          keyboardType: TextInputType.number,
+                                          onChanged:
+                                              jobNumberProvider.setQtyActual,
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize:
+                                                constraints.maxWidth * 0.025,
+                                            color: Colors.green.shade700,
+                                          ),
+                                          decoration: InputDecoration(
+                                            prefixText: ': ',
+                                            prefixStyle: GoogleFonts.poppins(
+                                              fontSize:
+                                                  constraints.maxWidth * 0.025,
+                                              color: Colors.grey.shade800,
+                                            ),
+                                            border: InputBorder.none,
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                          ),
+                                        )
+                                      : SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Text(
+                                            ": ${data[index][1]}",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight:
+                                                  data[index][0] == "JOB NUMBER"
+                                                      ? FontWeight.bold
+                                                      : FontWeight.w500,
+                                              fontSize:
+                                                  constraints.maxWidth * 0.025,
+                                              color: Colors.grey.shade800,
+                                            ),
+                                            softWrap: false,
+                                          ),
+                                        ),
                                 ),
                               ],
                             );

@@ -25,15 +25,74 @@ class StopGridView extends StatefulWidget {
 }
 
 class _StopGridViewState extends State<StopGridView> {
-  final List<RecordPendingModel> _selectedItems = [];
+  final ValueNotifier<Set<int>> _selectedPendingIds =
+      ValueNotifier<Set<int>>(<int>{});
+  late final PendingProvider _pendingProvider;
+  int _lastPendingRevision = 0;
 
   @override
   void initState() {
     super.initState();
+    _pendingProvider = context.read<PendingProvider>();
+    _lastPendingRevision = _pendingProvider.pendingRevision;
+    _pendingProvider.addListener(_handlePendingRevisionChanged);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<PendingProvider>().fetchPending(widget.idProses);
+      _clearSelection();
+      _pendingProvider.fetchPending(widget.idProses);
     });
   }
+
+  @override
+  void dispose() {
+    _pendingProvider.removeListener(_handlePendingRevisionChanged);
+    _selectedPendingIds.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant StopGridView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.idProses != widget.idProses) {
+      _clearSelection();
+      _pendingProvider.fetchPending(widget.idProses);
+    }
+  }
+
+  void _handlePendingRevisionChanged() {
+    if (!mounted || _pendingProvider.pendingRevision == _lastPendingRevision) {
+      return;
+    }
+
+    _lastPendingRevision = _pendingProvider.pendingRevision;
+    _clearSelection();
+  }
+
+  void _clearSelection() {
+    if (_selectedPendingIds.value.isEmpty) return;
+    _selectedPendingIds.value = <int>{};
+  }
+
+  bool _isSelected(RecordPendingModel item, Set<int> selectedIds) =>
+      selectedIds.contains(item.idPending);
+
+  List<RecordPendingModel> _currentSelectedItems(
+      List<RecordPendingModel> latestItems, Set<int> selectedIds) {
+    return latestItems
+        .where((item) => selectedIds.contains(item.idPending))
+        .toList();
+  }
+
+  void _toggleSelection(RecordPendingModel item) {
+    final nextSelection = Set<int>.from(_selectedPendingIds.value);
+    if (!nextSelection.add(item.idPending)) {
+      nextSelection.remove(item.idPending);
+    }
+    _selectedPendingIds.value = nextSelection;
+  }
+
+  String _normalizeEmployeeId(String? idEmployee) =>
+      (idEmployee ?? '').trim().toUpperCase();
 
   // ── OPEN SCANNER ───────────────────────────────────────────────────────
   Future<String?> _openScanner() async {
@@ -66,10 +125,9 @@ class _StopGridViewState extends State<StopGridView> {
     }
 
     if (!mounted) return;
-    setState(() {
-      context.read<PendingProvider>().scannedJobNumber =
-          code.substring(9, 19).trim();
-    });
+    _clearSelection();
+    context.read<PendingProvider>().scannedJobNumber =
+        code.substring(9, 19).trim();
   }
 
   // ── SCAN EMPLOYEE ──────────────────────────────────────────────────────
@@ -85,21 +143,26 @@ class _StopGridViewState extends State<StopGridView> {
     }
 
     if (!mounted) return;
-    setState(() {
-      context.read<PendingProvider>().scannedEmployeeFinishId = code;
-    });
+    _clearSelection();
+    context.read<PendingProvider>().scannedEmployeeFinishId = code;
   }
 
   // ── ON CONTINUE PRESSED ────────────────────────────────────────────────
   Future<void> _onContinuePressed() async {
-    if (_selectedItems.isEmpty) {
+    final prov = context.read<PendingProvider>();
+    final selectedItems =
+        _currentSelectedItems(prov.filteredPending, _selectedPendingIds.value);
+
+    if (selectedItems.isEmpty) {
       await showWarningDialog(context, "Belum ada data yang dipilih.");
       return;
     }
 
-    final firstEmployee = _selectedItems.first.employeeName;
-    final sameEmployee =
-        _selectedItems.every((item) => item.employeeName == firstEmployee);
+    final firstEmployeeId =
+        _normalizeEmployeeId(selectedItems.first.idEmployee);
+    final sameEmployee = firstEmployeeId.isNotEmpty &&
+        selectedItems.every(
+            (item) => _normalizeEmployeeId(item.idEmployee) == firstEmployeeId);
 
     if (!sameEmployee) {
       await showWarningDialog(
@@ -115,7 +178,7 @@ class _StopGridViewState extends State<StopGridView> {
       '06': 'REASON CHANGE MACHINE TIDAK BISA DI RUNNING DARI MENU INI',
     };
 
-    final codereason = _selectedItems.first.idReason;
+    final codereason = selectedItems.first.idReason;
     if (reasonMessages.containsKey(codereason)) {
       await showWarningDialog(context, reasonMessages[codereason]!);
       return;
@@ -127,12 +190,13 @@ class _StopGridViewState extends State<StopGridView> {
       PageRouteBuilder(
         opaque: false,
         pageBuilder: (_, __, ___) => DialogConfirmMassRunning(
-          selectedItems: _selectedItems,
+          selectedItems: selectedItems,
           idProses: widget.idProses,
         ),
         transitionsBuilder: (_, animation, __, child) =>
             FadeTransition(opacity: animation, child: child),
-        transitionDuration: const Duration(milliseconds: 300),
+        transitionDuration: const Duration(milliseconds: 160),
+        reverseTransitionDuration: const Duration(milliseconds: 120),
       ),
     );
   }
@@ -153,39 +217,50 @@ class _StopGridViewState extends State<StopGridView> {
     return Scaffold(
       body: Column(
         children: [
-          StopGridTopRow(
-            widthApp: widthApp,
-            prov: prov,
-            selectedItems: _selectedItems,
-            onScanJobNumber: _scanAndFilterJobNumber,
-            onScanEmployee: _scanAndFilterEmployee,
-            onContinue: _onContinuePressed,
+          ValueListenableBuilder<Set<int>>(
+            valueListenable: _selectedPendingIds,
+            builder: (context, selectedIds, _) {
+              final selectedItems =
+                  _currentSelectedItems(filteredList, selectedIds);
+
+              return StopGridTopRow(
+                widthApp: widthApp,
+                prov: prov,
+                selectedItems: selectedItems,
+                onScanJobNumber: _scanAndFilterJobNumber,
+                onScanEmployee: _scanAndFilterEmployee,
+                onClear: _clearSelectionAndFilter,
+                onContinue: _onContinuePressed,
+              );
+            },
           ),
           Expanded(
             child: filteredList.isEmpty
                 ? const StopGridEmptyState()
-                : GridView.builder(
-                    padding: const EdgeInsets.all(8),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: filteredList.length,
-                    itemBuilder: (context, index) {
-                      final item = filteredList[index];
-                      return StopGridItem(
-                        item: item,
-                        isSelected: _selectedItems.contains(item),
-                        idProses: widget.idProses,
-                        onTap: () {
-                          setState(() {
-                            _selectedItems.contains(item)
-                                ? _selectedItems.remove(item)
-                                : _selectedItems.add(item);
-                          });
+                : ValueListenableBuilder<Set<int>>(
+                    valueListenable: _selectedPendingIds,
+                    builder: (context, selectedIds, _) {
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(8),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: filteredList.length,
+                        itemBuilder: (context, index) {
+                          final item = filteredList[index];
+                          return RepaintBoundary(
+                            key: ValueKey(item.idPending),
+                            child: StopGridItem(
+                              item: item,
+                              isSelected: _isSelected(item, selectedIds),
+                              idProses: widget.idProses,
+                              onTap: () => _toggleSelection(item),
+                            ),
+                          );
                         },
                       );
                     },
@@ -194,5 +269,10 @@ class _StopGridViewState extends State<StopGridView> {
         ],
       ),
     );
+  }
+
+  void _clearSelectionAndFilter() {
+    _clearSelection();
+    context.read<PendingProvider>().clearFilter();
   }
 }

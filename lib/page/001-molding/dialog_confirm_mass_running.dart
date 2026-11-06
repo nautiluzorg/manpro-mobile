@@ -29,6 +29,19 @@ class DialogConfirmMassRunning extends StatefulWidget {
 }
 
 class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
+  static const double _pagePadding = 16;
+  static const double _sectionGap = 20;
+  static const double _labelGap = 10;
+  static const double _maxContentWidth = 900;
+  static const double _buttonHeight = 80;
+
+  // ===== Ukuran card list =====
+  static const double _itemHeight = 200; // tinggi tiap card
+  static const double _itemGap = 10; // jarak antar card
+  static const double _itemPadding = 12;
+  static const double _photoSize = 140; // = _itemHeight - 2 * _itemPadding
+  static const double _photoRadius = 12;
+
   @override
   void initState() {
     super.initState();
@@ -49,78 +62,109 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
   ) {
     if (!prov.hasConfirmedEmployee) return false;
 
-    final confirmId = prov.confirmedEmployee.idEmployee;
+    final confirmId = prov.confirmedEmployee.idEmployee.trim().toUpperCase();
 
     return items.every(
-      (r) => r.idEmployee == confirmId, // ← ganti di sini
+      (r) => r.idEmployee.trim().toUpperCase() == confirmId,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final myAppBar = customDialogAppBar(
-      title: "OPERATOR CONFIRM",
-    );
-    final maxGridHeight = MediaQuery.of(context).size.height * 0.4;
-
     return Scaffold(
-      appBar: myAppBar,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        padding: const EdgeInsets.all(16),
-        color: Colors.white,
+      appBar: customDialogAppBar(title: "CONTINUE PENDING MOLDING"),
+      body: SafeArea(
         child: Column(
           children: [
-            Text(
-              "LIST JOBNUMBER YANG AKAN DI RUNNING",
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.blueGrey.shade600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height:
-                  (widget.selectedItems.length / 2).ceil() * 160 > maxGridHeight
-                      ? maxGridHeight
-                      : (widget.selectedItems.length / 2).ceil() * 160,
-              child: GridView.builder(
-                padding: const EdgeInsets.all(4),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 2 kolom
-                  childAspectRatio: 2.5, // lebih besar dan panjang
-                  crossAxisSpacing: 6,
-                  mainAxisSpacing: 6,
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(_pagePadding),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxWidth: _maxContentWidth),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const _SectionLabel(
+                          "DAFTAR JOBNUMBER YANG AKAN DI-RUNNING:",
+                        ),
+                        const SizedBox(height: _labelGap),
+                        _buildSelectedItemsList(),
+                        const SizedBox(height: _sectionGap),
+                        const _SectionLabel("KONFIRMASI OPERATOR:"),
+                        const SizedBox(height: _labelGap),
+                        Consumer<PendingProvider>(
+                          builder: (context, prov, _) =>
+                              _buildEmployeeConfirmBox(prov),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                itemCount: widget.selectedItems.length,
-                itemBuilder: (context, index) {
-                  final r = widget.selectedItems[index];
-                  return _buildItemCard(r); // gunakan fungsi item card
-                },
               ),
             ),
-            const SizedBox(height: 10),
-            Consumer<PendingProvider>(
-              builder: (context, prov, _) {
-                return _buildEmployeeConfirmBox(prov);
-              },
-            ),
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                _buildCancelButton(context),
-                const SizedBox(width: 12),
-                _buildConfirmButton(context),
-                const SizedBox(width: 12),
-                _buildSubmitButton(context),
-              ],
-            ),
+            _buildBottomActionBar(context),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// List ke bawah, tiap card memenuhi lebar layar (tinggi tetap 100).
+  /// Ikut scroll halaman (tidak punya scroll sendiri).
+  Widget _buildSelectedItemsList() {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      itemCount: widget.selectedItems.length,
+      separatorBuilder: (_, __) => const SizedBox(height: _itemGap),
+      itemBuilder: (context, index) {
+        return SizedBox(
+          height: _itemHeight,
+          width: double.infinity,
+          child: RepaintBoundary(
+            child: _buildItemCard(widget.selectedItems[index]),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildBottomActionBar(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(
+        _pagePadding,
+        12,
+        _pagePadding,
+        12,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Colors.grey.shade300)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0F000000),
+            blurRadius: 8,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _maxContentWidth),
+          child: Row(
+            children: [
+              Expanded(child: _buildCancelButton(context)),
+              const SizedBox(width: 12),
+              Expanded(child: _buildConfirmButton(context)),
+              const SizedBox(width: 12),
+              Expanded(child: _buildSubmitButton(context)),
+            ],
+          ),
         ),
       ),
     );
@@ -128,151 +172,182 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
 
   Widget _buildEmployeeConfirmBox(PendingProvider prov) {
     final hasEmployee = prov.hasConfirmedEmployee;
+    final imageUrl = "${AppConfig.baseUrl}/media/img/employee/"
+        "${hasEmployee ? '${prov.confirmedEmployee.idEmployee}.png' : 'employee.png'}";
 
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.blueGrey.shade50,
-            Colors.blue.shade50.withValues(alpha: 0.6),
-          ],
+        color: hasEmployee ? Colors.green.shade50 : const Color(0xFFF9FAFB),
+        border: Border.all(
+          color: hasEmployee ? Colors.green.shade300 : Colors.grey.shade300,
         ),
-        border: Border.all(color: Colors.blueGrey.shade300),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blueGrey.shade300.withValues(alpha: 0.35),
-            blurRadius: 5,
-            offset: const Offset(1, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // LABEL
-          Text(
-            "OPERATOR CONFIRM :",
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Colors.blueGrey.shade700,
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey.shade200,
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x22000000),
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: hasEmployee
+                  ? Image.network(
+                      imageUrl,
+                      cacheWidth: 128,
+                      cacheHeight: 128,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.person,
+                        size: 36,
+                        color: Colors.grey,
+                      ),
+                    )
+                  : const Icon(
+                      Icons.qr_code_scanner,
+                      size: 32,
+                      color: Colors.grey,
+                    ),
             ),
           ),
-          const SizedBox(height: 6),
-
-          Row(
-            children: [
-              // FOTO
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      "${AppConfig.baseUrl}/media/img/employee/"
-                      "${hasEmployee ? '${prov.confirmedEmployee.idEmployee}.png' : 'employee.png'}",
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              const SizedBox(width: 10),
-
-              // NAMA
-              Expanded(
-                child: Text(
-                  hasEmployee ? prov.confirmedEmployee.fullName : "-",
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "CONFIRMED BY",
                   style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blueGrey.shade900,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade600,
+                    letterSpacing: 1.2,
                   ),
                 ),
-              ),
-
-              // ===== STATUS CONFIRMED =====
-              if (hasEmployee)
-                Row(
-                  children: [
-                    Text(
-                      "CONFIRMED",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.green.shade700,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green.shade700,
-                      size: 20,
-                    ),
-                  ],
+                const SizedBox(height: 4),
+                Text(
+                  hasEmployee
+                      ? prov.confirmedEmployee.fullName
+                      : "BELUM DIKONFIRMASI",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    height: 1.3,
+                    fontWeight: FontWeight.w600,
+                    color: hasEmployee ? Colors.black87 : Colors.grey,
+                  ),
                 ),
-            ],
+              ],
+            ),
           ),
+          const SizedBox(width: 10),
+          if (hasEmployee)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.green.shade100,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.verified_rounded,
+                      color: Colors.green.shade700, size: 18),
+                  const SizedBox(width: 4),
+                  Text(
+                    "CONFIRMED",
+                    style: GoogleFonts.poppins(
+                      color: Colors.green.shade800,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            const Icon(Icons.info_outline_rounded,
+                color: Colors.grey, size: 24),
         ],
       ),
     );
   }
 
-  // Contoh fungsi build item card
   Widget _buildItemCard(RecordPendingModel r) {
+    final imageUrl =
+        "${AppConfig.baseUrl}/media/img/employee/${r.idEmployee}.png";
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.all(_itemPadding),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.blueAccent, Colors.lightBlue.shade900],
+          colors: [Colors.blueAccent, Colors.blue.shade900],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.blueGrey.shade100, width: 1.5),
-        boxShadow: [
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(2, 4),
+            color: Color(0x26000000),
+            blurRadius: 8,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
-          // FOTO OPERATOR
-          Container(
-            width: 90,
-            height: 90,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.blueGrey.shade200, width: 1.5),
-              image: DecorationImage(
-                image: NetworkImage(
-                  "${AppConfig.baseUrl}/media/img/employee/${r.idEmployee}.png", // ← ganti di sini
-                ),
-                fit: BoxFit.cover,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(_photoRadius),
+            child: Image.network(
+              imageUrl,
+              width: _photoSize,
+              height: _photoSize,
+              cacheWidth: 192,
+              cacheHeight: 192,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                width: _photoSize,
+                height: _photoSize,
+                color: Colors.white24,
+                alignment: Alignment.center,
+                child: const Icon(Icons.person, size: 38, color: Colors.white),
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
-            child: Table(
-              columnWidths: const {
-                0: FlexColumnWidth(4), // label
-                1: FlexColumnWidth(4), // value
-              },
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildTableRow("NAMA", r.employeeName),
-                _buildTableRow("MACHINE", r.machineName),
-                _buildTableRow("JOBNUMBER", r.jobnumber.toString()),
+                Text(
+                  r.employeeName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    height: 1.3,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                _buildInfoLine("JOBNUMBER", r.jobnumber ?? '-'),
+                _buildInfoLine("MACHINE", r.machineName),
               ],
             ),
           ),
@@ -281,38 +356,55 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
     );
   }
 
-// ================== Table Row Builder ==================
-  TableRow _buildTableRow(String label, String value) {
-    return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Text(
-          "$label:",
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Colors.white70,
+  // Lebar kolom label supaya titik dua dan nilai rata seperti tabel
+  static const double _infoLabelWidth = 104;
+
+  Widget _buildInfoLine(String label, String value) {
+    final labelStyle = GoogleFonts.poppins(
+      fontSize: 14,
+      height: 1.35,
+      fontWeight: FontWeight.w500,
+      color: Colors.white70,
+    );
+
+    return Row(
+      children: [
+        // Kolom 1: label (lebar tetap)
+        SizedBox(
+          width: _infoLabelWidth,
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: labelStyle,
           ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Text(
-          value,
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
+        // Kolom 2: titik dua (lebar tetap)
+        SizedBox(
+          width: 14,
+          child: Text(":", style: labelStyle),
+        ),
+        // Kolom 3: nilai (melebar mengisi sisa)
+        Expanded(
+          child: Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              height: 1.35,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   Widget _buildCancelButton(BuildContext context) {
     return SizedBox(
-      width: 180,
-      height: 70,
+      height: _buttonHeight,
       child: OutlinedButton(
         onPressed: () => Navigator.pop(context),
         style: OutlinedButton.styleFrom(
@@ -324,7 +416,7 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
           "CANCEL",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 20,
             color: Colors.red.shade800,
           ),
         ),
@@ -334,12 +426,11 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
 
   Widget _buildConfirmButton(BuildContext context) {
     return SizedBox(
-      width: 180,
-      height: 70,
+      height: _buttonHeight,
       child: buildCustomButton(
         text: "CONFIRM",
-        height: 70,
-        fontSize: 18,
+        height: _buttonHeight,
+        fontSize: 20,
         fontWeight: FontWeight.bold,
         gradient: LinearGradient(
           colors: [
@@ -392,12 +483,11 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
           prov.confirmedEmployee.idEmployee.isNotEmpty && !prov.isSubmitting,
       builder: (context, canSubmit, _) {
         return SizedBox(
-          width: 180,
-          height: 70,
+          height: _buttonHeight,
           child: buildCustomButton(
             text: "SUBMIT",
-            height: 70,
-            fontSize: 18,
+            height: _buttonHeight,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             gradient: LinearGradient(
               colors: [
@@ -452,6 +542,40 @@ class _DialogConfirmMassRunningState extends State<DialogConfirmMassRunning> {
           ),
         );
       },
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  final String text;
+
+  const _SectionLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 4,
+          height: 20,
+          decoration: BoxDecoration(
+            color: Colors.blue.shade700,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.8,
+              color: Colors.blueGrey.shade700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -136,6 +136,11 @@ class RunningListCard extends StatelessWidget {
 
   // ── OPERATOR PHOTO ────────────────────────────────────────────────────
   Widget _buildOperatorPhoto(double widthApp) {
+    final employeeId = record.activeEmployee?.idEmployee.trim() ?? '';
+    final photoUrl = employeeId.isEmpty
+        ? '${AppConfig.baseUrl}/media/img/employee/employee.png'
+        : '${AppConfig.baseUrl}/media/img/employee/$employeeId.png';
+
     return SizedBox(
       width: widthApp * 0.20,
       child: Column(
@@ -182,7 +187,7 @@ class RunningListCard extends StatelessWidget {
                 ),
                 child: ClipOval(
                   child: Image.network(
-                    "${AppConfig.baseUrl}/media/img/employee/${record.activeEmployee?.idEmployee}.png",
+                    photoUrl,
                     width: widthApp * 0.16,
                     height: widthApp * 0.16,
                     fit: BoxFit.cover,

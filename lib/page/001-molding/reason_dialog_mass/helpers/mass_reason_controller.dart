@@ -56,9 +56,11 @@ class MassReasonController extends ChangeNotifier {
     if (!isEmployeeConfirmed) return false;
     if (selectedItems.isEmpty) return false;
 
-    final wrongConfirm = selectedItems.any(
-      (item) => item.activeEmployee?.idEmployee != idEmployeeConfirm,
-    );
+    final confirmedId = idEmployeeConfirm.trim().toUpperCase();
+    final wrongConfirm = selectedItems.any((item) {
+      final itemId = item.activeEmployee?.idEmployee.trim().toUpperCase() ?? '';
+      return itemId.isEmpty || itemId != confirmedId;
+    });
     return !wrongConfirm;
   }
 

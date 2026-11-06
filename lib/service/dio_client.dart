@@ -11,7 +11,10 @@ class DioClient {
       headers: {"Content-Type": "application/json"},
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 15),
-      validateStatus: (status) => status != null && status < 500,
+      // 401 harus masuk ke AuthInterceptor.onError agar access token
+      // dapat di-refresh dan request sebelumnya diulang.
+      validateStatus: (status) =>
+          status != null && status >= 200 && status < 300,
     ),
   );
 
@@ -48,36 +51,6 @@ class DioClient {
     ),
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 import 'package:dio/dio.dart';

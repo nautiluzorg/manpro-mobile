@@ -5,13 +5,11 @@ import 'package:flutter_provider_data/page/main_menu_admin.dart';
 import 'package:flutter_provider_data/page/login_page.dart';
 import 'package:flutter_provider_data/page/main_menu_leader.dart';
 import 'package:flutter_provider_data/page/menu.dart';
-import 'package:flutter_provider_data/service/auth_service.dart';
-import 'package:flutter_provider_data/service/token_storage.dart';
-import 'package:flutter_provider_data/utils/jwt_helper.dart';
+import 'package:flutter_provider_data/service/auth_session.dart';
+import 'package:flutter_provider_data/provider/running_provider.dart';
+import 'package:provider/provider.dart';
 
 class AuthNavigator {
-  static final AuthService _authService = AuthService();
-
   // ================================================================
   // GO HOME (Main Menu Admin / Leader)
   // ================================================================
@@ -34,7 +32,8 @@ class AuthNavigator {
     } else if (groups.contains('LEADER')) {
       target = const MainMenuLeader(title: "MAIN MENU");
     } else {
-      await TokenStorage.clear();
+      context.read<RunningProvider>().resetForLogout();
+      await AuthSession.logout();
       if (!context.mounted) return;
       _toLogin(context);
       return;
@@ -67,7 +66,7 @@ class AuthNavigator {
     } else if (groups.contains('LEADER')) {
       target = const MainMenuLeader(title: "MAIN MENU");
     } else {
-      await TokenStorage.clear();
+      await AuthSession.logout();
       if (!context.mounted) return;
       _toLogin(context);
       return;
@@ -90,45 +89,8 @@ class AuthNavigator {
   // walaupun sesinya sebenarnya masih valid.
   // ================================================================
   static Future<Map<String, dynamic>?> _resolveValidPayload() async {
-    final token = await TokenStorage.getAccessToken();
-
-    if (token == null) {
-      return null;
-    }
-
-    var payload = JwtHelper.decodePayload(token);
-
-    // Access token masih valid → langsung pakai.
-    if (payload != null && !JwtHelper.isExpired(payload)) {
-      return payload;
-    }
-
-    // Access token expired/invalid → coba refresh pakai refresh token.
-    final refreshed = await _authService.refreshToken();
-
-    if (!refreshed) {
-      // Refresh token juga sudah invalid/expired → memang harus login ulang.
-      await TokenStorage.clear();
-      return null;
-    }
-
-    // Refresh berhasil → ambil access token yang baru.
-    final newToken = await TokenStorage.getAccessToken();
-
-    if (newToken == null) {
-      await TokenStorage.clear();
-      return null;
-    }
-
-    payload = JwtHelper.decodePayload(newToken);
-
-    if (payload == null || JwtHelper.isExpired(payload)) {
-      // Kondisi aneh: baru saja refresh tapi token baru invalid/expired.
-      await TokenStorage.clear();
-      return null;
-    }
-
-    return payload;
+    final loaded = await AuthSession.load();
+    return loaded ? AuthSession.payload : null;
   }
 
   // ================================================================
@@ -141,6 +103,7 @@ class AuthNavigator {
   }
 
   static void _toLogin(BuildContext context) {
+    context.read<RunningProvider>().resetForLogout();
     Navigator.of(context).pushAndRemoveUntil(
       PageTransitions.fade(const LoginPage()),
       (_) => false,

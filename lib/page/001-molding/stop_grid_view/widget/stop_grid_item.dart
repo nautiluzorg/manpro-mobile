@@ -158,8 +158,12 @@ class StopGridItem extends StatelessWidget {
           // Dikecilkan dari 60 -> 42 supaya total tinggi konten lebih
           // ringkas dan lebih jarang butuh scroll di cell grid kecil.
           radius: 42,
-          backgroundImage: NetworkImage(
-            "${AppConfig.baseUrl}/media/img/employee/${item.idEmployee}.png",
+          backgroundImage: ResizeImage(
+            NetworkImage(
+              "${AppConfig.baseUrl}/media/img/employee/${item.idEmployee}.png",
+            ),
+            width: 84,
+            height: 84,
           ),
           onBackgroundImageError: (_, __) =>
               const Icon(Icons.person, size: 24, color: Colors.grey),

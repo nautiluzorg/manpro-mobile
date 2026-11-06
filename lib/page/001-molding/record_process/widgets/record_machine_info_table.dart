@@ -80,9 +80,15 @@ class RecordMachineInfoTable extends StatelessWidget {
                 ['MACHINE', machineData.nmMc],
                 ['MACHINE AREA', machineData.areaMc],
                 ['CUSTOMER', jobProvider.customer],
-                ['MOLD CAVITY', jobProvider.cavity],
-                ['TOTAL SHOT', jobProvider.totalShoot.toString()],
-                ['QTY LOT', jobProvider.qtyLot],
+                [
+                  'GOLD PILL LOT',
+                  jobProvider.germanSilverLn,
+                  ' ',
+                  jobProvider.uedaUshinLn,
+                  ' ',
+                  jobProvider.materialLn
+                ],
+                ['CARBON PILL LOT', jobProvider.carbonLot],
               ];
 
               return Container(

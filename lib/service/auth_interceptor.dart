@@ -4,7 +4,9 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_provider_data/config/api_config.dart';
 import 'package:flutter_provider_data/main.dart'; // navigatorKey
+import 'package:flutter_provider_data/provider/running_provider.dart';
 import 'package:flutter_provider_data/utils/app_logger.dart';
+import 'package:provider/provider.dart';
 import 'token_storage.dart';
 import 'auth_service.dart';
 
@@ -16,7 +18,7 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
 
   // Guard supaya kalau banyak request 401 bersamaan,
   // proses refresh token cuma jalan SEKALI.
-  Completer<bool>? _refreshCompleter;
+  Completer<RefreshTokenStatus>? _refreshCompleter;
 
   @override
   void onRequest(
@@ -54,16 +56,24 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
       return handler.next(err);
     }
 
-    AppLogger.w("401 detected, mencoba refresh token...");
-    final refreshed = await _refreshTokenSafely();
+    // Jangan mengulang request yang sama tanpa batas jika access token baru
+    // tetap ditolak oleh server.
+    if (err.requestOptions.extra['auth_retry'] == true) {
+      await _logoutToLogin();
+      return handler.next(err);
+    }
 
-    if (!refreshed) {
+    AppLogger.w("401 detected, mencoba refresh token...");
+    final refreshStatus = await _refreshTokenSafely();
+
+    if (refreshStatus == RefreshTokenStatus.invalid) {
       AppLogger.w("Refresh gagal, logout user");
-      await TokenStorage.clear();
-      navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        '/',
-        (route) => false,
-      );
+      await _logoutToLogin();
+      return handler.next(err);
+    }
+
+    // Gangguan jaringan tidak boleh menghapus session operator.
+    if (refreshStatus == RefreshTokenStatus.unavailable) {
       return handler.next(err);
     }
 
@@ -72,6 +82,7 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
       final newToken = await TokenStorage.getAccessToken();
       final opts = err.requestOptions;
       opts.headers['Authorization'] = 'Bearer $newToken';
+      opts.extra['auth_retry'] = true;
 
       AppLogger.d("Retry request ke: ${opts.uri}");
       final cloneReq = await dio.fetch(opts);
@@ -85,50 +96,35 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   /// Mencegah beberapa request yang 401 bersamaan
   /// memicu banyak kali refresh token secara paralel.
   /// Request kedua dst akan "numpang nunggu" hasil refresh yang sudah berjalan.
-  Future<bool> _refreshTokenSafely() {
+  Future<RefreshTokenStatus> _refreshTokenSafely() {
     if (_refreshCompleter != null) {
       AppLogger.d("Refresh udah jalan, numpang nunggu hasilnya...");
       return _refreshCompleter!.future;
     }
 
-    _refreshCompleter = Completer<bool>();
+    _refreshCompleter = Completer<RefreshTokenStatus>();
 
-    _authService.refreshToken().then((result) {
+    _authService.refreshTokenStatus().then((result) {
       _refreshCompleter?.complete(result);
       _refreshCompleter = null;
     }).catchError((e) {
       AppLogger.e("Error saat refresh token", e);
-      _refreshCompleter?.complete(false);
+      _refreshCompleter?.complete(RefreshTokenStatus.unavailable);
       _refreshCompleter = null;
     });
 
     return _refreshCompleter!.future;
   }
+
+  Future<void> _logoutToLogin() async {
+    navigatorKey.currentContext?.read<RunningProvider>().resetForLogout();
+    await TokenStorage.clear();
+    navigatorKey.currentState?.pushNamedAndRemoveUntil(
+      '/',
+      (route) => false,
+    );
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 import 'package:dio/dio.dart';

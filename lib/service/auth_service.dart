@@ -18,6 +18,12 @@ class LoginResult {
   LoginResult.failure(this.errorMessage) : success = false;
 }
 
+enum RefreshTokenStatus {
+  success,
+  invalid,
+  unavailable,
+}
+
 class AuthService {
   // Pakai authDio yang udah disiapin di DioClient —
   // dio polos TANPA AuthInterceptor, supaya gak ada risiko infinite loop
@@ -91,11 +97,17 @@ class AuthService {
   }
 
   Future<bool> refreshToken() async {
+    return await refreshTokenStatus() == RefreshTokenStatus.success;
+  }
+
+  /// Refresh access token dan membedakan token invalid dari gangguan koneksi.
+  /// Token hanya boleh dihapus jika server benar-benar menolak refresh token.
+  Future<RefreshTokenStatus> refreshTokenStatus() async {
     try {
       final refresh = await TokenStorage.getRefreshToken();
       if (refresh == null) {
         AppLogger.w("Refresh token kosong, gak bisa refresh");
-        return false;
+        return RefreshTokenStatus.invalid;
       }
 
       final response = await _dio.post(
@@ -109,7 +121,7 @@ class AuthService {
 
         if (newAccess == null) {
           AppLogger.w("Refresh sukses tapi access token null");
-          return false;
+          return RefreshTokenStatus.unavailable;
         }
 
         await TokenStorage.saveTokens(
@@ -117,15 +129,25 @@ class AuthService {
           refresh: newRefresh ?? refresh,
         );
         AppLogger.i("Refresh token berhasil");
-        return true;
+        return RefreshTokenStatus.success;
       }
 
       AppLogger.w("Refresh token gagal, status: ${response.statusCode}");
-      return false;
+      return _statusFromHttpCode(response.statusCode);
     } on DioException catch (e) {
       AppLogger.e("Refresh token error", e);
-      return false;
+      return _statusFromHttpCode(e.response?.statusCode);
+    } catch (e) {
+      AppLogger.e("Refresh token unexpected error", e);
+      return RefreshTokenStatus.unavailable;
     }
+  }
+
+  RefreshTokenStatus _statusFromHttpCode(int? statusCode) {
+    if (statusCode != null && statusCode >= 400 && statusCode < 500) {
+      return RefreshTokenStatus.invalid;
+    }
+    return RefreshTokenStatus.unavailable;
   }
 
   String? _extractErrorMessage(dynamic responseData) {

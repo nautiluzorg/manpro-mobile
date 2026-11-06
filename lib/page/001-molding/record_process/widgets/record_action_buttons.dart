@@ -21,7 +21,7 @@ class RecordActionButtons extends StatelessWidget {
       return Container(
         width: double.infinity,
         height: constraints.maxHeight,
-        color: Colors.grey,
+        color: const Color.fromARGB(255, 157, 181, 245),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -45,11 +45,11 @@ class RecordActionButtons extends StatelessWidget {
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                             ),
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(6),
                           ),
                           child: Ink(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             child: OutlinedButton.icon(
                               label: Consumer<JobNumberProvider>(
@@ -61,7 +61,7 @@ class RecordActionButtons extends StatelessWidget {
                                     color: jobProvider.isSubmitting
                                         ? Colors.grey[400]
                                         : Colors.white,
-                                    fontSize: 30,
+                                    fontSize: 32,
                                     fontWeight: FontWeight.w600,
                                     letterSpacing: 1.2,
                                   ),
@@ -73,7 +73,7 @@ class RecordActionButtons extends StatelessWidget {
                                 side:
                                     const BorderSide(color: Colors.transparent),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
                             ),
@@ -93,7 +93,7 @@ class RecordActionButtons extends StatelessWidget {
                             'CLEAR',
                             style: GoogleFonts.poppins(
                               color: Colors.blue.shade800,
-                              fontSize: 30,
+                              fontSize: 32,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 1.2,
                             ),
@@ -105,7 +105,7 @@ class RecordActionButtons extends StatelessWidget {
                               width: 2,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.redAccent,
@@ -134,19 +134,19 @@ class RecordActionButtons extends StatelessWidget {
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(6),
                         border: Border.all(color: Colors.transparent, width: 1),
                       ),
                       child: Ink(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: OutlinedButton.icon(
                           label: Text(
                             'ADD NG',
                             style: GoogleFonts.poppins(
                               color: Colors.white,
-                              fontSize: 40.0,
+                              fontSize: 42.0,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 1.5,
                             ),
@@ -157,7 +157,7 @@ class RecordActionButtons extends StatelessWidget {
                             side: const BorderSide(
                                 color: Colors.transparent, width: 0),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                           ),
                         ),

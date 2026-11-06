@@ -24,13 +24,17 @@ class RunningMoldingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prov = context.read<RunningProvider>();
+    final employeeId = item.activeEmployee?.idEmployee.trim() ?? '';
+    final photoUrl = employeeId.isEmpty
+        ? '${AppConfig.baseUrl}/media/img/employee/employee.png'
+        : '${AppConfig.baseUrl}/media/img/employee/$employeeId.png';
 
     return GestureDetector(
       onTap: onTapCard,
       child: Stack(
         children: [
           AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 180),
             curve: Curves.easeInOut,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -132,8 +136,10 @@ class RunningMoldingCard extends StatelessWidget {
                             ),
                             child: CircleAvatar(
                               radius: 42,
-                              backgroundImage: NetworkImage(
-                                "${AppConfig.baseUrl}/media/img/employee/${item.activeEmployee?.idEmployee}.png",
+                              backgroundImage: ResizeImage(
+                                NetworkImage(photoUrl),
+                                width: 84,
+                                height: 84,
                               ),
                               onBackgroundImageError: (_, __) => const Icon(
                                 Icons.person,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_provider_data/provider/running_provider.dart';
+import 'package:provider/provider.dart';
 
 class RunningGridTopMenu extends StatelessWidget {
   final double widthApp;
@@ -22,6 +23,10 @@ class RunningGridTopMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasSelectedItems = context.select<RunningProvider, bool>(
+      (provider) => provider.selectedItems.isNotEmpty,
+    );
+
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Container(
@@ -179,7 +184,7 @@ class RunningGridTopMenu extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: prov.selectedItems.isEmpty
+                      colors: !hasSelectedItems
                           ? [Colors.grey.shade400, Colors.grey.shade500]
                           : [Colors.redAccent, Colors.red.shade900],
                       begin: Alignment.topCenter,
@@ -188,8 +193,7 @@ class RunningGridTopMenu extends StatelessWidget {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: OutlinedButton(
-                    onPressed:
-                        prov.selectedItems.isEmpty ? null : onStopSelected,
+                    onPressed: !hasSelectedItems ? null : onStopSelected,
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 16),
@@ -205,7 +209,7 @@ class RunningGridTopMenu extends StatelessWidget {
                         Icon(
                           Icons.stop_circle,
                           size: 18,
-                          color: prov.selectedItems.isEmpty
+                          color: !hasSelectedItems
                               ? Colors.grey.shade300
                               : Colors.white,
                         ),
@@ -217,7 +221,7 @@ class RunningGridTopMenu extends StatelessWidget {
                             maxLines: 1,
                             style: GoogleFonts.poppins(
                               fontSize: 12,
-                              color: prov.selectedItems.isEmpty
+                              color: !hasSelectedItems
                                   ? Colors.grey.shade300
                                   : Colors.white,
                               fontWeight: FontWeight.bold,

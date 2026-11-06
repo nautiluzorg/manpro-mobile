@@ -117,8 +117,14 @@ class PendingProvider extends ChangeNotifier {
   // ===================== PENDING LIST =====================
   List<RecordPendingModel> _allPending = [];
   List<RecordPendingModel> _filteredPending = [];
+  int _pendingRevision = 0;
 
   List<RecordPendingModel> get pendingList => _filteredPending;
+
+  List<RecordPendingModel> get allPending =>
+      List<RecordPendingModel>.unmodifiable(_allPending);
+
+  int get pendingRevision => _pendingRevision;
 
   List<RecordPendingModel> get filteredPending => _filteredPending;
 
@@ -130,8 +136,15 @@ class PendingProvider extends ChangeNotifier {
 
   // ===================== FETCH PENDING LIST =====================
   Future<void> fetchPending(String idProcess) async {
-    _setLoading(true);
-    _setError(null);
+    // Inform halaman bahwa dataset pending sedang dimuat ulang. Selection
+    // berbasis halaman harus dibersihkan agar tidak terbawa ke dataset baru.
+    _pendingRevision++;
+    // Dua notifikasi saja: satu saat loading dimulai dan satu saat request
+    // selesai. Sebelumnya _setLoading + _setError masing-masing memicu
+    // notifyListeners sehingga grid dapat rebuild berkali-kali.
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
 
     try {
       _allPending = await _service.fetchPendingList(idProcess);
@@ -139,9 +152,10 @@ class PendingProvider extends ChangeNotifier {
     } catch (e) {
       _allPending = [];
       _filteredPending = [];
-      _setError(e.toString());
+      _errorMessage = e.toString();
     } finally {
-      _setLoading(false);
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
