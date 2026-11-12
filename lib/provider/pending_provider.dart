@@ -97,6 +97,7 @@ class PendingProvider extends ChangeNotifier {
     _nextOperator = EmployeeModel.empty;
     _errorMessage = null;
     _isSubmitting = false;
+    _employeeProvider?.clearEmployee();
     notifyListeners();
   }
 
@@ -139,6 +140,8 @@ class PendingProvider extends ChangeNotifier {
     // Inform halaman bahwa dataset pending sedang dimuat ulang. Selection
     // berbasis halaman harus dibersihkan agar tidak terbawa ke dataset baru.
     _pendingRevision++;
+    _filterJobNumber = '';
+    _filterEmployeeFinishId = '';
     // Dua notifikasi saja: satu saat loading dimulai dan satu saat request
     // selesai. Sebelumnya _setLoading + _setError masing-masing memicu
     // notifyListeners sehingga grid dapat rebuild berkali-kali.

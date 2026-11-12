@@ -17,6 +17,106 @@ class NgQtyCounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: 3, // tadinya 1
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.redAccent, Colors.red.shade900],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.red.shade200.withValues(alpha: 0.5),
+                  offset: const Offset(1, 1),
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: onDecrement,
+              child: const Icon(Icons.remove, color: Colors.white, size: 30),
+            ),
+          ),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Container(
+              height: 56,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blueGrey),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ValueListenableBuilder<TextEditingValue>(
+                valueListenable: ngQtyController,
+                builder: (context, value, _) {
+                  return Text(
+                    value.text.isEmpty ? '0' : value.text,
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      color: Colors.blueGrey,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          const SizedBox(width: 4),
+          Container(
+            width: 48,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.greenAccent, Colors.green.shade900],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.green.shade200.withValues(alpha: 0.5),
+                  offset: const Offset(1, 1),
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: onIncrement,
+              child: const Icon(Icons.add, color: Colors.white, size: 30),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Widget counter qty NG dengan tombol - dan +.
+/// 
+/*
+class NgQtyCounter extends StatelessWidget {
+  final TextEditingController ngQtyController;
+  final VoidCallback onDecrement;
+  final VoidCallback onIncrement;
+
+  const NgQtyCounter({
+    super.key,
+    required this.ngQtyController,
+    required this.onDecrement,
+    required this.onIncrement,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
       flex: 1,
       child: Row(
         children: [
@@ -45,7 +145,7 @@ class NgQtyCounter extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
           Expanded(
             child: Container(
               height: 50,
@@ -69,7 +169,7 @@ class NgQtyCounter extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -100,3 +200,4 @@ class NgQtyCounter extends StatelessWidget {
     );
   }
 }
+*/

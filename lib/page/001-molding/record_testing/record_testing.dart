@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_provider_data/page/menu.dart';
+import 'package:flutter_provider_data/provider/employee_provider.dart';
+import 'package:flutter_provider_data/provider/machine_provider.dart';
+import 'package:flutter_provider_data/provider/material_provider.dart';
 import 'package:flutter_provider_data/provider/testing_provider.dart';
 import 'package:flutter_provider_data/utils/logger.dart';
 import 'package:flutter_provider_data/page/001-molding/record_testing/widgets/warning_banner.dart';
@@ -59,6 +62,21 @@ class _RecordTestingState extends State<RecordTesting>
   @override
   void initState() {
     super.initState();
+
+    // Provider form berada di level aplikasi. Reset setelah frame pertama
+    // agar notifyListeners() tidak dipanggil saat widget masih sedang build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      context.read<TestingProvider>().resetAll();
+      context.read<EmployeeProvider>().clearEmployee();
+      context.read<MachineProvider>().clearMachine();
+      final materialProvider = context.read<MaterialProvider>();
+      materialProvider.clearMixLot();
+      materialProvider.clearGoldPill();
+      materialProvider.clearCarbonPill();
+    });
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

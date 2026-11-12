@@ -46,6 +46,15 @@ class _RecordProcessState extends State<RecordProcess>
   @override
   void initState() {
     super.initState();
+
+    // Semua provider form bersifat global. Reset setelah frame pertama agar
+    // notifyListeners() tidak dipanggil ketika widget masih sedang build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<JobNumberProvider>().clearAll(context, qtyActualController);
+      context.read<NGProvider>().clearAll();
+    });
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_provider_data/model/job_row_model.dart';
+import 'package:flutter_provider_data/model/master/product_model.dart';
 import 'package:flutter_provider_data/provider/employee_provider.dart';
 import 'package:flutter_provider_data/provider/machine_provider.dart';
 import 'package:flutter_provider_data/provider/material_provider.dart';
@@ -361,6 +362,40 @@ class JobNumberProvider extends ChangeNotifier {
 
     qtyActual = value;
     notifyListeners();
+  }
+
+  Future<void> setProductFromDrawing(ProductModel product) async {
+    bcode = product.bcode;
+    drawNumber = product.drawingNumber;
+    productType = product.productType;
+    productCategory = product.productCategory;
+    customer = product.companyName;
+    jobProcess = 'MOLDING';
+
+    // Draw No baru harus memilih mold dan kalkulasi shoot dari awal.
+    molds = [];
+    selectedMold = null;
+    cavity = '';
+    totalShoot = '';
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final encodedDrawNumber = Uri.encodeComponent(drawNumber);
+      molds = await _service.getMoldsByDrawing(encodedDrawNumber);
+
+      if (molds.isNotEmpty) {
+        selectedMold = molds.first['tool_number']?.toString();
+        cavity = molds.first['cavity']?.toString() ?? '';
+        _calculateShoot();
+      }
+    } catch (e) {
+      errorMessage = 'Gagal memuat mold untuk Draw No: $e';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   void updateQtyActualBasedOnNG(int totalNG) {
